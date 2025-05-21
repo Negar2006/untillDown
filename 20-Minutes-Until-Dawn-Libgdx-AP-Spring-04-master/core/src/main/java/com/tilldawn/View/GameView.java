@@ -32,10 +32,10 @@ public class GameView extends InputAdapter implements Screen {
     private GameController controller;
     private Array<DamagePopup> damagePopups = new Array<>();
     private ImageButton settingsButton;
-    private OrthographicCamera camera;
 
-    private ArrayList<Tree> treeInstances;  // لیست درخت‌ها
-    private Animation<TextureRegion> treeAnimation; // انیمیشن درخت
+    private ArrayList<Tree> treeInstances;
+    private Animation<TextureRegion> treeAnimation;
+    private Animation<TextureRegion> playerAnimation;
     private float stateTime;
 
     private GameAssetManager assetManager;
@@ -52,10 +52,6 @@ public class GameView extends InputAdapter implements Screen {
     public void show() {
         stage = new Stage(new ScreenViewport());
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        // تنظیم دکمه تنظیمات
         settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("gear.png")))));
         settingsButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
         settingsButton.setSize(50, 50);
@@ -82,6 +78,14 @@ public class GameView extends InputAdapter implements Screen {
         }
         treeAnimation = new Animation<>(rawTreeAnim.getFrameDuration(), frames, Animation.PlayMode.LOOP);
 
+        Animation<com.badlogic.gdx.graphics.Texture> rawPlayerAnim = assetManager.getCharacter1_idle_animation();
+        Array<TextureRegion> playerFrames = new Array<>();
+        for (com.badlogic.gdx.graphics.Texture t : rawPlayerAnim.getKeyFrames()) {
+            playerFrames.add(new TextureRegion(t));
+        }
+        playerAnimation = new Animation<>(rawPlayerAnim.getFrameDuration(), playerFrames, Animation.PlayMode.LOOP);
+
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
@@ -95,15 +99,14 @@ public class GameView extends InputAdapter implements Screen {
 
         Main.getBatch().begin();
 
-        // بروزرسانی بازی از کنترلر
         controller.updateGame();
 
-//        for (Tree tree : treeInstances) {
-//            if (tree.isAlive()) {
-//                TextureRegion currentFrame = treeAnimation.getKeyFrame(stateTime);
-//                Main.getBatch().draw(currentFrame, tree.getX(), tree.getY());
-//            }
-//        }
+        for (Tree tree : treeInstances) {
+            if (tree.isAlive()) {
+                TextureRegion currentFrame = treeAnimation.getKeyFrame(stateTime);
+                Main.getBatch().draw(currentFrame, tree.getX(), tree.getY());
+            }
+        }
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
             DamagePopup popup = damagePopups.get(i);
@@ -114,10 +117,19 @@ public class GameView extends InputAdapter implements Screen {
             }
         }
 
-        Main.getBatch().end();
+        TextureRegion playerFrame = playerAnimation.getKeyFrame(stateTime, true);
+        float playerX = controller.getPlayerController().getPlayer().getPosX();
+        float playerY = controller.getPlayerController().getPlayer().getPosY();
+        float width = playerFrame.getRegionWidth() * 4f;
+        float height = playerFrame.getRegionHeight() * 4f;
+
+        Main.getBatch().draw(playerFrame, playerX, playerY, width, height);
+
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        Main.getBatch().end();
     }
 
     @Override

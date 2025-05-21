@@ -8,21 +8,26 @@ import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Player;
 
+
 public class PlayerController {
     private Player player;
+    private float moveSpeed = 100f;
 
     public PlayerController(Player player){
         this.player = player;
     }
 
-    public void update(){
-        player.getPlayerSprite().draw(Main.getBatch());
+    public void update(float delta) {
+        float dx = 0, dy = 0;
 
-        if(player.isPlayerIdle()){
-            idleAnimation();
-        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += moveSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= moveSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= moveSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * delta;
 
-        handlePlayerInput();
+        Player player = getPlayer();
+        player.setPosX(player.getPosX() + dx);
+        player.setPosY(player.getPosY() + dy);
     }
 
 

@@ -34,7 +34,8 @@ public class GameController {
     public void updateGame() {
         if (view != null) {
             worldController.update();
-            playerController.update();
+            float delta = Gdx.graphics.getDeltaTime();
+            playerController.update(delta);
             weaponController.update(monsterController.getMonsters());
             monsterController.update(playerController.getPlayer(), Main.getBatch());
             checkIfPlayerOutOfScreen();
