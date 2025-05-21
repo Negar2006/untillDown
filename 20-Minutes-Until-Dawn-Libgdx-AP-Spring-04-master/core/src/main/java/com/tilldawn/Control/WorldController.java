@@ -20,4 +20,8 @@ public class WorldController {
         Main.getBatch().draw(backgroundTexture, backgroundX, backgroundY);
     }
 
+    public void renderBackground() {
+        Main.getBatch().draw(backgroundTexture, 0, 0);
+    }
+
 }

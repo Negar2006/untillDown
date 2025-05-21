@@ -98,12 +98,12 @@ public class GameView extends InputAdapter implements Screen {
         // بروزرسانی بازی از کنترلر
         controller.updateGame();
 
-        for (Tree tree : treeInstances) {
-            if (tree.isAlive()) {
-                TextureRegion currentFrame = treeAnimation.getKeyFrame(stateTime);
-                Main.getBatch().draw(currentFrame, tree.getX(), tree.getY());
-            }
-        }
+//        for (Tree tree : treeInstances) {
+//            if (tree.isAlive()) {
+//                TextureRegion currentFrame = treeAnimation.getKeyFrame(stateTime);
+//                Main.getBatch().draw(currentFrame, tree.getX(), tree.getY());
+//            }
+//        }
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
             DamagePopup popup = damagePopups.get(i);

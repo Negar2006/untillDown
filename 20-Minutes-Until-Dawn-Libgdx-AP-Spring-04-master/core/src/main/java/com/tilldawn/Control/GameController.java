@@ -20,6 +20,7 @@ public class GameController {
     private MonsterController monsterController;
     private boolean autoAimEnabled = false;
 
+
     public void setView(GameView view) {
         this.view = view;
         playerController = new PlayerController(new Player());
@@ -103,4 +104,7 @@ public class GameController {
         }
     }
 
+    public WorldController getWorldController() {
+        return worldController;
+    }
 }
