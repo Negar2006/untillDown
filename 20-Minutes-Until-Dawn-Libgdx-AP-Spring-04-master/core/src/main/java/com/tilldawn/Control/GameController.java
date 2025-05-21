@@ -19,11 +19,6 @@ public class GameController {
     private WeaponController weaponController;
     private MonsterController monsterController;
     private boolean autoAimEnabled = false;
-    private OrthographicCamera gameCamera;
-
-    public OrthographicCamera getCamera() {
-        return gameCamera;
-    }
 
     public void setView(GameView view) {
         this.view = view;
@@ -33,7 +28,6 @@ public class GameController {
         weaponController.setGameView(view);
         weaponController.setGameController(this);
         monsterController = new MonsterController();
-        this.gameCamera = view.getCamera();
     }
 
     public void updateGame() {
@@ -88,6 +82,25 @@ public class GameController {
 
     public void goToSettingsMenu() {
         Main.getMain().setScreen(new SettingsView(new SettingsController(), GameAssetManager.getGameAssetManager().getSkin()));
+    }
+
+    public void killMonster() {
+        Player player = playerController.getPlayer();
+        float playerX = player.getPlayerSprite().getX();
+        float playerY = player.getPlayerSprite().getY();
+        float radius = 50f;
+
+        for (Monster monster : monsterController.getMonsters()) {
+            if (!monster.isDead()) {
+                float dx = monster.getSprite().getX() - playerX;
+                float dy = monster.getSprite().getY() - playerY;
+                float distance = (float) Math.sqrt(dx * dx + dy * dy);
+                if (distance <= radius) {
+                    monster.setHealth(-1);
+                    System.out.println("💀 Monster slain at (" + monster.getX() + ", " + monster.getY() + ")");
+                }
+            }
+        }
     }
 
 }

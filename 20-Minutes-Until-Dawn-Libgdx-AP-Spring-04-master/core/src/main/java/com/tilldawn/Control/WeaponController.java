@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.tilldawn.Main;
-import com.tilldawn.Model.Bullet;
-import com.tilldawn.Model.DamagePopup;
-import com.tilldawn.Model.Monster;
-import com.tilldawn.Model.Weapon;
+import com.tilldawn.Model.*;
 import com.tilldawn.View.GameView;
 
 import java.util.ArrayList;
@@ -91,6 +88,15 @@ public class WeaponController {
                 }
             }
 
+//            for (Tree tree : gameView.getTrees()) {
+//                if (tree.getBounds().overlaps(b.getSprite().getBoundingRectangle())) {
+//                    tree.damage(10);
+//                    gameView.addDamagePopup(tree.getX(), tree.getY(), "-10");
+//
+//                    bulletIterator.remove();
+//                    break;
+//                }
+//            }
         }
     }
 

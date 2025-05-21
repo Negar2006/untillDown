@@ -35,6 +35,17 @@ public class GameAssetManager {
 
     private final Animation<Texture> monster_idle_animation = new Animation<>(0.2f, monster0_tex, monster1_tex, monster2_tex, monster3_tex);
 
+    private final String Tree0 = "Tree/TreeMonster_0.png";
+    private final String Tree1 = "Tree/TreeMonster_1.png";
+    private final String Tree2 = "Tree/TreeMonster_2.png";
+    private final String Tree3 = "Tree/TreeMonster_3.png";
+
+    private final Texture Tree0_tex = new Texture(Tree0);
+    private final Texture Tree1_tex = new Texture(Tree1);
+    private final Texture Tree2_tex = new Texture(Tree2);
+    private final Texture Tree3_tex = new Texture(Tree3);
+
+    private final Animation<Texture> Tree_idle_animation = new Animation<>(0.2f, Tree0_tex, Tree1_tex, Tree2_tex, Tree3_tex);
 
     private final String smg = "smg/SMGStill.png";
     private final Texture smgTexture = new Texture(smg);
@@ -81,4 +92,19 @@ public class GameAssetManager {
         return monster_idle_animation;
     }
 
+    public Animation<Texture> getCharacter1_idle_frames() {
+        return character1_idle_frames;
+    }
+
+    public Animation<Texture> getMonster_idle_animation() {
+        return monster_idle_animation;
+    }
+
+    public Animation<Texture> getTree_idle_animation() {
+        return Tree_idle_animation;
+    }
+
+    public static void setGameAssetManager(GameAssetManager gameAssetManager) {
+        GameAssetManager.gameAssetManager = gameAssetManager;
+    }
 }

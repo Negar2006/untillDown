@@ -10,7 +10,7 @@ public class Monster {
     private float health = 100;
     private float posX, posY;
     private Sprite sprite;
-    private float speed = 1f;
+    private float speed = 0.5f;
     private float time = 0f;
     private Animation<Texture> animation;
 
@@ -96,4 +96,9 @@ public class Monster {
     public float getY() {
         return sprite.getY() + sprite.getHeight() / 2f;
     }
+
+    public void setPosX(float posX) {
+        this.posX = posX;
+    }
+
 }

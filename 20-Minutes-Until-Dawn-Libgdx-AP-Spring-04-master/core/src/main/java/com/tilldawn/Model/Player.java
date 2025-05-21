@@ -12,7 +12,7 @@ public class Player {
     private float playerHealth = 100;
     private CollisionRect rect;
     private float time = 0;
-    private float speed = 5f;
+    private float speed = 10f;
     private int score = 0;
 
     public float getSpeed() {
