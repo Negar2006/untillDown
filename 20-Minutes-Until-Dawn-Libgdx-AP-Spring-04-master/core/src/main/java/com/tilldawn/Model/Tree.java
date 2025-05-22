@@ -22,10 +22,6 @@ public class Tree {
         return health;
     }
 
-//    public Rectangle getBounds() {
-//        return new Rectangle(x, y, width, height);
-//    }
-
     public void setY(float y) {
         this.y = y;
     }

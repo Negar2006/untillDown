@@ -3,7 +3,6 @@ package com.tilldawn.Control;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
-import com.tilldawn.Model.SoundManager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
