@@ -30,8 +30,16 @@ public class PreGameMenuController {
                     return;
                 }
                 System.out.println("Starting game with character " + selectedCharacter);
-                Main.getMain().setScreen(new GameView(selectedCharacter, new GameController(), GameAssetManager.getGameAssetManager().getSkin()));
+
+                GameController gameController = new GameController();
+
+                if (Main.getMain() != null) {
+                    Main.getMain().setScreen(new GameView(gameController, GameAssetManager.getGameAssetManager().getSkin()));
+                } else {
+                    System.out.println("Error: Main.getMain() returned null!");
+                }
             }
         });
     }
+
 }

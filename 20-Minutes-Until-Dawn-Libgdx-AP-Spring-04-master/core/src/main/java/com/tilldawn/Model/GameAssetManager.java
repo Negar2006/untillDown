@@ -148,6 +148,298 @@ public class GameAssetManager {
         return character1_idle0;
     }
 
+    public String getCharacter1_idle1() {
+        return character1_idle1;
+    }
+
+    public String getCharacter1_idle2() {
+        return character1_idle2;
+    }
+
+    public String getCharacter1_idle3() {
+        return character1_idle3;
+    }
+
+    public String getCharacter1_idle4() {
+        return character1_idle4;
+    }
+
+    public String getCharacter1_idle5() {
+        return character1_idle5;
+    }
+
+    public Texture getCharacter1_idle0_tex() {
+        return character1_idle0_tex;
+    }
+
+    public Texture getCharacter1_idle1_tex() {
+        return character1_idle1_tex;
+    }
+
+    public Texture getCharacter1_idle2_tex() {
+        return character1_idle2_tex;
+    }
+
+    public Texture getCharacter1_idle3_tex() {
+        return character1_idle3_tex;
+    }
+
+    public Texture getCharacter1_idle4_tex() {
+        return character1_idle4_tex;
+    }
+
+    public Texture getCharacter1_idle5_tex() {
+        return character1_idle5_tex;
+    }
+
+    public String getCharacter2_idle0() {
+        return character2_idle0;
+    }
+
+    public String getCharacter2_idle1() {
+        return character2_idle1;
+    }
+
+    public String getCharacter2_idle2() {
+        return character2_idle2;
+    }
+
+    public String getCharacter2_idle3() {
+        return character2_idle3;
+    }
+
+    public String getCharacter2_idle4() {
+        return character2_idle4;
+    }
+
+    public String getCharacter2_idle5() {
+        return character2_idle5;
+    }
+
+    public Texture getCharacter2_idle0_tex() {
+        return character2_idle0_tex;
+    }
+
+    public Texture getCharacter2_idle1_tex() {
+        return character2_idle1_tex;
+    }
+
+    public Texture getCharacter2_idle2_tex() {
+        return character2_idle2_tex;
+    }
+
+    public Texture getCharacter2_idle3_tex() {
+        return character2_idle3_tex;
+    }
+
+    public Texture getCharacter2_idle4_tex() {
+        return character2_idle4_tex;
+    }
+
+    public Texture getCharacter2_idle5_tex() {
+        return character2_idle5_tex;
+    }
+
+    public String getCharacter3_idle0() {
+        return character3_idle0;
+    }
+
+    public String getCharacter3_idle1() {
+        return character3_idle1;
+    }
+
+    public String getCharacter3_idle2() {
+        return character3_idle2;
+    }
+
+    public String getCharacter3_idle3() {
+        return character3_idle3;
+    }
+
+    public String getCharacter3_idle4() {
+        return character3_idle4;
+    }
+
+    public Texture getCharacter3_idle0_tex() {
+        return character3_idle0_tex;
+    }
+
+    public Texture getCharacter3_idle1_tex() {
+        return character3_idle1_tex;
+    }
+
+    public Texture getCharacter3_idle2_tex() {
+        return character3_idle2_tex;
+    }
+
+    public Texture getCharacter3_idle3_tex() {
+        return character3_idle3_tex;
+    }
+
+    public Texture getCharacter3_idle4_tex() {
+        return character3_idle4_tex;
+    }
+
+    public String getCharacter4_idle0() {
+        return character4_idle0;
+    }
+
+    public String getCharacter4_idle1() {
+        return character4_idle1;
+    }
+
+    public String getCharacter4_idle2() {
+        return character4_idle2;
+    }
+
+    public String getCharacter4_idle3() {
+        return character4_idle3;
+    }
+
+    public String getCharacter4_idle4() {
+        return character4_idle4;
+    }
+
+    public String getCharacter4_idle5() {
+        return character4_idle5;
+    }
+
+    public Texture getCharacter4_idle0_tex() {
+        return character4_idle0_tex;
+    }
+
+    public Texture getCharacter4_idle1_tex() {
+        return character4_idle1_tex;
+    }
+
+    public Texture getCharacter4_idle2_tex() {
+        return character4_idle2_tex;
+    }
+
+    public Texture getCharacter4_idle3_tex() {
+        return character4_idle3_tex;
+    }
+
+    public Texture getCharacter4_idle4_tex() {
+        return character4_idle4_tex;
+    }
+
+    public Texture getCharacter4_idle5_tex() {
+        return character4_idle5_tex;
+    }
+
+    public String getCharacter5_idle0() {
+        return character5_idle0;
+    }
+
+    public String getCharacter5_idle1() {
+        return character5_idle1;
+    }
+
+    public String getCharacter5_idle2() {
+        return character5_idle2;
+    }
+
+    public String getCharacter5_idle3() {
+        return character5_idle3;
+    }
+
+    public String getCharacter5_idle4() {
+        return character5_idle4;
+    }
+
+    public String getCharacter5_idle5() {
+        return character5_idle5;
+    }
+
+    public Texture getCharacter5_idle0_tex() {
+        return character5_idle0_tex;
+    }
+
+    public Texture getCharacter5_idle1_tex() {
+        return character5_idle1_tex;
+    }
+
+    public Texture getCharacter5_idle2_tex() {
+        return character5_idle2_tex;
+    }
+
+    public Texture getCharacter5_idle3_tex() {
+        return character5_idle3_tex;
+    }
+
+    public Texture getCharacter5_idle4_tex() {
+        return character5_idle4_tex;
+    }
+
+    public Texture getCharacter5_idle5_tex() {
+        return character5_idle5_tex;
+    }
+
+    public String getMonster0() {
+        return monster0;
+    }
+
+    public String getMonster1() {
+        return monster1;
+    }
+
+    public String getMonster2() {
+        return monster2;
+    }
+
+    public String getMonster3() {
+        return monster3;
+    }
+
+    public Texture getMonster0_tex() {
+        return monster0_tex;
+    }
+
+    public Texture getMonster1_tex() {
+        return monster1_tex;
+    }
+
+    public Texture getMonster2_tex() {
+        return monster2_tex;
+    }
+
+    public Texture getMonster3_tex() {
+        return monster3_tex;
+    }
+
+    public String getTree0() {
+        return Tree0;
+    }
+
+    public String getTree1() {
+        return Tree1;
+    }
+
+    public String getTree2() {
+        return Tree2;
+    }
+
+    public String getTree3() {
+        return Tree3;
+    }
+
+    public Texture getTree0_tex() {
+        return Tree0_tex;
+    }
+
+    public Texture getTree1_tex() {
+        return Tree1_tex;
+    }
+
+    public Texture getTree2_tex() {
+        return Tree2_tex;
+    }
+
+    public Texture getTree3_tex() {
+        return Tree3_tex;
+    }
+
     public Texture getSmgTexture(){
         return smgTexture;
     }

@@ -2,10 +2,10 @@ package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -14,7 +14,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.PreGameMenuController;
-import com.tilldawn.Model.GameAssetManager;
 
 public class PreGameMenuView implements Screen {
 
@@ -25,10 +24,9 @@ public class PreGameMenuView implements Screen {
     private final PreGameMenuController controller;
     private final Skin skin;
 
-    private Animation<?>[] characterAnimations;
-    private int selectedCharacterIndex = -1; // هیچکدوم انتخاب نشده
-
-    private float stateTime = 0f;
+    private final Texture[] characterTextures;
+    private final Image[] characterImages;
+    private int selectedCharacterIndex = -1;
 
     public PreGameMenuView(PreGameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -38,14 +36,15 @@ public class PreGameMenuView implements Screen {
         this.mainTable = new Table();
         controller.setView(this);
 
-        GameAssetManager assetManager = GameAssetManager.getGameAssetManager();
-        characterAnimations = new Animation[]{
-            assetManager.getCharacter1_idle_frames(),
-            assetManager.getCharacter2_idle_frames(),
-            assetManager.getCharacter3_idle_frames(),
-            assetManager.getCharacter4_idle_frames(),
-            assetManager.getCharacter5_idle_frames()
+        characterTextures = new Texture[]{
+            new Texture(Gdx.files.internal("SHANA.png")),
+            new Texture(Gdx.files.internal("DASHER.png")),
+            new Texture(Gdx.files.internal("DIAMOND.png")),
+            new Texture(Gdx.files.internal("LILITH.png")),
+            new Texture(Gdx.files.internal("SCARLET.png"))
         };
+
+        characterImages = new Image[characterTextures.length];
 
         playButton.setDisabled(true);
     }
@@ -58,28 +57,18 @@ public class PreGameMenuView implements Screen {
         mainTable.setFillParent(true);
         mainTable.center().pad(20);
 
-        mainTable.add(gameTitle).colspan(characterAnimations.length).padBottom(20);
+        mainTable.add(gameTitle).colspan(characterTextures.length).padBottom(20);
         mainTable.row();
 
-        Table animationTable = new Table();
+        Table imageTable = new Table();
 
-        for (int i = 0; i < characterAnimations.length; i++) {
+        for (int i = 0; i < characterTextures.length; i++) {
             final int index = i;
-            Image animImage = new Image() {
-                @Override
-                public void draw(Batch batch, float parentAlpha) {
-                    stateTime += Gdx.graphics.getDeltaTime();
-                    Animation<?> anim = characterAnimations[index];
-                    TextureRegion frame = (TextureRegion) anim.getKeyFrame(stateTime, true);
-                    batch.setColor(getColor());
-                    batch.draw(frame, getX(), getY(), getWidth(), getHeight());
-                }
-            };
-            animImage.setSize(120, 120);
-            animImage.setScaling(Scaling.fit);
+            Image img = new Image(characterTextures[i]);
+            img.setSize(120, 120);
+            img.setScaling(Scaling.fit);
 
-            // Box or border for selection
-            animImage.addListener(new ClickListener() {
+            img.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     selectedCharacterIndex = index;
@@ -88,10 +77,11 @@ public class PreGameMenuView implements Screen {
                 }
             });
 
-            animationTable.add(animImage).pad(10);
+            characterImages[i] = img;
+            imageTable.add(img).pad(10);
         }
 
-        mainTable.add(animationTable).colspan(characterAnimations.length);
+        mainTable.add(imageTable).colspan(characterTextures.length);
         mainTable.row();
 
         mainTable.add(playButton).width(200).padTop(30);
@@ -108,29 +98,17 @@ public class PreGameMenuView implements Screen {
         stage.draw();
 
         if (selectedCharacterIndex >= 0) {
-            Batch batch = stage.getBatch();
-            batch.begin();
+            Actor selectedActor = characterImages[selectedCharacterIndex];
 
-            Table animationTable = (Table) mainTable.getChildren().get(1);
-            SnapshotArray<Actor> animationActors = animationTable.getChildren();
-            Actor selectedActor = animationActors.get(selectedCharacterIndex);
-
-            float x = selectedActor.getX() + animationTable.getX();
-            float y = selectedActor.getY() + animationTable.getY();
-            float width = selectedActor.getWidth();
-            float height = selectedActor.getHeight();
-
-            batch.end();
+            Vector2 coords = selectedActor.localToStageCoordinates(new Vector2(0, 0));
 
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(1, 0, 0, 1);
-            shapeRenderer.rect(x, y, width, height);
+            shapeRenderer.rect(coords.x, coords.y, selectedActor.getWidth(), selectedActor.getHeight());
             shapeRenderer.end();
             shapeRenderer.dispose();
-
-            batch.begin();
         }
     }
 
@@ -151,6 +129,9 @@ public class PreGameMenuView implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        for (Texture texture : characterTextures) {
+            texture.dispose();
+        }
     }
 
     public TextButton getPlayButton() {
