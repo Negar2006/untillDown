@@ -10,19 +10,27 @@ import com.tilldawn.View.PreGameMenuView;
 public class PreGameMenuController {
 
     private PreGameMenuView view;
+    private int selectedCharacter = -1;
 
     public void setView(PreGameMenuView view) {
         this.view = view;
+    }
+
+    public void onCharacterSelected(int index) {
+        selectedCharacter = index;
+        System.out.println("Character selected: " + selectedCharacter);
     }
 
     public void handlePreGameMenuButtons() {
         view.getPlayButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String hero = view.getSelectedHero();
-                System.out.println("Selected Hero: " + hero);
-
-                Main.getMain().setScreen(new GameView(new GameController(), GameAssetManager.getGameAssetManager().getSkin()));
+                if (selectedCharacter == -1) {
+                    System.out.println("Please select a character first!");
+                    return;
+                }
+                System.out.println("Starting game with character " + selectedCharacter);
+                Main.getMain().setScreen(new GameView(selectedCharacter, new GameController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
         });
     }

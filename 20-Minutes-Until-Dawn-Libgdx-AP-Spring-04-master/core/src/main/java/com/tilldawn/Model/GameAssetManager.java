@@ -42,14 +42,12 @@ public class GameAssetManager {
     private final String character3_idle2 = "DASHER/Idle_2.png";
     private final String character3_idle3 = "DASHER/Idle_3.png";
     private final String character3_idle4 = "DASHER/Idle_4.png";
-    private final String character3_idle5 = "DASHER/Idle_5.png";
     private final Texture character3_idle0_tex = new Texture(character3_idle0);
     private final Texture character3_idle1_tex = new Texture(character3_idle1);
     private final Texture character3_idle2_tex = new Texture(character3_idle2);
     private final Texture character3_idle3_tex = new Texture(character3_idle3);
     private final Texture character3_idle4_tex = new Texture(character3_idle4);
-    private final Texture character3_idle5_tex = new Texture(character3_idle5);
-    private final Animation<Texture> character3_idle_frames = new Animation<>(0.1f, character3_idle0_tex, character3_idle1_tex, character3_idle2_tex, character3_idle3_tex, character3_idle4_tex, character3_idle5_tex);
+    private final Animation<Texture> character3_idle_frames = new Animation<>(0.1f, character3_idle0_tex, character3_idle1_tex, character3_idle2_tex, character3_idle3_tex, character3_idle4_tex);
 
     private final String character4_idle0 = "DIAMOND/Idle_0.png";
     private final String character4_idle1 = "DIAMOND/Idle_1.png";
@@ -180,5 +178,21 @@ public class GameAssetManager {
 
     public static void setGameAssetManager(GameAssetManager gameAssetManager) {
         GameAssetManager.gameAssetManager = gameAssetManager;
+    }
+
+    public Animation<Texture> getCharacter2_idle_animation() {
+        return character2_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter3_idle_animation() {
+        return character3_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter4_idle_animation() {
+        return character4_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter5_idle_animation() {
+        return character5_idle_frames;
     }
 }

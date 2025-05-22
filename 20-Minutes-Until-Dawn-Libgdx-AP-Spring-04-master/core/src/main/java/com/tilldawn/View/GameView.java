@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -37,8 +38,10 @@ public class GameView extends InputAdapter implements Screen {
     private float stateTime;
     private GameAssetManager assetManager;
     private Label timerLabel;
+    private int selectedCharacter;
 
-    public GameView(GameController controller, Skin skin) {
+    public GameView(int selectedCharacter, GameController controller, Skin skin) {
+        this.selectedCharacter = selectedCharacter;
         this.skin = skin;
         this.controller = controller;
         controller.setView(this);
@@ -67,13 +70,35 @@ public class GameView extends InputAdapter implements Screen {
         stage.addActor(settingsButton);
 
 
-        Animation<com.badlogic.gdx.graphics.Texture> rawPlayerAnim = assetManager.getCharacter1_idle_animation();
+        Animation<Texture> rawPlayerAnim;
+
+        switch (selectedCharacter) {
+            case 0:
+                rawPlayerAnim = assetManager.getCharacter1_idle_animation();
+                break;
+            case 1:
+                rawPlayerAnim = assetManager.getCharacter2_idle_animation();
+                break;
+            case 2:
+                rawPlayerAnim = assetManager.getCharacter3_idle_animation();
+                break;
+            case 3:
+                rawPlayerAnim = assetManager.getCharacter4_idle_animation();
+                break;
+            case 4:
+                rawPlayerAnim = assetManager.getCharacter5_idle_animation();
+                break;
+            default:
+                rawPlayerAnim = assetManager.getCharacter1_idle_animation(); // fallback
+        }
+
         Array<TextureRegion> playerFrames = new Array<>();
-        for (com.badlogic.gdx.graphics.Texture t : rawPlayerAnim.getKeyFrames()) {
+        for (Texture t : rawPlayerAnim.getKeyFrames()) {
             playerFrames.add(new TextureRegion(t));
         }
         playerAnimation = new Animation<>(rawPlayerAnim.getFrameDuration(), playerFrames, Animation.PlayMode.LOOP);
 
+        // ...
         InputMultiplexer multiplexer = new InputMultiplexer();
 
         multiplexer.addProcessor(stage);
