@@ -29,6 +29,9 @@ public class Monster {
                 this.health = 25f;
                 this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
                 break;
+            case Eyebat:
+                this.health = 50f;
+                this.animation = GameAssetManager.getGameAssetManager().getEyeBat_idle_animation();
             default:
                 this.health = 100f;
                 this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
@@ -37,13 +40,17 @@ public class Monster {
 
         if (type == monsterTypes.TreeMonster) {
             this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
-        } else {
+        } else if (type == monsterTypes.TentacleMonster) {
             this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
-        }
+        } else
+            this.animation = GameAssetManager.getGameAssetManager().getEyeBat_idle_animation();
 
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);
-        sprite.setSize(firstFrame.getWidth() * 3, firstFrame.getHeight() * 3);
+        if (type == monsterTypes.TentacleMonster || type == monsterTypes.TreeMonster)
+            sprite.setSize(firstFrame.getWidth() * 2, firstFrame.getHeight() * 2);
+        else
+            sprite.setSize(firstFrame.getWidth(), firstFrame.getHeight());
         setRandomStartPosition();
     }
 
@@ -104,7 +111,7 @@ public class Monster {
     public void updateAndDraw(com.badlogic.gdx.graphics.g2d.SpriteBatch batch, Player player) {
         time += Gdx.graphics.getDeltaTime();
 
-        if (type == monsterTypes.TentacleMonster) {
+        if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
             moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
         }
 

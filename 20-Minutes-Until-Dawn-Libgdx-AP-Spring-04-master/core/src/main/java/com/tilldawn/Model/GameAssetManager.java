@@ -91,6 +91,19 @@ public class GameAssetManager {
 
     private final Animation<Texture> monster_idle_animation = new Animation<>(0.2f, monster0_tex, monster1_tex, monster2_tex, monster3_tex);
 
+
+    private final String EyeBat0 = "EyeBat/EyeBat_0.png";
+    private final String EyeBat1 = "EyeBat/EyeBat_1.png";
+    private final String EyeBat2 = "EyeBat/EyeBat_2.png";
+    private final String EyeBat3 = "EyeBat/EyeBat_3.png";
+
+    private final Texture EyeBat0_tex = new Texture(EyeBat0);
+    private final Texture EyeBat1_tex = new Texture(EyeBat1);
+    private final Texture EyeBat2_tex = new Texture(EyeBat2);
+    private final Texture EyeBat3_tex = new Texture(EyeBat3);
+
+    private final Animation<Texture> EyeBat_idle_animation = new Animation<>(0.2f, EyeBat0_tex, EyeBat1_tex, EyeBat2_tex, EyeBat3_tex);
+
     private final String Tree0 = "Tree/TreeMonster_0.png";
     private final String Tree1 = "Tree/TreeMonster_1.png";
     private final String Tree2 = "Tree/TreeMonster_2.png";
@@ -486,5 +499,13 @@ public class GameAssetManager {
 
     public Animation<Texture> getCharacter5_idle_animation() {
         return character5_idle_frames;
+    }
+
+    public Animation<Texture> getEyeBat_idle_animation() {
+        return EyeBat_idle_animation;
+    }
+
+    public String getEyeBat0() {
+        return EyeBat0;
     }
 }

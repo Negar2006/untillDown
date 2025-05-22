@@ -45,6 +45,7 @@ public class GameController {
             float delta = Gdx.graphics.getDeltaTime();
             weaponController.update(monsterController.getTentacleMonsters());
             weaponController.update(monsterController.getTreeMonsters());
+            weaponController.update(monsterController.getEyebatMonsters());
             playerController.update(delta);
             monsterController.update(playerController.getPlayer(), Main.getBatch());
         }
@@ -103,14 +104,26 @@ public class GameController {
         float radius = 50f;
 
         for (Monster monster : monsterController.getTentacleMonsters()) {
-            if (!monster.isDead()) {
-                float dx = monster.getSprite().getX() - playerX;
-                float dy = monster.getSprite().getY() - playerY;
-                float distance = (float) Math.sqrt(dx * dx + dy * dy);
-                if (distance <= radius) {
-                    monster.setHealth(-1);
-                    System.out.println("💀 Monster slain at (" + monster.getX() + ", " + monster.getY() + ")");
-                }
+            killingAllMonster(playerX, playerY, radius, monster);
+        }
+
+        for (Monster monster : monsterController.getEyebatMonsters()) {
+            killingAllMonster(playerX, playerY, radius, monster);
+        }
+
+        for (Monster monster : monsterController.getTreeMonsters()) {
+            killingAllMonster(playerX, playerY, radius, monster);
+        }
+    }
+
+    private void killingAllMonster(float playerX, float playerY, float radius, Monster monster) {
+        if (!monster.isDead()) {
+            float dx = monster.getSprite().getX() - playerX;
+            float dy = monster.getSprite().getY() - playerY;
+            float distance = (float) Math.sqrt(dx * dx + dy * dy);
+            if (distance <= radius) {
+                monster.setHealth(-1);
+                System.out.println("💀 Monster slain at (" + monster.getX() + ", " + monster.getY() + ")");
             }
         }
     }
