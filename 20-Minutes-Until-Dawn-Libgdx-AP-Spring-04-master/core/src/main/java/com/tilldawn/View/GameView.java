@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -26,6 +27,7 @@ import java.util.Random;
 
 public class GameView extends InputAdapter implements Screen {
     private Stage stage;
+    private Skin skin;
     private GameController controller;
     private Array<DamagePopup> damagePopups = new Array<>();
     private ImageButton settingsButton;
@@ -34,8 +36,10 @@ public class GameView extends InputAdapter implements Screen {
     private Animation<TextureRegion> playerAnimation;
     private float stateTime;
     private GameAssetManager assetManager;
+    private Label timerLabel;
 
     public GameView(GameController controller, Skin skin) {
+        this.skin = skin;
         this.controller = controller;
         controller.setView(this);
         this.assetManager = GameAssetManager.getGameAssetManager();
@@ -46,6 +50,10 @@ public class GameView extends InputAdapter implements Screen {
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
+
+        timerLabel = new Label("Time Left: 10:00", skin);
+        timerLabel.setPosition(10, Gdx.graphics.getHeight() - 30);
+        stage.addActor(timerLabel);
 
         settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("gear.png")))));
         settingsButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
@@ -79,6 +87,11 @@ public class GameView extends InputAdapter implements Screen {
         stateTime += delta;
 
         Main.getBatch().begin();
+        long elapsedMillis = System.currentTimeMillis() - controller.getStartTimeMillis();
+        long remainingMillis = Math.max(0, 600_000 - elapsedMillis);
+        long minutes = remainingMillis / 60000;
+        long seconds = (remainingMillis % 60000) / 1000;
+        timerLabel.setText(String.format("Time Left: %02d:%02d", minutes, seconds));
 
         controller.updateGame();
 

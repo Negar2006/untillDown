@@ -10,6 +10,7 @@ import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.User;
 import com.tilldawn.View.GameView;
 import com.tilldawn.View.LoginMenuView;
+import com.tilldawn.View.PreGameMenuView;
 import com.tilldawn.View.RegisterMenuViews;
 
 import java.util.HashMap;
@@ -85,7 +86,7 @@ public class RegisterMenuController {
     private void handleGuestLogin() {
         if (view != null && registrationSuccess) {
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new GameView(new GameController(), GameAssetManager.getGameAssetManager().getSkin()));
+            Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
             registrationSuccess = false;
         }
     }
@@ -95,7 +96,7 @@ public class RegisterMenuController {
             Main.getMain().getScreen().dispose();
 
             if (isGuest)
-                Main.getMain().setScreen(new GameView(new GameController(), GameAssetManager.getGameAssetManager().getSkin()));
+                Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
             else
                 Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
             registrationSuccess = false;

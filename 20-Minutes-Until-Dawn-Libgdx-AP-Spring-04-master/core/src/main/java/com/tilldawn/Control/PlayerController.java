@@ -28,20 +28,6 @@ public class PlayerController {
         player.getPlayerSprite().draw(Main.getBatch());
     }
 
-    public void idleAnimation() {
-        Animation<Texture> animation = GameAssetManager.getGameAssetManager().getCharacter1_idle_animation();
-
-        player.getPlayerSprite().setRegion(animation.getKeyFrame(player.getTime()));
-
-        if (!animation.isAnimationFinished(player.getTime())) {
-            player.setTime(player.getTime() + Gdx.graphics.getDeltaTime());
-        } else {
-            player.setTime(0);
-        }
-
-        animation.setPlayMode(Animation.PlayMode.LOOP);
-    }
-
     public Player getPlayer() {
         return player;
     }

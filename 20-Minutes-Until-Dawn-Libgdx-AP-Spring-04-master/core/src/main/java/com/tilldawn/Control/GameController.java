@@ -7,10 +7,7 @@ import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
 import com.tilldawn.Model.Weapon;
-import com.tilldawn.View.GameView;
-import com.tilldawn.View.MainMenuView;
-import com.tilldawn.View.RegisterMenuViews;
-import com.tilldawn.View.SettingsView;
+import com.tilldawn.View.*;
 
 public class GameController {
     private GameView view;
@@ -19,6 +16,8 @@ public class GameController {
     private WeaponController weaponController;
     private MonsterController monsterController;
     private boolean autoAimEnabled = false;
+    private long startTimeMillis;
+    private final long GAME_DURATION_MILLIS = 10 * 60 * 1000;
 
     public void setView(GameView view) {
         this.view = view;
@@ -29,16 +28,31 @@ public class GameController {
 
         weaponController.setGameView(view);
         weaponController.setGameController(this);
+        startTimeMillis = System.currentTimeMillis();
     }
 
     public void updateGame() {
         if (view != null) {
+            long currentTime = System.currentTimeMillis();
+            long elapsed = currentTime - startTimeMillis;
+
+            if (elapsed >= GAME_DURATION_MILLIS) {
+                endGame();
+                return;
+            }
             worldController.update();
             float delta = Gdx.graphics.getDeltaTime();
             weaponController.update(monsterController.getTentacleMonsters());
+            weaponController.update(monsterController.getTreeMonsters());
             playerController.update(delta);
             monsterController.update(playerController.getPlayer(), Main.getBatch());
         }
+    }
+
+    private void endGame() {
+        System.out.println("⏰ Game time finished! Going to end screen...");
+        // Example: go to a hypothetical GameOverView screen (you should implement this)
+        Main.getMain().setScreen(new GameOverView(new GameOverController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
     public boolean isAutoAimEnabled() {
@@ -103,4 +117,9 @@ public class GameController {
     public WorldController getWorldController() {
         return worldController;
     }
+
+    public long getStartTimeMillis() {
+        return startTimeMillis;
+    }
+
 }

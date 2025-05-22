@@ -9,12 +9,12 @@ public class GameAssetManager {
     private static GameAssetManager gameAssetManager;
     private final Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
-    private final String character1_idle0 = "1/Idle_0.png";
-    private final String character1_idle1 = "1/Idle_1.png";
-    private final String character1_idle2 = "1/Idle_2.png";
-    private final String character1_idle3 = "1/Idle_3.png";
-    private final String character1_idle4 = "1/Idle_4.png";
-    private final String character1_idle5 = "1/Idle_5.png";
+    private final String character1_idle0 = "SHANA/Idle_0.png";
+    private final String character1_idle1 = "SHANA/Idle_1.png";
+    private final String character1_idle2 = "SHANA/Idle_2.png";
+    private final String character1_idle3 = "SHANA/Idle_3.png";
+    private final String character1_idle4 = "SHANA/Idle_4.png";
+    private final String character1_idle5 = "SHANA/Idle_5.png";
     private final Texture character1_idle0_tex = new Texture(character1_idle0);
     private final Texture character1_idle1_tex = new Texture(character1_idle1);
     private final Texture character1_idle2_tex = new Texture(character1_idle2);
@@ -22,6 +22,64 @@ public class GameAssetManager {
     private final Texture character1_idle4_tex = new Texture(character1_idle4);
     private final Texture character1_idle5_tex = new Texture(character1_idle5);
     private final Animation<Texture> character1_idle_frames = new Animation<>(0.1f, character1_idle0_tex, character1_idle1_tex, character1_idle2_tex, character1_idle3_tex, character1_idle4_tex, character1_idle5_tex);
+
+    private final String character2_idle0 = "LILITH/Idle_0.png";
+    private final String character2_idle1 = "LILITH/Idle_1.png";
+    private final String character2_idle2 = "LILITH/Idle_2.png";
+    private final String character2_idle3 = "LILITH/Idle_3.png";
+    private final String character2_idle4 = "LILITH/Idle_4.png";
+    private final String character2_idle5 = "LILITH/Idle_5.png";
+    private final Texture character2_idle0_tex = new Texture(character2_idle0);
+    private final Texture character2_idle1_tex = new Texture(character2_idle1);
+    private final Texture character2_idle2_tex = new Texture(character2_idle2);
+    private final Texture character2_idle3_tex = new Texture(character2_idle3);
+    private final Texture character2_idle4_tex = new Texture(character2_idle4);
+    private final Texture character2_idle5_tex = new Texture(character2_idle5);
+    private final Animation<Texture> character2_idle_frames = new Animation<>(0.1f, character2_idle0_tex, character2_idle1_tex, character2_idle2_tex, character2_idle3_tex, character2_idle4_tex, character2_idle5_tex);
+
+    private final String character3_idle0 = "DASHER/Idle_0.png";
+    private final String character3_idle1 = "DASHER/Idle_1.png";
+    private final String character3_idle2 = "DASHER/Idle_2.png";
+    private final String character3_idle3 = "DASHER/Idle_3.png";
+    private final String character3_idle4 = "DASHER/Idle_4.png";
+    private final String character3_idle5 = "DASHER/Idle_5.png";
+    private final Texture character3_idle0_tex = new Texture(character3_idle0);
+    private final Texture character3_idle1_tex = new Texture(character3_idle1);
+    private final Texture character3_idle2_tex = new Texture(character3_idle2);
+    private final Texture character3_idle3_tex = new Texture(character3_idle3);
+    private final Texture character3_idle4_tex = new Texture(character3_idle4);
+    private final Texture character3_idle5_tex = new Texture(character3_idle5);
+    private final Animation<Texture> character3_idle_frames = new Animation<>(0.1f, character3_idle0_tex, character3_idle1_tex, character3_idle2_tex, character3_idle3_tex, character3_idle4_tex, character3_idle5_tex);
+
+    private final String character4_idle0 = "DIAMOND/Idle_0.png";
+    private final String character4_idle1 = "DIAMOND/Idle_1.png";
+    private final String character4_idle2 = "DIAMOND/Idle_2.png";
+    private final String character4_idle3 = "DIAMOND/Idle_3.png";
+    private final String character4_idle4 = "DIAMOND/Idle_4.png";
+    private final String character4_idle5 = "DIAMOND/Idle_5.png";
+    private final Texture character4_idle0_tex = new Texture(character4_idle0);
+    private final Texture character4_idle1_tex = new Texture(character4_idle1);
+    private final Texture character4_idle2_tex = new Texture(character4_idle2);
+    private final Texture character4_idle3_tex = new Texture(character4_idle3);
+    private final Texture character4_idle4_tex = new Texture(character4_idle4);
+    private final Texture character4_idle5_tex = new Texture(character4_idle5);
+    private final Animation<Texture> character4_idle_frames = new Animation<>(0.1f, character4_idle0_tex, character4_idle1_tex, character4_idle2_tex, character4_idle3_tex, character4_idle4_tex, character4_idle5_tex);
+
+
+    private final String character5_idle0 = "SCARLET/Idle_0.png";
+    private final String character5_idle1 = "SCARLET/Idle_1.png";
+    private final String character5_idle2 = "SCARLET/Idle_2.png";
+    private final String character5_idle3 = "SCARLET/Idle_3.png";
+    private final String character5_idle4 = "SCARLET/Idle_4.png";
+    private final String character5_idle5 = "SCARLET/Idle_5.png";
+    private final Texture character5_idle0_tex = new Texture(character5_idle0);
+    private final Texture character5_idle1_tex = new Texture(character5_idle1);
+    private final Texture character5_idle2_tex = new Texture(character5_idle2);
+    private final Texture character5_idle3_tex = new Texture(character5_idle3);
+    private final Texture character5_idle4_tex = new Texture(character5_idle4);
+    private final Texture character5_idle5_tex = new Texture(character5_idle5);
+    private final Animation<Texture> character5_idle_frames = new Animation<>(0.1f, character5_idle0_tex, character5_idle1_tex, character5_idle2_tex, character5_idle3_tex, character5_idle4_tex, character5_idle5_tex);
+
 
     private final String monster0 = "TentacleMonster/TentacleMonster_0.png";
     private final String monster1 = "TentacleMonster/TentacleMonster_1.png";
@@ -70,6 +128,22 @@ public class GameAssetManager {
 
     public Animation<Texture> getCharacter1_idle_animation() {
         return character1_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter2_idle_frames() {
+        return character2_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter3_idle_frames() {
+        return character3_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter4_idle_frames() {
+        return character4_idle_frames;
+    }
+
+    public Animation<Texture> getCharacter5_idle_frames() {
+        return character5_idle_frames;
     }
 
     public String getCharacter1_idle0(){
