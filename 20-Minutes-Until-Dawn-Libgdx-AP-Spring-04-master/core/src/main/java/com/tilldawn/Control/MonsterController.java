@@ -23,11 +23,10 @@ public class MonsterController {
         // Draw and check TreeMonsters
         for (Monster m : treeMonsters) {
             if (!m.isDead()) {
-                m.updateAndDraw(batch, player); // They don’t move, so no need for extra logic
+                m.updateAndDraw(batch, player);
             }
         }
 
-        // TentacleMonster spawn logic
         spawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
         if (spawnTimer > 2f) {
             tentacleMonsters.add(new Monster(monsterTypes.TentacleMonster));
@@ -48,7 +47,7 @@ public class MonsterController {
     }
 
     private void spawnInitialTrees() {
-        for (int i = 0; i < 80; i++) {
+        for (int i = 0; i < 50; i++) {
             treeMonsters.add(new Monster(monsterTypes.TreeMonster));
         }
     }

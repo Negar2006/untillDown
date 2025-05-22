@@ -9,7 +9,7 @@ import com.tilldawn.Model.enums.monsterTypes;
 import java.util.Random;
 
 public class Monster {
-    private float health = 100;
+    private float health;
     private monsterTypes type;
     private float posX, posY;
     private Sprite sprite;
@@ -18,7 +18,22 @@ public class Monster {
     private Animation<Texture> animation;
 
     public Monster(monsterTypes type) {
+
         this.type = type;
+        switch (type) {
+            case TreeMonster:
+                this.health = 10f;
+                this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
+                break;
+            case TentacleMonster:
+                this.health = 25f;
+                this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
+                break;
+            default:
+                this.health = 100f;
+                this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
+                break;
+        }
 
         if (type == monsterTypes.TreeMonster) {
             this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
@@ -35,31 +50,44 @@ public class Monster {
 
     private void setRandomStartPosition() {
         Random rand = new Random();
-        int edge = rand.nextInt(4);
-        float x = 0, y = 0;
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
 
-        switch (edge) {
-            case 0: // top
-                x = rand.nextFloat() * screenWidth;
-                y = screenHeight + 50;
-                break;
-            case 1: // right
-                x = screenWidth + 50;
-                y = rand.nextFloat() * screenHeight;
-                break;
-            case 2: // bottom
-                x = rand.nextFloat() * screenWidth;
-                y = -50;
-                break;
-            case 3: // left
-                x = -50;
-                y = rand.nextFloat() * screenHeight;
-                break;
+        // Define your big world size here
+        float worldWidth = 3500f;  // set your actual world width
+        float worldHeight = 2500f; // set your actual world height
+
+        if (type == monsterTypes.TreeMonster) {
+            // Spawn TreeMonster anywhere inside the big world bounds
+            float x = rand.nextFloat() * worldWidth;
+            float y = rand.nextFloat() * worldHeight;
+            sprite.setPosition(x, y);
+
+        } else {
+            // For other monsters, spawn outside the visible screen edges
+            float screenWidth = Gdx.graphics.getWidth();
+            float screenHeight = Gdx.graphics.getHeight();
+            int edge = rand.nextInt(4);
+            float x = 0, y = 0;
+
+            switch (edge) {
+                case 0: // top
+                    x = rand.nextFloat() * screenWidth;
+                    y = screenHeight + 50;
+                    break;
+                case 1: // right
+                    x = screenWidth + 50;
+                    y = rand.nextFloat() * screenHeight;
+                    break;
+                case 2: // bottom
+                    x = rand.nextFloat() * screenWidth;
+                    y = -50;
+                    break;
+                case 3: // left
+                    x = -50;
+                    y = rand.nextFloat() * screenHeight;
+                    break;
+            }
+            sprite.setPosition(x, y);
         }
-
-        sprite.setPosition(x, y);
     }
 
     public void moveTowards(float targetX, float targetY) {
