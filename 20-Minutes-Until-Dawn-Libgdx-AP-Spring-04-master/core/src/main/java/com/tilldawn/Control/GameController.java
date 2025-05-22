@@ -20,10 +20,9 @@ public class GameController {
     private long startTimeMillis;
     private final long GAME_DURATION_MILLIS = 10 * 60 * 1000;
 
-    public void setView(GameView view, Texture playerTexture) {
+    public void setView(GameView view, Texture playerTexture, String characterName) {
         this.view = view;
-        playerController = new PlayerController(new Player(playerTexture));
-        playerController.getPlayer().setPlayerTexture(playerTexture);
+        playerController = new PlayerController(new Player(playerTexture), characterName);
         weaponController = new WeaponController(new Weapon());
         worldController = new WorldController(playerController);
         monsterController = new MonsterController();

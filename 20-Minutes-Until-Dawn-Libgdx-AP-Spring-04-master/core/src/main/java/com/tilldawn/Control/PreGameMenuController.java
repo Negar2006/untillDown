@@ -34,7 +34,8 @@ public class PreGameMenuController {
                 Texture playerTexture = new Texture(Gdx.files.internal(fileName));
 
                 GameController gameController = new GameController();
-                Main.getMain().setScreen(new GameView(gameController, GameAssetManager.getGameAssetManager().getSkin(), playerTexture));
+                Main.getMain().setScreen(new GameView(gameController, GameAssetManager.getGameAssetManager().getSkin(),
+                    playerTexture, CHARACTER_NAMES[selectedCharacter]));
 
             }
         });

@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Player {
-    private Texture playerTexture = new Texture(GameAssetManager.getGameAssetManager().getCharacter1_idle0());
-    private Sprite playerSprite = new Sprite(playerTexture);
+    private Texture playerTexture;
+    private Sprite playerSprite ;
     private float posX;
     private float posY;
     private float playerHealth = 100;
@@ -14,12 +14,11 @@ public class Player {
     private float time = 0;
     private float speed = 100f;
     private int score = 0;
-
     private boolean isPlayerIdle = true;
-    private boolean isPlayerRunning = false;
 
     public Player(Texture playerTexture) {
         this.playerTexture = playerTexture;
+        this.playerSprite = new Sprite(playerTexture);
         playerSprite.setSize(playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
 
         posX = playerSprite.getX();
@@ -28,10 +27,6 @@ public class Player {
         centerPlayerOnScreen();
 
         rect = new CollisionRect(posX, posY, playerSprite.getWidth(), playerSprite.getHeight());
-    }
-
-    public void setPlayerTexture(Texture playerTexture) {
-        this.playerTexture = playerTexture;
     }
 
     private void centerPlayerOnScreen() {

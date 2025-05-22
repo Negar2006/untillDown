@@ -39,10 +39,10 @@ public class GameView extends InputAdapter implements Screen {
     private GameAssetManager assetManager;
     private Label timerLabel;
 
-    public GameView(GameController controller, Skin skin, Texture playerTexture) {
+    public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
         this.controller = controller;
-        controller.setView(this, playerTexture);
+        controller.setView(this, playerTexture, name);
         this.assetManager = GameAssetManager.getGameAssetManager();
         this.stateTime = 0f;
 
