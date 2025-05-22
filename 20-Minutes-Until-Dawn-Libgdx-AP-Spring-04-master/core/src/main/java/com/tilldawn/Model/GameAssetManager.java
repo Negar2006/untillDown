@@ -23,10 +23,10 @@ public class GameAssetManager {
     private final Texture character1_idle5_tex = new Texture(character1_idle5);
     private final Animation<Texture> character1_idle_frames = new Animation<>(0.1f, character1_idle0_tex, character1_idle1_tex, character1_idle2_tex, character1_idle3_tex, character1_idle4_tex, character1_idle5_tex);
 
-    private final String monster0 = "BrainMonster/BrainMonster_0.png";
-    private final String monster1 = "BrainMonster/BrainMonster_1.png";
-    private final String monster2 = "BrainMonster/BrainMonster_2.png";
-    private final String monster3 = "BrainMonster/BrainMonster_3.png";
+    private final String monster0 = "TentacleMonster/TentacleMonster_0.png";
+    private final String monster1 = "TentacleMonster/TentacleMonster_1.png";
+    private final String monster2 = "TentacleMonster/TentacleMonster_2.png";
+    private final String monster3 = "TentacleMonster/TentacleMonster_3.png";
 
     private final Texture monster0_tex = new Texture(monster0);
     private final Texture monster1_tex = new Texture(monster1);
