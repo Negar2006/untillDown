@@ -62,29 +62,37 @@ public class PreGameMenuView implements Screen {
 
         Table imageTable = new Table();
 
+        float imageWidth = 400f;
+        float imageHeight = 400f;
+
         for (int i = 0; i < characterTextures.length; i++) {
             final int index = i;
             Image img = new Image(characterTextures[i]);
-            img.setSize(120, 120);
-            img.setScaling(Scaling.fit);
+            img.setScaling(Scaling.fit); // حفظ نسبت
+
+            img.setSize(imageWidth, imageHeight); // سایز بزرگ‌تر
+            img.setTouchable(Touchable.enabled);
 
             img.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    selectedCharacterIndex = index ;
+                    selectedCharacterIndex = index;
                     playButton.setDisabled(false);
                     controller.onCharacterSelected(selectedCharacterIndex);
                 }
             });
 
             characterImages[i] = img;
-            imageTable.add(img).pad(10);
+            imageTable.add(img).width(imageWidth).height(imageHeight).pad(15); // کنترل دقیق سایز
         }
 
         mainTable.add(imageTable).colspan(characterTextures.length);
         mainTable.row();
 
-        mainTable.add(playButton).width(200).padTop(30);
+        mainTable.add(playButton)
+            .colspan(characterTextures.length)
+            .center()
+            .padTop(30);
 
         stage.addActor(mainTable);
 

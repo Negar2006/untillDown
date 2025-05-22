@@ -14,10 +14,27 @@ public class PlayerController {
     private Player player;
     private Animation<TextureRegion> playerAnimation;
     private float stateTime = 0f;
+    private Animation<Texture> rawAnim ;
 
     public PlayerController(Player player, String characterName) {
         this.player = player;
-        Animation<Texture> rawAnim = GameAssetManager.getGameAssetManager().getCharacter1_idle_animation();
+        switch (characterName) {
+            case "SHANA":
+                rawAnim = GameAssetManager.getGameAssetManager().getCharacter1_idle_animation();
+                break;
+            case "SCARLET":
+                rawAnim = GameAssetManager.getGameAssetManager().getCharacter5_idle_animation();
+                break;
+            case "LILITH":
+                rawAnim = GameAssetManager.getGameAssetManager().getCharacter2_idle_animation();
+                break;
+            case "DASHER":
+                rawAnim = GameAssetManager.getGameAssetManager().getCharacter3_idle_animation();
+                break;
+            case "DIAMOND":
+                rawAnim = GameAssetManager.getGameAssetManager().getCharacter4_idle_animation();
+                break;
+        }
         Array<TextureRegion> frames = new Array<>();
         for (Texture t : rawAnim.getKeyFrames()) {
             frames.add(new TextureRegion(t));
