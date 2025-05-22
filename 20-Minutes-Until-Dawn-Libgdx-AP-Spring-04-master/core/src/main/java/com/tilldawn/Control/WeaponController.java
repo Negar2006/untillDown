@@ -65,7 +65,14 @@ public class WeaponController {
     }
 
     public void handleWeaponShoot(int x, int y) {
-        bullets.add(new Bullet(x, y));
+        Player player = controller.getPlayerController().getPlayer();
+        Sprite playerSprite = player.getPlayerSprite();
+        float playerX = playerSprite.getX() + playerSprite.getWidth() / 2;
+        float playerY = playerSprite.getY() + playerSprite.getHeight() / 3;
+
+        int flippedY = Gdx.graphics.getHeight() - y;
+
+        bullets.add(new Bullet(x, flippedY, playerX, playerY));
         weapon.setAmmo(weapon.getAmmo() - 1);
     }
 
@@ -75,13 +82,9 @@ public class WeaponController {
             Bullet b = bulletIterator.next();
             b.getSprite().draw(Main.getBatch());
 
-            Vector2 direction = new Vector2(
-                Gdx.graphics.getWidth() / 2f - b.getX(),
-                Gdx.graphics.getHeight() / 2f - b.getY()
-            ).nor();
-
-            b.getSprite().setX(b.getSprite().getX() - direction.x * 5);
-            b.getSprite().setY(b.getSprite().getY() + direction.y * 5);
+            // move in stored direction
+            Vector2 dir = b.getDirection();
+            b.getSprite().translate(dir.x * 5, dir.y * 5);
 
             for (Monster m : monsters) {
                 if (b.getSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
@@ -99,6 +102,7 @@ public class WeaponController {
             }
         }
     }
+
 
     private Monster findClosestMonster(ArrayList<Monster> monsters) {
         float minDistance = Float.MAX_VALUE;
