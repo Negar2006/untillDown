@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class WeaponController {
-    private Weapon weapon;
-    private ArrayList<Bullet> bullets = new ArrayList<>();
+    private final Weapon weapon;
+    private final ArrayList<Bullet> bullets = new ArrayList<>();
     private GameView gameView;
     private GameController controller;
 
@@ -21,6 +21,9 @@ public class WeaponController {
         this.controller = controller;
     }
 
+    public Weapon getWeapon() {
+        return weapon;
+    }
 
     public void setGameView(GameView gameView) {
         this.gameView = gameView;
@@ -38,10 +41,10 @@ public class WeaponController {
                 autoAimAt(closest);
             }
         }
+        weapon.setPosition(controller.getPlayerController().getPlayer().getPosX(), controller.getPlayerController().getPlayer().getPosY());
         weapon.getSmgSprite().draw(Main.getBatch());
         updateBullets(monsters);
     }
-
 
     public void handleWeaponRotation(int x, int y) {
         Sprite weaponSprite = weapon.getSmgSprite();
@@ -87,16 +90,6 @@ public class WeaponController {
                     break;
                 }
             }
-
-//            for (Tree tree : gameView.getTrees()) {
-//                if (tree.getBounds().overlaps(b.getSprite().getBoundingRectangle())) {
-//                    tree.damage(10);
-//                    gameView.addDamagePopup(tree.getX(), tree.getY(), "-10");
-//
-//                    bulletIterator.remove();
-//                    break;
-//                }
-//            }
         }
     }
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.tilldawn.Main;
 import com.tilldawn.Model.Bullet;
 import com.tilldawn.Model.Player;
+import com.tilldawn.Model.Weapon;
 
 import java.util.ArrayList;
 
@@ -16,15 +17,13 @@ public class WorldController {
     private OrthographicCamera camera;
 
     public WorldController(PlayerController playerController) {
-        this.playerController = playerController;
-        this.backgroundTexture = new Texture("background.png");
+        this.playerController = playerController;this.backgroundTexture = new Texture("background.png");
 
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     public void update() {
-        // Move camera to follow the player
         Player player = playerController.getPlayer();
         camera.position.set(player.getPosX(), player.getPosY(), 0);
         camera.update();

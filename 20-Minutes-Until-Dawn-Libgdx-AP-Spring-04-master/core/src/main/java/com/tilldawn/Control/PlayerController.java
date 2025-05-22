@@ -29,8 +29,6 @@ public class PlayerController {
         player.setPosX(player.getPosX() + dx);
         player.setPosY(player.getPosY() + dy);
     }
-
-
     public void handlePlayerInput(){
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
             player.setPosY(player.getPosY() - player.getSpeed());

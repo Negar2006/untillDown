@@ -19,6 +19,14 @@ public class Weapon {
         return smgSprite;
     }
 
+    public void setPosition(float x, float y) {
+        smgSprite.setPosition(x, y);
+    }
+
+    public Sprite getSprite() {
+        return smgSprite;
+    }
+
     public int getAmmo() {
         return ammo;
     }
