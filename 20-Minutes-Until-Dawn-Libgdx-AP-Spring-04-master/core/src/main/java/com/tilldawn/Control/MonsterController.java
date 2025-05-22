@@ -9,18 +9,32 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class MonsterController {
-    private ArrayList<Monster> monsters = new ArrayList<>();
+    private ArrayList<Monster> tentacleMonsters = new ArrayList<>();
+    private ArrayList<Monster> treeMonsters = new ArrayList<>();
     private float spawnTimer = 0;
+    private boolean treesSpawned = false;
 
     public void update(Player player, SpriteBatch batch) {
-        spawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        if (!treesSpawned) {
+            spawnInitialTrees();
+            treesSpawned = true;
+        }
 
+        // Draw and check TreeMonsters
+        for (Monster m : treeMonsters) {
+            if (!m.isDead()) {
+                m.updateAndDraw(batch, player); // They don’t move, so no need for extra logic
+            }
+        }
+
+        // TentacleMonster spawn logic
+        spawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
         if (spawnTimer > 2f) {
-            monsters.add(new Monster(monsterTypes.TentacleMonster));
+            tentacleMonsters.add(new Monster(monsterTypes.TentacleMonster));
             spawnTimer = 0;
         }
 
-        Iterator<Monster> iter = monsters.iterator();
+        Iterator<Monster> iter = tentacleMonsters.iterator();
         while (iter.hasNext()) {
             Monster m = iter.next();
 
@@ -29,12 +43,21 @@ public class MonsterController {
                 iter.remove();
                 continue;
             }
-            m.moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
-            m.updateAndDraw(batch);
+            m.updateAndDraw(batch, player);
         }
     }
 
-    public ArrayList<Monster> getMonsters() {
-        return monsters;
+    private void spawnInitialTrees() {
+        for (int i = 0; i < 80; i++) {
+            treeMonsters.add(new Monster(monsterTypes.TreeMonster));
+        }
+    }
+
+    public ArrayList<Monster> getTentacleMonsters() {
+        return tentacleMonsters;
+    }
+
+    public ArrayList<Monster> getTreeMonsters() {
+        return treeMonsters;
     }
 }

@@ -35,7 +35,7 @@ public class GameController {
         if (view != null) {
             worldController.update();
             float delta = Gdx.graphics.getDeltaTime();
-            weaponController.update(monsterController.getMonsters());
+            weaponController.update(monsterController.getTentacleMonsters());
             playerController.update(delta);
             monsterController.update(playerController.getPlayer(), Main.getBatch());
         }
@@ -87,7 +87,7 @@ public class GameController {
         float playerY = player.getPlayerSprite().getY();
         float radius = 50f;
 
-        for (Monster monster : monsterController.getMonsters()) {
+        for (Monster monster : monsterController.getTentacleMonsters()) {
             if (!monster.isDead()) {
                 float dx = monster.getSprite().getX() - playerX;
                 float dy = monster.getSprite().getY() - playerY;

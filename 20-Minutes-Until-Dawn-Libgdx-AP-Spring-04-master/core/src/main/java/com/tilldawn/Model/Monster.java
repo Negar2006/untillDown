@@ -19,12 +19,19 @@ public class Monster {
 
     public Monster(monsterTypes type) {
         this.type = type;
-        this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
+
+        if (type == monsterTypes.TreeMonster) {
+            this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
+        } else {
+            this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
+        }
+
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);
         sprite.setSize(firstFrame.getWidth() * 3, firstFrame.getHeight() * 3);
         setRandomStartPosition();
     }
+
 
     private void setRandomStartPosition() {
         Random rand = new Random();
@@ -66,8 +73,13 @@ public class Monster {
         sprite.setPosition(sprite.getX() + dx * speed, sprite.getY() + dy * speed);
     }
 
-    public void updateAndDraw(com.badlogic.gdx.graphics.g2d.SpriteBatch batch) {
+    public void updateAndDraw(com.badlogic.gdx.graphics.g2d.SpriteBatch batch, Player player) {
         time += Gdx.graphics.getDeltaTime();
+
+        if (type == monsterTypes.TentacleMonster) {
+            moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
+        }
+
         sprite.setRegion(animation.getKeyFrame(time, true));
         sprite.draw(batch);
     }
