@@ -3,6 +3,11 @@ package com.tilldawn.Model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.tilldawn.Control.GameOverController;
+import com.tilldawn.Control.PreGameMenuController;
+import com.tilldawn.Main;
+import com.tilldawn.View.GameOverView;
+import com.tilldawn.View.PreGameMenuView;
 
 public class Player {
     private Texture playerTexture;
@@ -114,7 +119,11 @@ public class Player {
         return time;
     }
 
-    public void reduceHealth(int i) {
-        this.playerHealth -= i;
+    public void takeDamage(int damage) {
+        playerHealth -= damage;
+        if (playerHealth < 0) {
+            Main.getMain().setScreen(new GameOverView(new GameOverController(), GameAssetManager.getGameAssetManager().getSkin()));
+            playerHealth = 0;
+        }
     }
 }

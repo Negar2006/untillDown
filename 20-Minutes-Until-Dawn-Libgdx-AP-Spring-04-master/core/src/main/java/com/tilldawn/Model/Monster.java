@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tilldawn.Model.enums.monsterTypes;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Monster {
@@ -16,6 +18,8 @@ public class Monster {
     private float speed = 0.5f;
     private float time = 0f;
     private Animation<Texture> animation;
+    private float bulletTimer = 0f;
+    private ArrayList<Bullet> bullets = new ArrayList<>();
 
     public Monster(monsterTypes type) {
 
@@ -108,16 +112,36 @@ public class Monster {
         sprite.setPosition(sprite.getX() + dx * speed, sprite.getY() + dy * speed);
     }
 
-    public void updateAndDraw(com.badlogic.gdx.graphics.g2d.SpriteBatch batch, Player player) {
+    public void updateAndDraw(SpriteBatch batch, Player player) {
         time += Gdx.graphics.getDeltaTime();
 
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
             moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
         }
 
+        if (type == monsterTypes.Eyebat) {
+            bulletTimer += Gdx.graphics.getDeltaTime();
+            if (bulletTimer >= 3f) {
+                shootBullet(player.getPosX(), player.getPosY());
+                bulletTimer = 0f;
+            }
+        }
+
         sprite.setRegion(animation.getKeyFrame(time, true));
         sprite.draw(batch);
+
+        for (Bullet b : bullets) {
+            b.getSprite().translate(b.getDirection().x * 5f, b.getDirection().y * 5f); // سرعت گلوله
+            b.getSprite().draw(batch);
+        }
     }
+
+    private void shootBullet(float targetX, float targetY) {
+        float startX = getX();
+        float startY = getY();
+        bullets.add(new Bullet(targetX, targetY, startX, startY));
+    }
+
 
     public Sprite getSprite() {
         return sprite;
@@ -125,6 +149,10 @@ public class Monster {
 
     public float getHealth() {
         return health;
+    }
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
     }
 
     public void setHealth(float health) {

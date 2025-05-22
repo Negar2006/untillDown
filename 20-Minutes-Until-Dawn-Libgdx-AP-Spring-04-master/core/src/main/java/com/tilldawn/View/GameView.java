@@ -32,12 +32,13 @@ public class GameView extends InputAdapter implements Screen {
     private GameController controller;
     private Array<DamagePopup> damagePopups = new Array<>();
     private ImageButton settingsButton;
-
     private Animation<TextureRegion> treeAnimation;
     private Animation<TextureRegion> playerAnimation;
     private float stateTime;
     private GameAssetManager assetManager;
     private Label timerLabel;
+    private Label healthLabel;
+    private Label killsLabel;
 
     public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
@@ -55,6 +56,15 @@ public class GameView extends InputAdapter implements Screen {
         timerLabel = new Label("Time Left: 10:00", skin);
         timerLabel.setPosition(10, Gdx.graphics.getHeight() - 30);
         stage.addActor(timerLabel);
+
+        healthLabel = new Label("HP: " + controller.getPlayerHealth(), skin);
+        healthLabel.setPosition(10, Gdx.graphics.getHeight() - 60);
+        stage.addActor(healthLabel);
+
+        killsLabel = new Label("Kills: " + controller.getKillCount(), skin);
+        killsLabel.setPosition(10, Gdx.graphics.getHeight() - 90);
+        stage.addActor(killsLabel);
+
 
         settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("gear.png")))));
         settingsButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
@@ -93,6 +103,9 @@ public class GameView extends InputAdapter implements Screen {
         long minutes = remainingMillis / 60000;
         long seconds = (remainingMillis % 60000) / 1000;
         timerLabel.setText(String.format("Time Left: %02d:%02d", minutes, seconds));
+        healthLabel.setText("HP: " + controller.getPlayerHealth());
+        killsLabel.setText("Kills: " + controller.getKillCount());
+
 
         controller.updateGame();
 

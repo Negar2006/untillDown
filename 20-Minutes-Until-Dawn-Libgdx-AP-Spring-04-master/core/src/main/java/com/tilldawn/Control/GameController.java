@@ -19,6 +19,7 @@ public class GameController {
     private boolean autoAimEnabled = false;
     private long startTimeMillis;
     private final long GAME_DURATION_MILLIS = 10 * 60 * 1000;
+    private int numberOfKill = 0;
 
     public void setView(GameView view, Texture playerTexture, String characterName) {
         this.view = view;
@@ -26,6 +27,7 @@ public class GameController {
         weaponController = new WeaponController(new Weapon());
         worldController = new WorldController(playerController);
         monsterController = new MonsterController();
+        monsterController.setGameController(this);
 
         weaponController.setGameView(view);
         weaponController.setGameController(this);
@@ -128,6 +130,14 @@ public class GameController {
         }
     }
 
+    public int getNumberOfKill() {
+        return numberOfKill;
+    }
+
+    public void setNumberOfKill(int numberOfKill) {
+        this.numberOfKill = numberOfKill;
+    }
+
     public WorldController getWorldController() {
         return worldController;
     }
@@ -136,4 +146,11 @@ public class GameController {
         return startTimeMillis;
     }
 
+    public float getPlayerHealth() {
+        return playerController.getPlayer().getPlayerHealth();
+    }
+
+    public int getKillCount() {
+        return this.numberOfKill;
+    }
 }

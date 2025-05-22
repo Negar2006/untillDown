@@ -1,6 +1,7 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.tilldawn.Model.Bullet;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
 import com.tilldawn.Model.enums.monsterTypes;
@@ -16,6 +17,12 @@ public class MonsterController {
     private float spawnTimer = 0;
     private float eyebatSpawnTimer = 0;
     private boolean treesSpawned = false;
+    private GameController gameController;
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
+    }
+
 
     public void update(Player player, SpriteBatch batch) {
         if (!treesSpawned) {
@@ -36,7 +43,7 @@ public class MonsterController {
         }
 
         eyebatSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
-        if (eyebatSpawnTimer > 2f) {
+        if (eyebatSpawnTimer > 10f) {
             eyebatMonsters.add(new Monster(monsterTypes.Eyebat));
             eyebatSpawnTimer = 0;
         }
@@ -47,13 +54,22 @@ public class MonsterController {
             }
         }
 
-        Iterator<Monster> iter = tentacleMonsters.iterator();
-        while (iter.hasNext()) {
-            Monster m = iter.next();
+        Iter(player, batch, tentacleMonsters);
+        Iter(player, batch, treeMonsters);
+        Iter(player, batch, eyebatMonsters);
+        handleEyebatBullets(player);
+    }
+
+    private void Iter(Player player, SpriteBatch batch, ArrayList<Monster> eyebatMonsters) {
+        Iterator<Monster> iter2 = eyebatMonsters.iterator();
+        while (iter2.hasNext()) {
+            Monster m = iter2.next();
 
             if (m.isDead()) {
                 player.addScore(10);
-                iter.remove();
+                iter2.remove();
+                int newKill = gameController.getKillCount() + 1;
+                gameController.setNumberOfKill(newKill);
                 continue;
             }
             m.updateAndDraw(batch, player);
@@ -66,6 +82,22 @@ public class MonsterController {
             treeMonsters.add(new Monster(monsterTypes.TreeMonster));
         }
     }
+
+    private void handleEyebatBullets(Player player) {
+        for (Monster eyebat : eyebatMonsters) {
+            if (eyebat.isDead()) continue;
+            ArrayList<Bullet> bullets = eyebat.getBullets();
+            Iterator<Bullet> iter = bullets.iterator();
+            while (iter.hasNext()) {
+                Bullet bullet = iter.next();
+                if (bullet.getSprite().getBoundingRectangle().overlaps(player.getPlayerSprite().getBoundingRectangle())) {
+                    player.takeDamage(bullet.getDamage());
+                    iter.remove();
+                }
+            }
+        }
+    }
+
 
     public ArrayList<Monster> getEyebatMonsters() {
         return eyebatMonsters;
