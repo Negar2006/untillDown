@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Player {
     private Texture playerTexture = new Texture(GameAssetManager.getGameAssetManager().getCharacter1_idle0());
     private Sprite playerSprite = new Sprite(playerTexture);
+    private float posX;
+    private float posY;
     private float playerHealth = 100;
     private CollisionRect rect;
     private float time = 0;
@@ -17,36 +19,55 @@ public class Player {
     private boolean isPlayerRunning = false;
 
     public Player() {
-        float spriteWidth = playerTexture.getWidth() * 3;
-        float spriteHeight = playerTexture.getHeight() * 3;
+        playerSprite.setSize(playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
 
-        // Position at screen center
-        float startX = (Gdx.graphics.getWidth() - spriteWidth) / 2f;
-        float startY = (Gdx.graphics.getHeight() - spriteHeight) / 2f;
+        posX = playerSprite.getX();
+        posY = playerSprite.getY();
 
-        playerSprite.setSize(spriteWidth, spriteHeight);
-        playerSprite.setPosition(startX, startY);
+        centerPlayerOnScreen();
 
-        rect = new CollisionRect(startX, startY, spriteWidth, spriteHeight);
+        rect = new CollisionRect(posX, posY, playerSprite.getWidth(), playerSprite.getHeight());
     }
 
-    // Position getters/setters use sprite's position to keep consistent
+    private void centerPlayerOnScreen() {
+        float centerX = (Gdx.graphics.getWidth() - playerSprite.getWidth()) / 2f;
+        float centerY = (Gdx.graphics.getHeight() - playerSprite.getHeight()) / 2f;
+
+        posX = centerX;
+        posY = centerY;
+
+        playerSprite.setPosition(posX, posY);
+    }
+
+    public void updatePosition(float deltaX, float deltaY) {
+        posX += deltaX;
+        posY += deltaY;
+        playerSprite.setPosition(posX, posY);
+        rect.move(posX, posY);
+    }
+
     public float getPosX() {
-        return playerSprite.getX();
+        return posX;
     }
 
     public void setPosX(float posX) {
+        this.posX = posX;
         playerSprite.setX(posX);
-        rect.setPosition(posX, getPosY());
+        rect.setPosition(posX, posY);
     }
 
     public float getPosY() {
-        return playerSprite.getY();
+        return posY;
     }
 
     public void setPosY(float posY) {
+        this.posY = posY;
         playerSprite.setY(posY);
-        rect.setPosition(getPosX(), posY);
+        rect.setPosition(posX, posY);
+    }
+
+    public void addScore(int amount) {
+        this.score += amount;
     }
 
     public Sprite getPlayerSprite() {
@@ -57,47 +78,39 @@ public class Player {
         return playerHealth;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public Texture getPlayerTexture() {
+        return playerTexture;
+    }
+
     public void setPlayerHealth(float playerHealth) {
         this.playerHealth = playerHealth;
-    }
-
-    public CollisionRect getRect() {
-        return rect;
-    }
-
-    public boolean isPlayerIdle() {
-        return isPlayerIdle;
-    }
-
-    public void setPlayerIdle(boolean playerIdle) {
-        isPlayerIdle = playerIdle;
-    }
-
-    public boolean isPlayerRunning() {
-        return isPlayerRunning;
-    }
-
-    public void setPlayerRunning(boolean playerRunning) {
-        isPlayerRunning = playerRunning;
-    }
-
-    public float getTime() {
-        return time;
-    }
-
-    public void setTime(float time) {
-        this.time = time;
-    }
-
-    public float getSpeed() {
-        return speed;
     }
 
     public int getScore() {
         return score;
     }
 
-    public void addScore(int amount) {
-        this.score += amount;
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public void setPlayerIdle(boolean playerIdle) {
+        isPlayerIdle = playerIdle;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
+    }
+
+    public float getTime() {
+        return time;
     }
 }

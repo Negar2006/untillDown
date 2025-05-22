@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Player;
-
 
 public class PlayerController {
     private Player player;
@@ -19,35 +19,14 @@ public class PlayerController {
     public void update(float delta) {
         float dx = 0, dy = 0;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += moveSpeed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= moveSpeed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= moveSpeed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += moveSpeed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) dy += player.getSpeed() * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) dy -= player.getSpeed() * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) dx -= player.getSpeed() * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) dx += player.getSpeed() * delta;
 
-        Player player = getPlayer();
+        player.updatePosition(dx, dy);
 
-//        float centerX = Gdx.graphics.getWidth() / 2f - player.getPlayerSprite().getWidth() / 2f;
-//        float centerY = Gdx.graphics.getHeight() / 2f - player.getPlayerSprite().getHeight() / 2f;
-//        player.getPlayerSprite().setPosition(centerX, centerY);
-        player.setPosX(player.getPosX() + dx);
-        player.setPosY(player.getPosY() + dy);
-        player.getPlayerSprite().setPosition(player.getPosX(), player.getPosY());
-    }
-
-    public void handlePlayerInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            player.setPosY(player.getPosY() - player.getSpeed());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.setPosX(player.getPosX() - player.getSpeed());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            player.setPosY(player.getPosY() + player.getSpeed());
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.setPosX(player.getPosX() + player.getSpeed());
-            player.getPlayerSprite().flip(true, false);
-        }
+        player.getPlayerSprite().draw(Main.getBatch());
     }
 
     public void idleAnimation() {
