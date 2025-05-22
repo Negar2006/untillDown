@@ -2,6 +2,7 @@ package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Monster;
@@ -19,9 +20,10 @@ public class GameController {
     private long startTimeMillis;
     private final long GAME_DURATION_MILLIS = 10 * 60 * 1000;
 
-    public void setView(GameView view) {
+    public void setView(GameView view, Texture playerTexture) {
         this.view = view;
-        playerController = new PlayerController(new Player());
+        playerController = new PlayerController(new Player(playerTexture));
+        playerController.getPlayer().setPlayerTexture(playerTexture);
         weaponController = new WeaponController(new Weapon());
         worldController = new WorldController(playerController);
         monsterController = new MonsterController();

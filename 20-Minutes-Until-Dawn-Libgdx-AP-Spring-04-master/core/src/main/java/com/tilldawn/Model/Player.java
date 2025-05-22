@@ -18,7 +18,8 @@ public class Player {
     private boolean isPlayerIdle = true;
     private boolean isPlayerRunning = false;
 
-    public Player() {
+    public Player(Texture playerTexture) {
+        this.playerTexture = playerTexture;
         playerSprite.setSize(playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
 
         posX = playerSprite.getX();
@@ -27,6 +28,10 @@ public class Player {
         centerPlayerOnScreen();
 
         rect = new CollisionRect(posX, posY, playerSprite.getWidth(), playerSprite.getHeight());
+    }
+
+    public void setPlayerTexture(Texture playerTexture) {
+        this.playerTexture = playerTexture;
     }
 
     private void centerPlayerOnScreen() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,10 +39,10 @@ public class GameView extends InputAdapter implements Screen {
     private GameAssetManager assetManager;
     private Label timerLabel;
 
-    public GameView(GameController controller, Skin skin) {
+    public GameView(GameController controller, Skin skin, Texture playerTexture) {
         this.skin = skin;
         this.controller = controller;
-        controller.setView(this);
+        controller.setView(this, playerTexture);
         this.assetManager = GameAssetManager.getGameAssetManager();
         this.stateTime = 0f;
 

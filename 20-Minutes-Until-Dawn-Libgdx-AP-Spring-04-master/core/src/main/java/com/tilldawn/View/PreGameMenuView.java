@@ -71,9 +71,9 @@ public class PreGameMenuView implements Screen {
             img.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    selectedCharacterIndex = index;
+                    selectedCharacterIndex = index ;
                     playButton.setDisabled(false);
-                    controller.onCharacterSelected(index);
+                    controller.onCharacterSelected(selectedCharacterIndex);
                 }
             });
 
