@@ -20,7 +20,6 @@ import com.tilldawn.Control.GameController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
-import com.tilldawn.Model.Tree;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -31,19 +30,17 @@ public class GameView extends InputAdapter implements Screen {
     private Array<DamagePopup> damagePopups = new Array<>();
     private ImageButton settingsButton;
 
-    private ArrayList<Tree> treeInstances;
     private Animation<TextureRegion> treeAnimation;
     private Animation<TextureRegion> playerAnimation;
     private float stateTime;
-
     private GameAssetManager assetManager;
 
     public GameView(GameController controller, Skin skin) {
         this.controller = controller;
         controller.setView(this);
         this.assetManager = GameAssetManager.getGameAssetManager();
-        this.treeInstances = new ArrayList<>();
         this.stateTime = 0f;
+
     }
 
     @Override
@@ -61,20 +58,6 @@ public class GameView extends InputAdapter implements Screen {
         });
         stage.addActor(settingsButton);
 
-        Random rand = new Random();
-        for (int i = 0; i < 20; i++) {
-            float x = rand.nextInt(Gdx.graphics.getWidth() - 100) + 50;
-            float y = rand.nextInt(Gdx.graphics.getHeight() - 200) + 100;
-            treeInstances.add(new Tree(x, y));
-        }
-
-        Animation<com.badlogic.gdx.graphics.Texture> rawTreeAnim = assetManager.getTree_idle_animation();
-
-        Array<TextureRegion> frames = new Array<>();
-        for (com.badlogic.gdx.graphics.Texture t : rawTreeAnim.getKeyFrames()) {
-            frames.add(new TextureRegion(t));
-        }
-        treeAnimation = new Animation<>(rawTreeAnim.getFrameDuration(), frames, Animation.PlayMode.LOOP);
 
         Animation<com.badlogic.gdx.graphics.Texture> rawPlayerAnim = assetManager.getCharacter1_idle_animation();
         Array<TextureRegion> playerFrames = new Array<>();
@@ -98,13 +81,6 @@ public class GameView extends InputAdapter implements Screen {
         Main.getBatch().begin();
 
         controller.updateGame();
-
-        for (Tree tree : treeInstances) {
-            if (tree.isAlive()) {
-                TextureRegion currentFrame = treeAnimation.getKeyFrame(stateTime);
-                Main.getBatch().draw(currentFrame, tree.getX(), tree.getY());
-            }
-        }
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
             DamagePopup popup = damagePopups.get(i);
@@ -167,16 +143,6 @@ public class GameView extends InputAdapter implements Screen {
     public boolean mouseMoved(int screenX, int screenY) {
         controller.getWeaponController().handleWeaponRotation(screenX, screenY);
         return false;
-    }
-
-    public void damageTreeAt(float x, float y, int damage) {
-        for (Tree tree : treeInstances) {
-            if (tree.isAlive() && x >= tree.getX() && x <= tree.getX() + 64 && y >= tree.getY() && y <= tree.getY() + 64) {
-                tree.damage(damage);
-                addDamagePopup(tree.getX(), tree.getY() + 70, "-" + damage);
-                break;
-            }
-        }
     }
 
     public void addDamagePopup(float x, float y, String text) {

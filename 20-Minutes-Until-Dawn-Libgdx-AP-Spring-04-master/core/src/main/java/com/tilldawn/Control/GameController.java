@@ -20,15 +20,15 @@ public class GameController {
     private MonsterController monsterController;
     private boolean autoAimEnabled = false;
 
-
     public void setView(GameView view) {
         this.view = view;
         playerController = new PlayerController(new Player());
         weaponController = new WeaponController(new Weapon());
-        weaponController.setGameView(view);
         worldController = new WorldController(playerController);
-        weaponController.setGameController(this);
         monsterController = new MonsterController();
+
+        weaponController.setGameView(view);
+        weaponController.setGameController(this);
     }
 
     public void updateGame() {

@@ -4,17 +4,21 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.tilldawn.Model.enums.monsterTypes;
+
 import java.util.Random;
 
 public class Monster {
     private float health = 100;
+    private monsterTypes type;
     private float posX, posY;
     private Sprite sprite;
     private float speed = 0.5f;
     private float time = 0f;
     private Animation<Texture> animation;
 
-    public Monster() {
+    public Monster(monsterTypes type) {
+        this.type = type;
         this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);

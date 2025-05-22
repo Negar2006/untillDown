@@ -70,9 +70,14 @@ public class WeaponController {
         float playerX = playerSprite.getX() + playerSprite.getWidth() / 2;
         float playerY = playerSprite.getY() + playerSprite.getHeight() / 3;
 
-        int flippedY = Gdx.graphics.getHeight() - y;
+        float angleDeg = weapon.getSmgSprite().getRotation();
 
-        bullets.add(new Bullet(x, flippedY, playerX, playerY));
+        float fixedAngle = angleDeg + 360;
+
+        float targetX = playerX + MathUtils.cosDeg(fixedAngle) * 1000;
+        float targetY = playerY + MathUtils.sinDeg(fixedAngle) * 1000;
+
+        bullets.add(new Bullet(targetX, targetY, playerX, playerY));
         weapon.setAmmo(weapon.getAmmo() - 1);
     }
 

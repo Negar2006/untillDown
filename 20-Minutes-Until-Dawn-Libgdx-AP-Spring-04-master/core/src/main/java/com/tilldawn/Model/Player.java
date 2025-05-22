@@ -113,4 +113,8 @@ public class Player {
     public float getTime() {
         return time;
     }
+
+    public void reduceHealth(int i) {
+        this.playerHealth -= i;
+    }
 }

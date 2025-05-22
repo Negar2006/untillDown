@@ -3,6 +3,7 @@ package com.tilldawn.Control;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
+import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,7 +16,7 @@ public class MonsterController {
         spawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
         if (spawnTimer > 2f) {
-            monsters.add(new Monster());
+            monsters.add(new Monster(monsterTypes.TentacleMonster));
             spawnTimer = 0;
         }
 
