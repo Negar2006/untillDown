@@ -4,11 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.tilldawn.Main;
-import com.tilldawn.Model.Bullet;
 import com.tilldawn.Model.Player;
-import com.tilldawn.Model.Weapon;
-
-import java.util.ArrayList;
 
 public class WorldController {
     private PlayerController playerController;

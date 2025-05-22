@@ -115,14 +115,6 @@ public class GameView extends InputAdapter implements Screen {
             }
         }
 
-        TextureRegion playerFrame = playerAnimation.getKeyFrame(stateTime, true);
-        float playerX = controller.getPlayerController().getPlayer().getPosX();
-        float playerY = controller.getPlayerController().getPlayer().getPosY();
-        float width = playerFrame.getRegionWidth() * 4f;
-        float height = playerFrame.getRegionHeight() * 4f;
-
-        Main.getBatch().draw(playerFrame, playerX, playerY, width, height);
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 

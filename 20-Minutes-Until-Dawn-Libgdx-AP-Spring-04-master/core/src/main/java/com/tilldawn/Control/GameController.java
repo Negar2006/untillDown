@@ -38,12 +38,7 @@ public class GameController {
             weaponController.update(monsterController.getMonsters());
             playerController.update(delta);
             monsterController.update(playerController.getPlayer(), Main.getBatch());
-            checkIfPlayerOutOfScreen();
         }
-    }
-
-    public MonsterController getMonsterController() {
-        return monsterController;
     }
 
     public boolean isAutoAimEnabled() {

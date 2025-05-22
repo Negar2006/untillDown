@@ -34,7 +34,6 @@ public class MonsterController {
         }
     }
 
-
     public ArrayList<Monster> getMonsters() {
         return monsters;
     }

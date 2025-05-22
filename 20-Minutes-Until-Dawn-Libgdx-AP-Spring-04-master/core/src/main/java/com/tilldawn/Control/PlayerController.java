@@ -10,7 +10,6 @@ import com.tilldawn.Model.Player;
 
 public class PlayerController {
     private Player player;
-    private float moveSpeed = 100f;
 
     public PlayerController(Player player) {
         this.player = player;
