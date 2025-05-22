@@ -5,9 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -85,8 +83,8 @@ public class GameView extends InputAdapter implements Screen {
         }
         playerAnimation = new Animation<>(rawPlayerAnim.getFrameDuration(), playerFrames, Animation.PlayMode.LOOP);
 
-
         InputMultiplexer multiplexer = new InputMultiplexer();
+
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
@@ -124,7 +122,6 @@ public class GameView extends InputAdapter implements Screen {
         float height = playerFrame.getRegionHeight() * 4f;
 
         Main.getBatch().draw(playerFrame, playerX, playerY, width, height);
-
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();

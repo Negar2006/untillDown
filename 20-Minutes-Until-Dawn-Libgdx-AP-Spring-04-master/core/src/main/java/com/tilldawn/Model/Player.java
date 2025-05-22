@@ -7,57 +7,50 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Player {
     private Texture playerTexture = new Texture(GameAssetManager.getGameAssetManager().getCharacter1_idle0());
     private Sprite playerSprite = new Sprite(playerTexture);
-    private float posX = 0;
-    private float posY = 0;
     private float playerHealth = 100;
     private CollisionRect rect;
     private float time = 0;
     private float speed = 100f;
     private int score = 0;
 
-    public float getSpeed() {
-        return speed;
-    }
-
     private boolean isPlayerIdle = true;
     private boolean isPlayerRunning = false;
 
-    public Player(){
-        playerSprite.setPosition((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2);
-        playerSprite.setSize(playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
-        rect = new CollisionRect((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight(), playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
+    public Player() {
+        float spriteWidth = playerTexture.getWidth() * 3;
+        float spriteHeight = playerTexture.getHeight() * 3;
+
+        // Position at screen center
+        float startX = (Gdx.graphics.getWidth() - spriteWidth) / 2f;
+        float startY = (Gdx.graphics.getHeight() - spriteHeight) / 2f;
+
+        playerSprite.setSize(spriteWidth, spriteHeight);
+        playerSprite.setPosition(startX, startY);
+
+        rect = new CollisionRect(startX, startY, spriteWidth, spriteHeight);
     }
 
-    public Texture getPlayerTexture() {
-        return playerTexture;
+    // Position getters/setters use sprite's position to keep consistent
+    public float getPosX() {
+        return playerSprite.getX();
     }
 
-    public void setPlayerTexture(Texture playerTexture) {
-        this.playerTexture = playerTexture;
+    public void setPosX(float posX) {
+        playerSprite.setX(posX);
+        rect.setPosition(posX, getPosY());
+    }
+
+    public float getPosY() {
+        return playerSprite.getY();
+    }
+
+    public void setPosY(float posY) {
+        playerSprite.setY(posY);
+        rect.setPosition(getPosX(), posY);
     }
 
     public Sprite getPlayerSprite() {
         return playerSprite;
-    }
-
-    public void setPlayerSprite(Sprite playerSprite) {
-        this.playerSprite = playerSprite;
-    }
-
-    public float getPosX() {
-        return posX;
-    }
-
-    public void setPosX(float posX) {
-        this.posX = posX;
-    }
-
-    public float getPosY() {
-        return posY;
-    }
-
-    public void setPosY(float posY) {
-        this.posY = posY;
     }
 
     public float getPlayerHealth() {
@@ -71,11 +64,6 @@ public class Player {
     public CollisionRect getRect() {
         return rect;
     }
-
-    public void setRect(CollisionRect rect) {
-        this.rect = rect;
-    }
-
 
     public boolean isPlayerIdle() {
         return isPlayerIdle;
@@ -101,7 +89,15 @@ public class Player {
         this.time = time;
     }
 
-    public void addScore(int i) {
-        this.score += i ;
+    public float getSpeed() {
+        return speed;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int amount) {
+        this.score += amount;
     }
 }

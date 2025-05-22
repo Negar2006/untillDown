@@ -35,8 +35,8 @@ public class GameController {
         if (view != null) {
             worldController.update();
             float delta = Gdx.graphics.getDeltaTime();
-            playerController.update(delta);
             weaponController.update(monsterController.getMonsters());
+            playerController.update(delta);
             monsterController.update(playerController.getPlayer(), Main.getBatch());
             checkIfPlayerOutOfScreen();
         }
@@ -66,14 +66,14 @@ public class GameController {
     private void checkIfPlayerOutOfScreen() {
         Player player = playerController.getPlayer();
 
-        float screenX = player.getPlayerSprite().getX();
-        float screenY = player.getPlayerSprite().getY();
-        float width = player.getPlayerSprite().getWidth();
-        float height = player.getPlayerSprite().getHeight();
+        float worldX = player.getPosX();
+        float worldY = player.getPosY();
 
-        if (screenX < 0 || screenX + width < 0 || screenX > Gdx.graphics.getWidth()
-            || screenY + height < 0 || screenY > Gdx.graphics.getHeight()) {
-            System.out.println("💀you can't go out of bounds! YOU LOST!💀");
+        float WORLD_WIDTH = 1920;
+        float WORLD_HEIGHT = 1080;
+
+        if (worldX < 0 || worldX > WORLD_WIDTH || worldY < 0 || worldY > WORLD_HEIGHT) {
+            System.out.println("💀 You can't go out of bounds! YOU LOST! 💀");
             Main.getMain().setScreen(new MainMenuView(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
         }
     }

@@ -41,7 +41,14 @@ public class WeaponController {
                 autoAimAt(closest);
             }
         }
-        weapon.setPosition(controller.getPlayerController().getPlayer().getPosX(), controller.getPlayerController().getPlayer().getPosY());
+
+        Player player = controller.getPlayerController().getPlayer();
+        Sprite playerSprite = player.getPlayerSprite();
+
+        float weaponX = playerSprite.getX() + playerSprite.getWidth() / 2;
+        float weaponY = playerSprite.getY() + playerSprite.getHeight() / 3;
+
+        weapon.setPosition(weaponX, weaponY);
         weapon.getSmgSprite().draw(Main.getBatch());
         updateBullets(monsters);
     }

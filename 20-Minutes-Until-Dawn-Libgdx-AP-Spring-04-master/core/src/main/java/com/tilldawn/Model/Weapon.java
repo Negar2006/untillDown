@@ -20,7 +20,7 @@ public class Weapon {
     }
 
     public void setPosition(float x, float y) {
-        smgSprite.setPosition(x, y);
+        smgSprite.setPosition(x, y); // tweak based on sprite size
     }
 
     public Sprite getSprite() {

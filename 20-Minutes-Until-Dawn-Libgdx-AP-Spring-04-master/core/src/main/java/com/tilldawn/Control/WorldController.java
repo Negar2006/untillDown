@@ -17,7 +17,8 @@ public class WorldController {
     private OrthographicCamera camera;
 
     public WorldController(PlayerController playerController) {
-        this.playerController = playerController;this.backgroundTexture = new Texture("background.png");
+        this.playerController = playerController;
+        this.backgroundTexture = new Texture("background.png");
 
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -25,13 +26,12 @@ public class WorldController {
 
     public void update() {
         Player player = playerController.getPlayer();
+
         camera.position.set(player.getPosX(), player.getPosY(), 0);
         camera.update();
 
-        // Apply the camera's projection to the batch
         Main.getBatch().setProjectionMatrix(camera.combined);
 
-        // Draw background (anchored at 0,0 in world coordinates)
         Main.getBatch().draw(backgroundTexture, 0, 0);
     }
 
