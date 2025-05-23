@@ -107,6 +107,10 @@ public class Monster {
     public void moveTowards(float targetX, float targetY) {
         float dx = targetX - sprite.getX();
         float dy = targetY - sprite.getY();
+        leangth(dx, dy, speed);
+    }
+
+    private void leangth(float dx, float dy, float speed) {
         float length = (float) Math.sqrt(dx * dx + dy * dy);
         if (length != 0) {
             dx /= length;
@@ -156,12 +160,7 @@ public class Monster {
                 dashTimePassed += delta;
                 float dx = player.getPlayerSprite().getX() - sprite.getX();
                 float dy = player.getPlayerSprite().getY() - sprite.getY();
-                float length = (float) Math.sqrt(dx * dx + dy * dy);
-                if (length != 0) {
-                    dx /= length;
-                    dy /= length;
-                }
-                sprite.setPosition(sprite.getX() + dx * dashSpeed, sprite.getY() + dy * dashSpeed);
+                leangth(dx, dy, dashSpeed);
 
                 if (dashTimePassed >= dashDuration) {
                     isDashing = false;
@@ -177,7 +176,6 @@ public class Monster {
             b.getSprite().draw(batch);
         }
     }
-
 
     private void shootBullet(float targetX, float targetY) {
         float startX = getX();

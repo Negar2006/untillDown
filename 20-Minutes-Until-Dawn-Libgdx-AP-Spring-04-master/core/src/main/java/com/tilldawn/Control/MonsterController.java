@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.tilldawn.Model.Bullet;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
+import com.tilldawn.Model.Seed;
 import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class MonsterController {
     private ArrayList<Monster> treeMonsters = new ArrayList<>();
     private ArrayList<Monster> eyebatMonsters = new ArrayList<>();
     private ArrayList<Monster> ElderMonster = new ArrayList<>();
+    private ArrayList<Seed> seeds = new ArrayList<>();
 
     private float tentacleSpawnTimer = 0;
     private float eyebatSpawnTimer = 0;
@@ -26,6 +28,7 @@ public class MonsterController {
     }
 
     public void update(Player player, SpriteBatch batch, float totalGameTime, float totalGame) {
+
         if (!treesSpawned) {
             spawnInitialTrees();
             treesSpawned = true;
@@ -58,11 +61,23 @@ public class MonsterController {
             isElder = true;
         }
 
+        Iterator<Seed> seedIter = seeds.iterator();
+        while (seedIter.hasNext()) {
+            Seed seed = seedIter.next();
+            if (player.getPlayerSprite().getBoundingRectangle().overlaps(seed.getBounds())) {
+                seedIter.remove();
+            }
+        }
+
         Iter(player, batch, tentacleMonsters);
         Iter(player, batch, treeMonsters);
         Iter(player, batch, eyebatMonsters);
         Iter(player, batch, ElderMonster);
         handleEyebatBullets(player);
+
+        for (Seed seed : seeds) {
+            seed.draw(batch);
+        }
     }
 
     private void Iter(Player player, SpriteBatch batch, ArrayList<Monster> monsters) {
@@ -76,6 +91,7 @@ public class MonsterController {
                 int newKill = gameController.getKillCount() + 1;
                 gameController.setNumberOfKill(newKill);
                 player.addScore(m.getType().getScore());
+                seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
                 continue;
             }
             m.updateAndDraw(batch, player);
@@ -119,4 +135,9 @@ public class MonsterController {
     public ArrayList<Monster> getElderMonster() {
         return ElderMonster;
     }
+
+    public ArrayList<Seed> getSeeds() {
+        return seeds;
+    }
 }
+
