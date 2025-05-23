@@ -108,7 +108,6 @@ public class WeaponController {
         }
     }
 
-
     private Monster findClosestMonster(ArrayList<Monster> monsters) {
         float minDistance = Float.MAX_VALUE;
         Monster closest = null;

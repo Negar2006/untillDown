@@ -157,6 +157,14 @@ public class GameView extends InputAdapter implements Screen {
             controller.killMonster();
             return true;
         }
+        if(keycode == Input.Keys.E){
+            controller.killEyeBat();
+            return true;
+        }
+        if(keycode == Input.Keys.T){
+            controller.addTime(60000);
+            return true;
+        }
         return false;
     }
 
@@ -174,5 +182,101 @@ public class GameView extends InputAdapter implements Screen {
 
     public void addDamagePopup(float x, float y, String text) {
         damagePopups.add(new DamagePopup(x, y, text));
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Skin getSkin() {
+        return skin;
+    }
+
+    public void setSkin(Skin skin) {
+        this.skin = skin;
+    }
+
+    public GameController getController() {
+        return controller;
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    public Array<DamagePopup> getDamagePopups() {
+        return damagePopups;
+    }
+
+    public void setDamagePopups(Array<DamagePopup> damagePopups) {
+        this.damagePopups = damagePopups;
+    }
+
+    public ImageButton getSettingsButton() {
+        return settingsButton;
+    }
+
+    public void setSettingsButton(ImageButton settingsButton) {
+        this.settingsButton = settingsButton;
+    }
+
+    public Animation<TextureRegion> getTreeAnimation() {
+        return treeAnimation;
+    }
+
+    public void setTreeAnimation(Animation<TextureRegion> treeAnimation) {
+        this.treeAnimation = treeAnimation;
+    }
+
+    public Animation<TextureRegion> getPlayerAnimation() {
+        return playerAnimation;
+    }
+
+    public void setPlayerAnimation(Animation<TextureRegion> playerAnimation) {
+        this.playerAnimation = playerAnimation;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public GameAssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    public void setAssetManager(GameAssetManager assetManager) {
+        this.assetManager = assetManager;
+    }
+
+    public Label getTimerLabel() {
+        return timerLabel;
+    }
+
+    public void setTimerLabel(Label timerLabel) {
+        this.timerLabel = timerLabel;
+    }
+
+    public Label getHealthLabel() {
+        return healthLabel;
+    }
+
+    public void setHealthLabel(Label healthLabel) {
+        this.healthLabel = healthLabel;
+    }
+
+    public Label getKillsLabel() {
+        return killsLabel;
+    }
+
+    public void setKillsLabel(Label killsLabel) {
+        this.killsLabel = killsLabel;
+    }
+
+    public float getStateTime() {
+        return stateTime;
     }
 }

@@ -48,8 +48,13 @@ public class GameController {
             weaponController.update(monsterController.getTentacleMonsters());
             weaponController.update(monsterController.getTreeMonsters());
             weaponController.update(monsterController.getEyebatMonsters());
+            weaponController.update(monsterController.getElderMonster());
             playerController.update(delta);
-            monsterController.update(playerController.getPlayer(), Main.getBatch());
+
+            float totalGameTime = (currentTime - startTimeMillis) / 1000f;
+            float holeTimeOfGame = GAME_DURATION_MILLIS / 1000f;
+            monsterController.update(playerController.getPlayer(), Main.getBatch(), totalGameTime, holeTimeOfGame);
+
         }
     }
 
@@ -116,6 +121,10 @@ public class GameController {
         for (Monster monster : monsterController.getTreeMonsters()) {
             killingAllMonster(playerX, playerY, radius, monster);
         }
+
+        for(Monster monster : monsterController.getElderMonster()){
+            killingAllMonster(playerX, playerY, radius, monster);
+        }
     }
 
     private void killingAllMonster(float playerX, float playerY, float radius, Monster monster) {
@@ -152,5 +161,15 @@ public class GameController {
 
     public int getKillCount() {
         return this.numberOfKill;
+    }
+
+    public void killEyeBat() {
+        for(Monster monster : monsterController.getEyebatMonsters()){
+            monster.setHealth(-1);
+        }
+    }
+
+    public void addTime(long millis) {
+        startTimeMillis -= millis;
     }
 }

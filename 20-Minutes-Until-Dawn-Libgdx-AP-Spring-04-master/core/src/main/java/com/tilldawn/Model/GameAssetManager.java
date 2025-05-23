@@ -116,6 +116,22 @@ public class GameAssetManager {
 
     private final Animation<Texture> Tree_idle_animation = new Animation<>(0.2f, Tree0_tex, Tree1_tex, Tree2_tex, Tree3_tex);
 
+    private final String Boss0 = "Boss/HasturBoss_0.png";
+    private final String Boss1 = "Boss/HasturBoss_1.png";
+    private final String Boss2 = "Boss/HasturBoss_2.png";
+    private final String Boss3 = "Boss/HasturBoss_3.png";
+    private final String Boss4 = "Boss/HasturBoss_4.png";
+    private final String Boss5 = "Boss/HasturBoss_5.png";
+
+    private final Texture Boss0_tex = new Texture(Boss0);
+    private final Texture Boss1_tex = new Texture(Boss1);
+    private final Texture Boss2_tex = new Texture(Boss2);
+    private final Texture Boss3_tex = new Texture(Boss3);
+    private final Texture Boss4_tex = new Texture(Boss4);
+    private final Texture Boss5_tex = new Texture(Boss5);
+
+    private final Animation<Texture> Boss_idle_animation = new Animation<>(0.2f, Boss0_tex, Boss1_tex, Boss2_tex, Boss3_tex, Boss4_tex, Boss5_tex);
+
     private final String smg = "smg/SMGStill.png";
     private final Texture smgTexture = new Texture(smg);
 
@@ -139,6 +155,86 @@ public class GameAssetManager {
 
     public Animation<Texture> getCharacter1_idle_animation() {
         return character1_idle_frames;
+    }
+
+    public Animation<Texture> getBoss_idle_animation() {
+        return Boss_idle_animation;
+    }
+
+    public String getEyeBat1() {
+        return EyeBat1;
+    }
+
+    public String getEyeBat2() {
+        return EyeBat2;
+    }
+
+    public String getEyeBat3() {
+        return EyeBat3;
+    }
+
+    public Texture getEyeBat0_tex() {
+        return EyeBat0_tex;
+    }
+
+    public Texture getEyeBat1_tex() {
+        return EyeBat1_tex;
+    }
+
+    public Texture getEyeBat2_tex() {
+        return EyeBat2_tex;
+    }
+
+    public Texture getEyeBat3_tex() {
+        return EyeBat3_tex;
+    }
+
+    public String getBoss0() {
+        return Boss0;
+    }
+
+    public String getBoss1() {
+        return Boss1;
+    }
+
+    public String getBoss2() {
+        return Boss2;
+    }
+
+    public String getBoss3() {
+        return Boss3;
+    }
+
+    public String getBoss4() {
+        return Boss4;
+    }
+
+    public String getBoss5() {
+        return Boss5;
+    }
+
+    public Texture getBoss0_tex() {
+        return Boss0_tex;
+    }
+
+    public Texture getBoss1_tex() {
+        return Boss1_tex;
+    }
+
+    public Texture getBoss2_tex() {
+        return Boss2_tex;
+    }
+
+    public Texture getBoss3_tex() {
+        return Boss3_tex;
+    }
+
+    public Texture getBoss4_tex() {
+        return Boss4_tex;
+    }
+
+    public Texture getBoss5_tex() {
+        return Boss5_tex;
     }
 
     public Animation<Texture> getCharacter2_idle_frames() {

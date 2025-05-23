@@ -13,61 +13,72 @@ public class MonsterController {
     private ArrayList<Monster> tentacleMonsters = new ArrayList<>();
     private ArrayList<Monster> treeMonsters = new ArrayList<>();
     private ArrayList<Monster> eyebatMonsters = new ArrayList<>();
+    private ArrayList<Monster> ElderMonster = new ArrayList<>();
 
-    private float spawnTimer = 0;
+    private float tentacleSpawnTimer = 0;
     private float eyebatSpawnTimer = 0;
+    private float elderSpawnTimer = 0;
     private boolean treesSpawned = false;
     private GameController gameController;
+
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
 
-    public void update(Player player, SpriteBatch batch) {
+    public void update(Player player, SpriteBatch batch, float totalGameTime,  float totalGame) {
         if (!treesSpawned) {
             spawnInitialTrees();
             treesSpawned = true;
         }
 
-        for (Monster m : treeMonsters) {
-            if (!m.isDead()) {
-                m.updateAndDraw(batch, player);
+        tentacleSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        if (tentacleSpawnTimer >= 3f) {
+            tentacleSpawnTimer = 0f;
+
+            int numberToSpawn = Math.max((int) (totalGameTime / 30f), 0);
+            for (int i = 0; i < numberToSpawn; i++) {
+                tentacleMonsters.add(new Monster(monsterTypes.TentacleMonster));
             }
         }
 
-        spawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
-        if (spawnTimer > 2f) {
-            tentacleMonsters.add(new Monster(monsterTypes.TentacleMonster));
-            spawnTimer = 0;
-        }
-
         eyebatSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
-        if (eyebatSpawnTimer > 10f) {
-            eyebatMonsters.add(new Monster(monsterTypes.Eyebat));
-            eyebatSpawnTimer = 0;
+        if (totalGameTime >= (totalGame / 4)) {
+            if(eyebatSpawnTimer > 10f) {
+                eyebatSpawnTimer = 0;
+
+                int numberToSpawn = Math.max((int) ((4 * totalGameTime - totalGame + 30) / 30f), 0);
+                for(int i = 0; i < numberToSpawn; i++) {
+                    eyebatMonsters.add(new Monster(monsterTypes.Eyebat));
+                }
+            }
         }
 
-        for (Monster m : eyebatMonsters) {
-            if (!m.isDead()) {
-                m.updateAndDraw(batch, player);
+        elderSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        if(totalGameTime >= (totalGame / 2)) {
+            if (elderSpawnTimer >= 3f) {
+                elderSpawnTimer = 0f;
+                ElderMonster.add(new Monster(monsterTypes.Elder));
             }
         }
 
         Iter(player, batch, tentacleMonsters);
         Iter(player, batch, treeMonsters);
         Iter(player, batch, eyebatMonsters);
+        Iter(player, batch, ElderMonster);
         handleEyebatBullets(player);
     }
 
-    private void Iter(Player player, SpriteBatch batch, ArrayList<Monster> eyebatMonsters) {
-        Iterator<Monster> iter2 = eyebatMonsters.iterator();
-        while (iter2.hasNext()) {
-            Monster m = iter2.next();
+    private void Iter(Player player, SpriteBatch batch, ArrayList<Monster> monsters) {
+        Iterator<Monster> iter = monsters.iterator();
+
+        while (iter.hasNext()) {
+            Monster m = iter.next();
 
             if (m.isDead()) {
                 player.addScore(10);
-                iter2.remove();
+                iter.remove();
                 int newKill = gameController.getKillCount() + 1;
                 gameController.setNumberOfKill(newKill);
                 continue;
@@ -75,7 +86,6 @@ public class MonsterController {
             m.updateAndDraw(batch, player);
         }
     }
-
 
     private void spawnInitialTrees() {
         for (int i = 0; i < 50; i++) {
@@ -109,5 +119,9 @@ public class MonsterController {
 
     public ArrayList<Monster> getTreeMonsters() {
         return treeMonsters;
+    }
+
+    public ArrayList<Monster> getElderMonster() {
+        return ElderMonster;
     }
 }

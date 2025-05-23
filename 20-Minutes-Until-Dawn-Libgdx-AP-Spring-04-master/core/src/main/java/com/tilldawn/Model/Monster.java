@@ -20,6 +20,11 @@ public class Monster {
     private Animation<Texture> animation;
     private float bulletTimer = 0f;
     private ArrayList<Bullet> bullets = new ArrayList<>();
+    private float elderDashTimer = 0f;
+    private boolean isDashing = false;
+    private float dashSpeed = 10f;
+    private float dashDuration = 0.3f;
+    private float dashTimePassed = 0f;
 
     public Monster(monsterTypes type) {
 
@@ -36,6 +41,11 @@ public class Monster {
             case Eyebat:
                 this.health = 50f;
                 this.animation = GameAssetManager.getGameAssetManager().getEyeBat_idle_animation();
+                break;
+            case Elder:
+                this.health = 400f;
+                this.animation = GameAssetManager.getGameAssetManager().getBoss_idle_animation();
+                break;
             default:
                 this.health = 100f;
                 this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
@@ -46,8 +56,11 @@ public class Monster {
             this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
         } else if (type == monsterTypes.TentacleMonster) {
             this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
-        } else
+        } else if (type == monsterTypes.Eyebat) {
             this.animation = GameAssetManager.getGameAssetManager().getEyeBat_idle_animation();
+        } else {
+            this.animation = GameAssetManager.getGameAssetManager().getBoss_idle_animation();
+        }
 
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);
@@ -113,28 +126,56 @@ public class Monster {
     }
 
     public void updateAndDraw(SpriteBatch batch, Player player) {
-        time += Gdx.graphics.getDeltaTime();
+        float delta = Gdx.graphics.getDeltaTime();
+        time += delta;
 
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
             moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
         }
 
         if (type == monsterTypes.Eyebat) {
-            bulletTimer += Gdx.graphics.getDeltaTime();
+            bulletTimer += delta;
             if (bulletTimer >= 3f) {
                 shootBullet(player.getPosX(), player.getPosY());
                 bulletTimer = 0f;
             }
         }
 
+        if (type == monsterTypes.Elder) {
+            elderDashTimer += delta;
+
+            if (!isDashing && elderDashTimer >= 5f) {
+                isDashing = true;
+                dashTimePassed = 0f;
+                elderDashTimer = 0f;
+            }
+
+            if (isDashing) {
+                dashTimePassed += delta;
+                float dx = player.getPlayerSprite().getX() - sprite.getX();
+                float dy = player.getPlayerSprite().getY() - sprite.getY();
+                float length = (float) Math.sqrt(dx * dx + dy * dy);
+                if (length != 0) {
+                    dx /= length;
+                    dy /= length;
+                }
+                sprite.setPosition(sprite.getX() + dx * dashSpeed, sprite.getY() + dy * dashSpeed);
+
+                if (dashTimePassed >= dashDuration) {
+                    isDashing = false;
+                }
+            } else moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
+        }
+
         sprite.setRegion(animation.getKeyFrame(time, true));
         sprite.draw(batch);
 
         for (Bullet b : bullets) {
-            b.getSprite().translate(b.getDirection().x * 5f, b.getDirection().y * 5f); // سرعت گلوله
+            b.getSprite().translate(b.getDirection().x * 5f, b.getDirection().y * 5f);
             b.getSprite().draw(batch);
         }
     }
+
 
     private void shootBullet(float targetX, float targetY) {
         float startX = getX();
