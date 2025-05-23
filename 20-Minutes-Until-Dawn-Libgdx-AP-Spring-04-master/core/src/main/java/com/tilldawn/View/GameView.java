@@ -39,6 +39,7 @@ public class GameView extends InputAdapter implements Screen {
     private Label timerLabel;
     private Label healthLabel;
     private Label killsLabel;
+    private Label scoreLabel;
 
     public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
@@ -64,6 +65,10 @@ public class GameView extends InputAdapter implements Screen {
         killsLabel = new Label("Kills: " + controller.getKillCount(), skin);
         killsLabel.setPosition(10, Gdx.graphics.getHeight() - 90);
         stage.addActor(killsLabel);
+
+        scoreLabel = new Label("Score: " + controller.getPlayerController().getPlayer().getScore(), skin);
+        scoreLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
+        stage.addActor(scoreLabel);
 
 
         settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("gear.png")))));
@@ -105,7 +110,7 @@ public class GameView extends InputAdapter implements Screen {
         timerLabel.setText(String.format("Time Left: %02d:%02d", minutes, seconds));
         healthLabel.setText("HP: " + controller.getPlayerHealth());
         killsLabel.setText("Kills: " + controller.getKillCount());
-
+        scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
 
         controller.updateGame();
 
@@ -167,6 +172,15 @@ public class GameView extends InputAdapter implements Screen {
         }
         return false;
     }
+
+    public Label getScoreLabel() {
+        return scoreLabel;
+    }
+
+    public void setScoreLabel(Label scoreLabel) {
+        this.scoreLabel = scoreLabel;
+    }
+
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {

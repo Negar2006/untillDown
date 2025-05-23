@@ -121,16 +121,14 @@ public class GameAssetManager {
     private final String Boss2 = "Boss/HasturBoss_2.png";
     private final String Boss3 = "Boss/HasturBoss_3.png";
     private final String Boss4 = "Boss/HasturBoss_4.png";
-    private final String Boss5 = "Boss/HasturBoss_5.png";
 
     private final Texture Boss0_tex = new Texture(Boss0);
     private final Texture Boss1_tex = new Texture(Boss1);
     private final Texture Boss2_tex = new Texture(Boss2);
     private final Texture Boss3_tex = new Texture(Boss3);
     private final Texture Boss4_tex = new Texture(Boss4);
-    private final Texture Boss5_tex = new Texture(Boss5);
 
-    private final Animation<Texture> Boss_idle_animation = new Animation<>(0.2f, Boss0_tex, Boss1_tex, Boss2_tex, Boss3_tex, Boss4_tex, Boss5_tex);
+    private final Animation<Texture> Boss_idle_animation = new Animation<>(0.2f, Boss0_tex, Boss1_tex, Boss2_tex, Boss3_tex, Boss4_tex);
 
     private final String smg = "smg/SMGStill.png";
     private final Texture smgTexture = new Texture(smg);
@@ -209,10 +207,6 @@ public class GameAssetManager {
         return Boss4;
     }
 
-    public String getBoss5() {
-        return Boss5;
-    }
-
     public Texture getBoss0_tex() {
         return Boss0_tex;
     }
@@ -231,10 +225,6 @@ public class GameAssetManager {
 
     public Texture getBoss4_tex() {
         return Boss4_tex;
-    }
-
-    public Texture getBoss5_tex() {
-        return Boss5_tex;
     }
 
     public Animation<Texture> getCharacter2_idle_frames() {

@@ -52,16 +52,6 @@ public class Monster {
                 break;
         }
 
-        if (type == monsterTypes.TreeMonster) {
-            this.animation = GameAssetManager.getGameAssetManager().getTree_idle_animation();
-        } else if (type == monsterTypes.TentacleMonster) {
-            this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
-        } else if (type == monsterTypes.Eyebat) {
-            this.animation = GameAssetManager.getGameAssetManager().getEyeBat_idle_animation();
-        } else {
-            this.animation = GameAssetManager.getGameAssetManager().getBoss_idle_animation();
-        }
-
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.TreeMonster)
@@ -123,6 +113,18 @@ public class Monster {
             dy /= length;
         }
         sprite.setPosition(sprite.getX() + dx * speed, sprite.getY() + dy * speed);
+    }
+
+    public void setType(monsterTypes type) {
+        this.type = type;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public monsterTypes getType() {
+        return type;
     }
 
     public void updateAndDraw(SpriteBatch batch, Player player) {

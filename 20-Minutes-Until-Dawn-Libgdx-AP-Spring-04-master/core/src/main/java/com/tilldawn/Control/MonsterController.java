@@ -17,17 +17,15 @@ public class MonsterController {
 
     private float tentacleSpawnTimer = 0;
     private float eyebatSpawnTimer = 0;
-    private float elderSpawnTimer = 0;
     private boolean treesSpawned = false;
     private GameController gameController;
-
+    private boolean isElder = false;
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
-
-    public void update(Player player, SpriteBatch batch, float totalGameTime,  float totalGame) {
+    public void update(Player player, SpriteBatch batch, float totalGameTime, float totalGame) {
         if (!treesSpawned) {
             spawnInitialTrees();
             treesSpawned = true;
@@ -45,22 +43,19 @@ public class MonsterController {
 
         eyebatSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
         if (totalGameTime >= (totalGame / 4)) {
-            if(eyebatSpawnTimer > 10f) {
+            if (eyebatSpawnTimer > 10f) {
                 eyebatSpawnTimer = 0;
 
                 int numberToSpawn = Math.max((int) ((4 * totalGameTime - totalGame + 30) / 30f), 0);
-                for(int i = 0; i < numberToSpawn; i++) {
+                for (int i = 0; i < numberToSpawn; i++) {
                     eyebatMonsters.add(new Monster(monsterTypes.Eyebat));
                 }
             }
         }
 
-        elderSpawnTimer += com.badlogic.gdx.Gdx.graphics.getDeltaTime();
-        if(totalGameTime >= (totalGame / 2)) {
-            if (elderSpawnTimer >= 3f) {
-                elderSpawnTimer = 0f;
-                ElderMonster.add(new Monster(monsterTypes.Elder));
-            }
+        if (totalGameTime >= (totalGame / 2) && !isElder) {
+            ElderMonster.add(new Monster(monsterTypes.Elder));
+            isElder = true;
         }
 
         Iter(player, batch, tentacleMonsters);
@@ -77,10 +72,10 @@ public class MonsterController {
             Monster m = iter.next();
 
             if (m.isDead()) {
-                player.addScore(10);
                 iter.remove();
                 int newKill = gameController.getKillCount() + 1;
                 gameController.setNumberOfKill(newKill);
+                player.addScore(m.getType().getScore());
                 continue;
             }
             m.updateAndDraw(batch, player);
