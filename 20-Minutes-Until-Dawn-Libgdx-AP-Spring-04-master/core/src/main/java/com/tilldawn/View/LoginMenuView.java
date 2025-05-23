@@ -68,23 +68,43 @@ public class LoginMenuView implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
         stage.dispose();
     }
 
-    public Stage getStage() { return stage; }
-    public TextField getUsernameField() { return usernameField; }
-    public TextField getPasswordField() { return passwordField; }
-    public TextButton getLoginButton() { return loginButton; }
-    public TextButton getForgotPasswordButton() { return forgotPasswordButton; }
-    public void setFeedbackText(String text) { feedbackLabel.setText(text); }
+    public Stage getStage() {
+        return stage;
+    }
+
+    public TextField getUsernameField() {
+        return usernameField;
+    }
+
+    public TextField getPasswordField() {
+        return passwordField;
+    }
+
+    public TextButton getLoginButton() {
+        return loginButton;
+    }
+
+    public TextButton getForgotPasswordButton() {
+        return forgotPasswordButton;
+    }
+
+    public void setFeedbackText(String text) {
+        feedbackLabel.setText(text);
+    }
 }
