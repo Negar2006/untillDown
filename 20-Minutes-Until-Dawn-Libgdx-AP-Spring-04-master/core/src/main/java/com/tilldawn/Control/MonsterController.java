@@ -8,6 +8,7 @@ import com.tilldawn.Model.Seed;
 import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class MonsterController {
@@ -22,6 +23,7 @@ public class MonsterController {
     private boolean treesSpawned = false;
     private GameController gameController;
     private boolean isElder = false;
+    private final HashMap<Monster, Float> overlapTimers = new HashMap<>();
 
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
@@ -61,13 +63,7 @@ public class MonsterController {
             isElder = true;
         }
 
-        Iterator<Seed> seedIter = seeds.iterator();
-        while (seedIter.hasNext()) {
-            Seed seed = seedIter.next();
-            if (player.getPlayerSprite().getBoundingRectangle().overlaps(seed.getBounds())) {
-                seedIter.remove();
-            }
-        }
+        seeds.removeIf(seed -> player.getPlayerSprite().getBoundingRectangle().overlaps(seed.getBounds()));
 
         Iter(player, batch, tentacleMonsters);
         Iter(player, batch, treeMonsters);
@@ -82,19 +78,33 @@ public class MonsterController {
 
     private void Iter(Player player, SpriteBatch batch, ArrayList<Monster> monsters) {
         Iterator<Monster> iter = monsters.iterator();
+        float delta = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
 
         while (iter.hasNext()) {
             Monster m = iter.next();
 
             if (m.isDead()) {
                 iter.remove();
+                overlapTimers.remove(m);  // clean up
                 int newKill = gameController.getKillCount() + 1;
                 gameController.setNumberOfKill(newKill);
                 player.addScore(m.getType().getScore());
                 seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
                 continue;
             }
+
             m.updateAndDraw(batch, player);
+
+            if (player.getPlayerSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
+                float time = overlapTimers.getOrDefault(m, 0f) + delta;
+                if (time >= 1f) {
+                    player.takeDamage(5);
+                    time = 0f;
+                }
+                overlapTimers.put(m, time);
+            } else {
+                overlapTimers.put(m, 0f);
+            }
         }
     }
 

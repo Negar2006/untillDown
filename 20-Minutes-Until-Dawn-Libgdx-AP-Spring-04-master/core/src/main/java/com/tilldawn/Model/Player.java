@@ -9,6 +9,8 @@ import com.tilldawn.Main;
 import com.tilldawn.View.GameOverView;
 import com.tilldawn.View.PreGameMenuView;
 
+import java.util.ArrayList;
+
 public class Player {
     private Texture playerTexture;
     private Sprite playerSprite ;
@@ -20,6 +22,8 @@ public class Player {
     private float speed = 100f;
     private int score = 0;
     private boolean isPlayerIdle = true;
+    private float invincibleTimer = 0f;
+    private final float INVINCIBLE_DURATION = 1.0f;
 
     public Player(Texture playerTexture) {
         this.playerTexture = playerTexture;
