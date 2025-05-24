@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Circle;
 import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
@@ -26,6 +27,13 @@ public class Monster {
     private float dashDuration = 0.3f;
     private float dashTimePassed = 0f;
 
+    private boolean hasShield = false;
+    private boolean shieldActive = false;
+    private float shieldRadius;
+    private float shieldShrinkSpeed = 20f;
+    private Circle shieldCircle;
+
+
     public Monster(monsterTypes type) {
 
         this.type = type;
@@ -44,6 +52,10 @@ public class Monster {
                 break;
             case Elder:
                 this.health = 400f;
+                this.hasShield = true;
+                this.shieldActive = true;
+                this.shieldRadius = 400f;
+                this.shieldCircle = new Circle(0, 0, shieldRadius);
                 this.animation = GameAssetManager.getGameAssetManager().getBoss_idle_animation();
                 break;
             default:

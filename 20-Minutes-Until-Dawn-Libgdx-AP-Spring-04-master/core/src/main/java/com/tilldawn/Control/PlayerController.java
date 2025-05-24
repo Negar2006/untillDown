@@ -21,18 +21,28 @@ public class PlayerController {
         switch (characterName) {
             case "SHANA":
                 rawAnim = GameAssetManager.getGameAssetManager().getCharacter1_idle_animation();
+                player.setPlayerHealth(80);
+                player.setSpeed(40f);
                 break;
             case "SCARLET":
                 rawAnim = GameAssetManager.getGameAssetManager().getCharacter5_idle_animation();
+                player.setPlayerHealth(60);
+                player.setSpeed(50f);
                 break;
             case "LILITH":
                 rawAnim = GameAssetManager.getGameAssetManager().getCharacter2_idle_animation();
+                player.setPlayerHealth(100);
+                player.setSpeed(30f);
                 break;
             case "DASHER":
                 rawAnim = GameAssetManager.getGameAssetManager().getCharacter3_idle_animation();
+                player.setPlayerHealth(40);
+                player.setSpeed(100f);
                 break;
             case "DIAMOND":
                 rawAnim = GameAssetManager.getGameAssetManager().getCharacter4_idle_animation();
+                player.setPlayerHealth(140);
+                player.setSpeed(10f);
                 break;
         }
         Array<TextureRegion> frames = new Array<>();

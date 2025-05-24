@@ -27,6 +27,12 @@ public class PreGameMenuView implements Screen {
     private final Texture[] characterTextures;
     private final Image[] characterImages;
     private int selectedCharacterIndex = -1;
+    private final Label timeLabel;
+    private final ButtonGroup<TextButton> timeButtonGroup;
+    private final Table timeTable;
+    private final Label weaponLabel;
+    private final ButtonGroup<TextButton> weaponButtonGroup;
+    private final Table weaponTable;
 
     public PreGameMenuView(PreGameMenuController controller, Skin skin) {
         this.controller = controller;
@@ -45,6 +51,40 @@ public class PreGameMenuView implements Screen {
         };
 
         characterImages = new Image[characterTextures.length];
+
+        timeLabel = new Label("Select Game Duration (minutes):", skin);
+
+        timeButtonGroup = new ButtonGroup<>();
+
+        timeTable = new Table();
+
+        int[] times = {2, 5, 10, 20};
+        for (int time : times) {
+            TextButton btn = new TextButton(time + " min", skin, "toggle");
+            btn.setUserObject(time);
+            timeButtonGroup.add(btn);
+            timeTable.add(btn).pad(5);
+        }
+        timeButtonGroup.setMaxCheckCount(1);
+        timeButtonGroup.setMinCheckCount(1);
+        timeButtonGroup.setChecked("5 min");
+
+        weaponLabel = new Label("Select Your Weapon:", skin);
+
+        weaponButtonGroup = new ButtonGroup<>();
+
+        weaponTable = new Table();
+
+        String[] weapons = {"Sword", "Bow", "Magic"};
+        for (String weapon : weapons) {
+            TextButton btn = new TextButton(weapon, skin, "toggle");
+            btn.setUserObject(weapon);
+            weaponButtonGroup.add(btn);
+            weaponTable.add(btn).pad(5);
+        }
+        weaponButtonGroup.setMaxCheckCount(1);
+        weaponButtonGroup.setMinCheckCount(1);
+        weaponButtonGroup.setChecked("Sword");
 
         playButton.setDisabled(true);
     }
@@ -93,6 +133,17 @@ public class PreGameMenuView implements Screen {
             .colspan(characterTextures.length)
             .center()
             .padTop(30);
+
+        mainTable.row();
+        mainTable.add(timeLabel).colspan(characterTextures.length).padTop(30);
+        mainTable.row();
+        mainTable.add(timeTable).colspan(characterTextures.length);
+
+        mainTable.row();
+        mainTable.add(weaponLabel).colspan(characterTextures.length).padTop(30);
+        mainTable.row();
+        mainTable.add(weaponTable).colspan(characterTextures.length);
+
 
         stage.addActor(mainTable);
 
@@ -149,4 +200,19 @@ public class PreGameMenuView implements Screen {
     public int getSelectedCharacterIndex() {
         return selectedCharacterIndex;
     }
+
+    public int getSelectedGameDuration() {
+        if (timeButtonGroup.getChecked() != null) {
+            return (int) timeButtonGroup.getChecked().getUserObject();
+        }
+        return 5;
+    }
+
+    public String getSelectedWeapon() {
+        if (weaponButtonGroup.getChecked() != null) {
+            return (String) weaponButtonGroup.getChecked().getUserObject();
+        }
+        return "Sword";
+    }
+
 }

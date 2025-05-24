@@ -101,16 +101,18 @@ public class GameView extends InputAdapter implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         stateTime += delta;
-
         Main.getBatch().begin();
+
         long elapsedMillis = System.currentTimeMillis() - controller.getStartTimeMillis();
-        long remainingMillis = Math.max(0, 600_000 - elapsedMillis);
+        long remainingMillis = Math.max(0, controller.getGameDurationMillis() - elapsedMillis);
         long minutes = remainingMillis / 60000;
         long seconds = (remainingMillis % 60000) / 1000;
         timerLabel.setText(String.format("Time Left: %02d:%02d", minutes, seconds));
+
         healthLabel.setText("HP: " + controller.getPlayerHealth());
         killsLabel.setText("Kills: " + controller.getKillCount());
         scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
+
 
         controller.updateGame();
 

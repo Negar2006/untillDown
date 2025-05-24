@@ -8,7 +8,6 @@ import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.View.GameView;
 import com.tilldawn.View.PreGameMenuView;
-import com.tilldawn.View.RegisterMenuViews;
 
 public class PreGameMenuController {
 
@@ -30,13 +29,26 @@ public class PreGameMenuController {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
+                if (selectedCharacter < 0) {
+                    System.out.println("No character selected!");
+                    return;
+                }
+
                 String fileName = CHARACTER_NAMES[selectedCharacter] + ".png";
                 Texture playerTexture = new Texture(Gdx.files.internal(fileName));
 
-                GameController gameController = new GameController();
-                Main.getMain().setScreen(new GameView(gameController, GameAssetManager.getGameAssetManager().getSkin(),
-                    playerTexture, CHARACTER_NAMES[selectedCharacter]));
+                int duration = view.getSelectedGameDuration();
 
+                String weapon = view.getSelectedWeapon();
+
+                System.out.println("Starting game with duration: " + duration + " minutes and weapon: " + weapon);
+
+                GameController gameController = new GameController(duration);
+
+                Main.getMain().setScreen(new GameView(gameController,
+                    GameAssetManager.getGameAssetManager().getSkin(),
+                    playerTexture,
+                    CHARACTER_NAMES[selectedCharacter]));
             }
         });
     }
