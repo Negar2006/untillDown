@@ -1,10 +1,12 @@
 package com.tilldawn.Model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.tilldawn.Model.enums.monsterTypes;
 
@@ -26,16 +28,15 @@ public class Monster {
     private float dashSpeed = 10f;
     private float dashDuration = 0.3f;
     private float dashTimePassed = 0f;
-
     private boolean hasShield = false;
-    private boolean shieldActive = false;
+    public boolean shieldActive = false;
     private float shieldRadius;
-    private float shieldShrinkSpeed = 20f;
+    private float shieldShrinkSpeed = 20f; // Shrinking speed for the shield
     private Circle shieldCircle;
-
+    private ShapeRenderer shapeRenderer;
 
     public Monster(monsterTypes type) {
-
+        shapeRenderer = new ShapeRenderer();
         this.type = type;
         switch (type) {
             case TreeMonster:
@@ -147,10 +148,12 @@ public class Monster {
         float delta = Gdx.graphics.getDeltaTime();
         time += delta;
 
+        // Movement for TentacleMonster and Eyebat
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
             moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
         }
 
+        // Eyebat shooting behavior
         if (type == monsterTypes.Eyebat) {
             bulletTimer += delta;
             if (bulletTimer >= 3f) {
@@ -161,7 +164,6 @@ public class Monster {
 
         if (type == monsterTypes.Elder) {
             elderDashTimer += delta;
-
             if (!isDashing && elderDashTimer >= 5f) {
                 isDashing = true;
                 dashTimePassed = 0f;
@@ -173,26 +175,52 @@ public class Monster {
                 float dx = player.getPlayerSprite().getX() - sprite.getX();
                 float dy = player.getPlayerSprite().getY() - sprite.getY();
                 leangth(dx, dy, dashSpeed);
-
                 if (dashTimePassed >= dashDuration) {
                     isDashing = false;
                 }
             } else moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
+
+            // Shrink shield and handle collision
+            if (shieldActive) {
+                shieldRadius -= shieldShrinkSpeed * delta;
+                if (shieldRadius < 0) shieldRadius = 0;
+
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(Color.BLUE); // Shield color
+                shapeRenderer.circle(this.getX(), this.getY(), shieldRadius);
+                shapeRenderer.end();
+
+                shieldCircle.set(this.getX(), this.getY(), shieldRadius);
+                if (shieldCircle.contains(player.getPosX(), player.getPosY())) {
+                    player.takeDamage(1); // Adjust damage as necessary
+                }
+            }
         }
 
+        // Update the sprite and animation
         sprite.setRegion(animation.getKeyFrame(time, true));
         sprite.draw(batch);
 
+        // Handle bullets for Eyebat
         for (Bullet b : bullets) {
             b.getSprite().translate(b.getDirection().x * 5f, b.getDirection().y * 5f);
             b.getSprite().draw(batch);
         }
     }
 
+
     private void shootBullet(float targetX, float targetY) {
         float startX = getX();
         float startY = getY();
-        bullets.add(new Bullet(targetX, targetY, startX, startY));
+        bullets.add(new Bullet(targetX, targetY, startX, startY, 5));
+    }
+
+    public boolean isPlayerCollidingWithShield(Player player) {
+        return shieldCircle.contains(player.getPosX(), player.getPosY());
+    }
+
+    public float getShieldRadius() {
+        return shieldRadius;
     }
 
 

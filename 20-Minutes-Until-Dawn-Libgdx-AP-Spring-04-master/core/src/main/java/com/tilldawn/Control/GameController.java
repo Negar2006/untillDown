@@ -8,6 +8,7 @@ import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
 import com.tilldawn.Model.Weapon;
+import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
 
 public class GameController {
@@ -20,16 +21,31 @@ public class GameController {
     private long startTimeMillis;
     private final long GAME_DURATION_MILLIS;
     private int numberOfKill = 0;
+    private weaponType weaponType;
 
-    public GameController(int gameDurationMinutes) {
+    public GameController(int gameDurationMinutes, String weapon) {
         this.GAME_DURATION_MILLIS = gameDurationMinutes * 60 * 1000L;
         this.startTimeMillis = System.currentTimeMillis();
+        switch (weapon) {
+            case "SMGs Dual":
+                this.weaponType = com.tilldawn.Model.enums.weaponType.SMG_DUAL;
+                break;
+            case "shotgun":
+                this.weaponType = com.tilldawn.Model.enums.weaponType.SHOTGUN;
+                break;
+            case "Revolver":
+                this.weaponType = com.tilldawn.Model.enums.weaponType.REVOLVER;
+                break;
+            default:
+                break;
+        }
     }
+
     public void setView(GameView view, Texture playerTexture, String characterName) {
         this.view = view;
         playerController = new PlayerController(new Player(playerTexture), characterName);
-        weaponController = new WeaponController(new Weapon());
-        worldController = new WorldController(playerController);
+        weaponController = new WeaponController(new Weapon(weaponType));
+        worldController = new WorldController(playerController, this);
         monsterController = new MonsterController();
         monsterController.setGameController(this);
 
@@ -81,6 +97,10 @@ public class GameController {
         return playerController;
     }
 
+    public MonsterController getMonsterController() {
+        return monsterController;
+    }
+
     public WeaponController getWeaponController() {
         return weaponController;
     }
@@ -126,7 +146,7 @@ public class GameController {
             killingAllMonster(playerX, playerY, radius, monster);
         }
 
-        for(Monster monster : monsterController.getElderMonster()){
+        for (Monster monster : monsterController.getElderMonster()) {
             killingAllMonster(playerX, playerY, radius, monster);
         }
     }
@@ -172,12 +192,16 @@ public class GameController {
     }
 
     public void killEyeBat() {
-        for(Monster monster : monsterController.getEyebatMonsters()){
+        for (Monster monster : monsterController.getEyebatMonsters()) {
             monster.setHealth(-1);
         }
     }
 
     public void addTime(long millis) {
         startTimeMillis -= millis;
+    }
+
+    public boolean isReloadAutoEnabled() {
+        return autoAimEnabled;
     }
 }

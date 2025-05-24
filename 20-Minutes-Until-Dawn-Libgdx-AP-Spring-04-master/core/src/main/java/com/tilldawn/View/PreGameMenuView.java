@@ -75,7 +75,7 @@ public class PreGameMenuView implements Screen {
 
         weaponTable = new Table();
 
-        String[] weapons = {"Sword", "Bow", "Magic"};
+        String[] weapons = {"SMGs Dual", "shotgun", "Revolver"};
         for (String weapon : weapons) {
             TextButton btn = new TextButton(weapon, skin, "toggle");
             btn.setUserObject(weapon);
@@ -108,9 +108,9 @@ public class PreGameMenuView implements Screen {
         for (int i = 0; i < characterTextures.length; i++) {
             final int index = i;
             Image img = new Image(characterTextures[i]);
-            img.setScaling(Scaling.fit); // حفظ نسبت
+            img.setScaling(Scaling.fit);
 
-            img.setSize(imageWidth, imageHeight); // سایز بزرگ‌تر
+            img.setSize(imageWidth, imageHeight);
             img.setTouchable(Touchable.enabled);
 
             img.addListener(new ClickListener() {
@@ -214,5 +214,4 @@ public class PreGameMenuView implements Screen {
         }
         return "Sword";
     }
-
 }

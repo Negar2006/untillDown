@@ -5,28 +5,25 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.TimeUtils;
 import com.tilldawn.Main;
+import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
+import com.tilldawn.Model.enums.monsterTypes;
 
 public class WorldController {
     private PlayerController playerController;
-    private Texture backgroundTexture;
+    private GameController gameController;
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
-    private float shieldRadius;
-    private long lastShrinkTime;
 
-    public WorldController(PlayerController playerController) {
+    public WorldController(PlayerController playerController, GameController gameController) {
+        this.gameController = gameController;
         this.playerController = playerController;
-        this.backgroundTexture = new Texture("background.png");
 
-        this.camera = new OrthographicCamera();
+        camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         shapeRenderer = new ShapeRenderer();
-        shieldRadius = Math.max(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) * 1.2f;
-        lastShrinkTime = TimeUtils.millis();
     }
 
     public void update() {
@@ -37,7 +34,17 @@ public class WorldController {
 
         Main.getBatch().setProjectionMatrix(camera.combined);
 
-        Main.getBatch().draw(backgroundTexture, 0, 0);
+        Main.getBatch().draw(new Texture("background.png"), 0, 0);
+
+        // Draw the Elder monster's shield if active
+        for (Monster monster : gameController.getMonsterController().getElderMonster()) {
+            if (monster.getType() == monsterTypes.Elder && !monster.isDead()) {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(Color.CYAN); // Shield color
+                shapeRenderer.circle(monster.getX(), monster.getY(), monster.getShieldRadius());
+                shapeRenderer.end();
+            }
+        }
     }
 
     public OrthographicCamera getCamera() {

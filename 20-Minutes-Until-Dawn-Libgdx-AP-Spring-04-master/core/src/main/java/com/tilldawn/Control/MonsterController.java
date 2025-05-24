@@ -90,11 +90,15 @@ public class MonsterController {
                 gameController.setNumberOfKill(newKill);
                 player.addScore(m.getType().getScore());
                 seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
+                if (m.getType() == monsterTypes.Elder) {
+                    m.shieldActive = false; // Disable shield when Elder is dead
+                }
                 continue;
             }
 
             m.updateAndDraw(batch, player);
 
+            // Check overlap
             if (player.getPlayerSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
                 float time = overlapTimers.getOrDefault(m, 0f) + delta;
                 if (time >= 1f) {

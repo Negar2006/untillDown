@@ -3,16 +3,26 @@ package com.tilldawn.Model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.tilldawn.Model.enums.weaponType;
 
 public class Weapon {
     private final Texture smgTexture = new Texture(GameAssetManager.getGameAssetManager().getSmg());
     private Sprite smgSprite = new Sprite(smgTexture);
-    private int ammo = 30;
 
-    public Weapon(){
-        smgSprite.setX((float) Gdx.graphics.getWidth() / 2 );
-        smgSprite.setY((float) Gdx.graphics.getHeight() / 2);
-        smgSprite.setSize(50,50);
+    private weaponType type;
+    private int ammo;
+    private boolean isReloading = false;
+    private float reloadTimer = 0f;
+
+    public Weapon(weaponType type) {
+        this.type = type;
+        this.ammo = type.maxAmmo;
+        smgSprite.setSize(50, 50);
+        smgSprite.setPosition((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2);
+    }
+
+    public weaponType getType() {
+        return type;
     }
 
     public Sprite getSmgSprite() {
@@ -20,11 +30,7 @@ public class Weapon {
     }
 
     public void setPosition(float x, float y) {
-        smgSprite.setPosition(x, y); // tweak based on sprite size
-    }
-
-    public Sprite getSprite() {
-        return smgSprite;
+        smgSprite.setPosition(x, y);
     }
 
     public int getAmmo() {
@@ -33,5 +39,36 @@ public class Weapon {
 
     public void setAmmo(int ammo){
         this.ammo = ammo;
+    }
+
+    public int getDamage() {
+        return type.damage;
+    }
+
+    public int getProjectileCount() {
+        return type.projectileCount;
+    }
+
+    public int getMaxAmmo() {
+        return type.maxAmmo;
+    }
+
+    public boolean isReloading() {
+        return isReloading;
+    }
+
+    public void reload(float deltaTime) {
+        if (!isReloading) return;
+        reloadTimer += deltaTime;
+        if (reloadTimer >= type.reloadTimeSeconds) {
+            ammo = type.maxAmmo;
+            isReloading = false;
+            reloadTimer = 0f;
+        }
+    }
+
+    public void startReload() {
+        isReloading = true;
+        reloadTimer = 0f;
     }
 }

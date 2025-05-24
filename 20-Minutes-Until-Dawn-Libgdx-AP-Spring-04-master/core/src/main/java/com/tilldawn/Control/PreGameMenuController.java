@@ -43,7 +43,7 @@ public class PreGameMenuController {
 
                 System.out.println("Starting game with duration: " + duration + " minutes and weapon: " + weapon);
 
-                GameController gameController = new GameController(duration);
+                GameController gameController = new GameController(duration, weapon);
 
                 Main.getMain().setScreen(new GameView(gameController,
                     GameAssetManager.getGameAssetManager().getSkin(),

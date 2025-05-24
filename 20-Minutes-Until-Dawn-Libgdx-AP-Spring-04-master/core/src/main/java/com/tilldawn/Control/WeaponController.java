@@ -50,6 +50,7 @@ public class WeaponController {
 
         weapon.setPosition(weaponX, weaponY);
         weapon.getSmgSprite().draw(Main.getBatch());
+        weapon.reload(Gdx.graphics.getDeltaTime());
         updateBullets(monsters);
     }
 
@@ -65,21 +66,34 @@ public class WeaponController {
     }
 
     public void handleWeaponShoot(int x, int y) {
+        if (weapon.isReloading()) return;
+
+        if (weapon.getAmmo() <= 0) {
+            if (controller.isReloadAutoEnabled()) {
+                weapon.startReload();
+            }
+            return;
+        }
+
         Player player = controller.getPlayerController().getPlayer();
         Sprite playerSprite = player.getPlayerSprite();
         float playerX = playerSprite.getX() + playerSprite.getWidth() / 2;
         float playerY = playerSprite.getY() + playerSprite.getHeight() / 3;
-
         float angleDeg = weapon.getSmgSprite().getRotation();
-
         float fixedAngle = angleDeg + 360;
 
-        float targetX = playerX + MathUtils.cosDeg(fixedAngle) * 1000;
-        float targetY = playerY + MathUtils.sinDeg(fixedAngle) * 1000;
+        for (int i = 0; i < weapon.getProjectileCount(); i++) {
+            float spread = MathUtils.random(-5f, 5f); // randomize for shotgun
+            float finalAngle = fixedAngle + spread;
+            float targetX = playerX + MathUtils.cosDeg(finalAngle) * 1000;
+            float targetY = playerY + MathUtils.sinDeg(finalAngle) * 1000;
 
-        bullets.add(new Bullet(targetX, targetY, playerX, playerY));
+            bullets.add(new Bullet(targetX, targetY, playerX, playerY, weapon.getDamage()));
+        }
+
         weapon.setAmmo(weapon.getAmmo() - 1);
     }
+
 
     public void updateBullets(ArrayList<Monster> monsters) {
         Iterator<Bullet> bulletIterator = bullets.iterator();
