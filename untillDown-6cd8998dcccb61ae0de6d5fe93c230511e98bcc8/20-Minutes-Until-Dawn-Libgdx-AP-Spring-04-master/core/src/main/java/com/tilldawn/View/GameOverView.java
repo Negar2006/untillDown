@@ -99,7 +99,6 @@ public class GameOverView implements Screen {
         stage.getViewport().update(width, height, true);
     }
 
-
     @Override
     public void pause() {}
 
