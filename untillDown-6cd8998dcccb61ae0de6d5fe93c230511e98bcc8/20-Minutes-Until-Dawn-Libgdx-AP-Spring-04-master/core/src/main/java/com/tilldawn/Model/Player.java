@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class Player {
     private Texture playerTexture;
-    private Sprite playerSprite ;
+    private Sprite playerSprite;
     private float posX;
     private float posY;
     private float playerHealth = 100;
@@ -143,9 +143,13 @@ public class Player {
             playerHealth = 0; // Ensure health doesn't go below zero
 
             // Create a GameOverController instance with the player's stats
-            GameOverController gameOverController = new GameOverController("Player1", score, playerController.getGameController().getKillCount() , playerHealth);
+            GameOverController gameOverController;
+            if (Main.currentUser == null) {
+                gameOverController = new GameOverController("guest", score, playerController.getGameController().getKillCount(), playerHealth);
+            } else {
+                gameOverController = new GameOverController(Main.currentUser.getUsername(), score, playerController.getGameController().getKillCount(), playerHealth);
+            }
             Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
         }
     }
-
 }

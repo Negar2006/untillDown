@@ -195,7 +195,13 @@ public class GameController {
     }
 
     public void endGame() {
-        String username = "Player1";
+        String username;
+        if(Main.currentUser != null){
+            username = Main.currentUser.getUsername();
+        }else{
+            username = "guest";
+        }
+
         int score = playerController.getPlayer().getScore(); // Get player score
         int kills = numberOfKill; // Number of kills
         float health = playerController.getPlayer().getPlayerHealth(); // Player health
