@@ -19,7 +19,6 @@ import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.RegisterMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
-import com.tilldawn.Model.GameSaver;
 
 public class GameOverView implements Screen {
     private Stage stage;

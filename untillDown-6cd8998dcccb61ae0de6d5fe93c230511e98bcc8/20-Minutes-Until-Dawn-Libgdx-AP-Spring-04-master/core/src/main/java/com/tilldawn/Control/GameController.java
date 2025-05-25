@@ -1,17 +1,20 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.tilldawn.Main;
-import com.tilldawn.Model.GameAssetManager;
-import com.tilldawn.Model.Monster;
-import com.tilldawn.Model.Player;
-import com.tilldawn.Model.Weapon;
+import com.tilldawn.Model.*;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameController {
     private GameView view;
@@ -258,12 +261,60 @@ public class GameController {
         }
     }
 
-    public long getElapsedTime() {
-        if (isPaused) {
-            return totalElapsedTime;
-        } else {
-            return totalElapsedTime + (System.currentTimeMillis() - startTimeMillis);
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public long getPausedTimeMillis() {
+        return pausedTimeMillis;
+    }
+
+    public void saveGameState() {
+        // Gather information
+        Player player = playerController.getPlayer();
+        String playerName = player.getCharacterName();
+        float playerX = player.getPosX();
+        float playerY = player.getPosY();
+        float playerHealth = player.getPlayerHealth();
+
+        // Get the current hour
+        long currentMillis = System.currentTimeMillis();
+        String currentHour = java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")
+            .format(java.time.Instant.ofEpochMilli(currentMillis));
+
+        String weapon = this.weaponType.name();
+
+        // Initialize a Map for tree monster positions
+        Map<String, Float> treeMonsterPositions = new HashMap<>();
+        for (Monster monster : monsterController.getTreeMonsters()) {
+            // Store both X and Y coordinates as a combined String key
+            treeMonsterPositions.put("X_" + monster.getX(), monster.getY());
+        }
+
+        // Check if the elder monster has appeared
+        boolean elderMonsterAppeared = !monsterController.getElderMonster().isEmpty();
+
+        // Create the GameState object and populate it
+        GameState gameState = new GameState();
+        gameState.setPlayerName(playerName);
+        gameState.setPlayerX(playerX);
+        gameState.setPlayerY(playerY);
+        gameState.setPlayerHealth(playerHealth);
+        gameState.setCurrentHour(currentHour);
+        gameState.setWeaponType(weapon);
+        gameState.setTreeMonsterCount(monsterController.getTreeMonsters().size());
+        gameState.setTreeMonsterPositions(treeMonsterPositions);
+        gameState.setElderMonsterAppeared(elderMonsterAppeared);
+
+        // Serialize the gameState to JSON and save it to a file
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter(playerName + ".json")) {
+            gson.toJson(gameState, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
+
 }
 

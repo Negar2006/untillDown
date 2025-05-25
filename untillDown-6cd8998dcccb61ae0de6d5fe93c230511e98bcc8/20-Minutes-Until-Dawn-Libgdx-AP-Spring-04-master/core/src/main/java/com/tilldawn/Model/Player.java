@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class Player {
     private Texture playerTexture;
     private Sprite playerSprite;
+    private String name;
     private float posX;
     private float posY;
     private float playerHealth = 100;
@@ -29,6 +30,8 @@ public class Player {
     private PlayerController playerController;
 
     public Player(Texture playerTexture) {
+        if(Main.currentUser!= null) name = Main.currentUser.getUsername();
+        else name = "guest";
         this.playerTexture = playerTexture;
         this.playerSprite = new Sprite(playerTexture);
         playerSprite.setSize(playerTexture.getWidth() * 3, playerTexture.getHeight() * 3);
@@ -151,5 +154,17 @@ public class Player {
             }
             Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
         }
+    }
+
+    public String getCharacterName() {
+        return name;
+    }
+
+    public void setHealth(float playerHealth) {
+        this.playerHealth = playerHealth;
+    }
+
+    public void setCharacterName(String playerName) {
+        this.name = playerName;
     }
 }

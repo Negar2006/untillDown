@@ -129,6 +129,30 @@ public class MonsterController {
         }
     }
 
+    public void clearMonsters() {
+        tentacleMonsters.clear();
+        eyebatMonsters.clear();
+        treeMonsters.clear();
+        ElderMonster.clear();
+    }
+
+    public void addMonster(Monster monster) {
+        switch (monster.getType()) {
+            case TentacleMonster:
+                tentacleMonsters.add(monster);
+                break;
+            case Eyebat:
+                eyebatMonsters.add(monster);
+                break;
+            case TreeMonster:
+                treeMonsters.add(monster);
+                break;
+            case Elder:
+                ElderMonster.add(monster);
+                break;
+        }
+    }
+
 
     public ArrayList<Monster> getEyebatMonsters() {
         return eyebatMonsters;

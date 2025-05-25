@@ -23,6 +23,7 @@ public class PauseMenuView implements Screen {
     private TextButton abilitiesButton;
     private TextButton giveUpButton;
     private TextButton settingsButton;
+    private TextButton saveGameButton;
 
     public PauseMenuView(GameController controller) {
         this.controller = controller;
@@ -34,9 +35,16 @@ public class PauseMenuView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        // Button size
+        final float buttonWidth = 300;
+        final float buttonHeight = 60;
+        final float centerX = stage.getWidth() / 2 - buttonWidth / 2;  // Center X position
+        float startY = stage.getHeight() - 100;  // Start Y position for the first button
+
         // Resume Button
         resumeButton = new TextButton("Resume", skin);
-        resumeButton.setPosition(200, 300);
+        resumeButton.setSize(buttonWidth, buttonHeight);
+        resumeButton.setPosition(centerX, startY);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -47,7 +55,8 @@ public class PauseMenuView implements Screen {
 
         // Cheat Codes Button
         cheatCodesButton = new TextButton("Cheat Codes", skin);
-        cheatCodesButton.setPosition(200, 240);
+        cheatCodesButton.setSize(buttonWidth, buttonHeight);
+        cheatCodesButton.setPosition(centerX, startY - (buttonHeight + 10));
         cheatCodesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -58,7 +67,8 @@ public class PauseMenuView implements Screen {
 
         // Abilities Button
         abilitiesButton = new TextButton("Abilities", skin);
-        abilitiesButton.setPosition(200, 180);
+        abilitiesButton.setSize(buttonWidth, buttonHeight);
+        abilitiesButton.setPosition(centerX, startY - 2 * (buttonHeight + 10));
         abilitiesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -69,18 +79,33 @@ public class PauseMenuView implements Screen {
 
         // Give Up Button
         giveUpButton = new TextButton("Give Up", skin);
-        giveUpButton.setPosition(200, 120);
+        giveUpButton.setSize(buttonWidth, buttonHeight);
+        giveUpButton.setPosition(centerX, startY - 3 * (buttonHeight + 10));
         giveUpButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.endGame(); // End the game
+                controller.endGame();
             }
         });
         stage.addActor(giveUpButton);
 
+        // Save Game Button
+        saveGameButton = new TextButton("Save/Leave", skin);
+        saveGameButton.setSize(buttonWidth, buttonHeight);
+        saveGameButton.setPosition(centerX, startY - 4 * (buttonHeight + 10));
+        saveGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.saveGameState();
+                controller.endGame();
+            }
+        });
+        stage.addActor(saveGameButton);
+
         // Settings Button
         settingsButton = new TextButton("Settings", skin);
-        settingsButton.setPosition(200, 60);
+        settingsButton.setSize(buttonWidth, buttonHeight);
+        settingsButton.setPosition(centerX, startY - 5 * (buttonHeight + 10));
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -116,4 +141,5 @@ public class PauseMenuView implements Screen {
     public void dispose() {
         stage.dispose();
     }
+
 }

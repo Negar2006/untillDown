@@ -221,4 +221,7 @@ public class Monster {
         this.posX = posX;
     }
 
+    public void setPosY(float posY) {
+        this.posY = posY;
+    }
 }

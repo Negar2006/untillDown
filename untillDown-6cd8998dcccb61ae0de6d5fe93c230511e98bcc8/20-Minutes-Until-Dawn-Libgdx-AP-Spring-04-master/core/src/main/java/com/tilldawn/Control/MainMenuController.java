@@ -37,7 +37,7 @@ public class MainMenuController {
 
             if (view.getContinueButton().isChecked()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new ContinueView(new ContinueController(), GameAssetManager.getGameAssetManager().getSkin()));
+
             }
 
             if (view.getTalentButton().isChecked()) {
