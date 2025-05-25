@@ -25,6 +25,10 @@ public class GameController {
     private long GAME_DURATION_MILLIS;
     private int numberOfKill = 0;
     private weaponType weaponType;
+    private boolean isPaused = false;
+    private long pausedTimeMillis = 0;
+    private long totalElapsedTime = 0;
+    private long pauseStartTime = 0;
 
     public GameController(int gameDurationMinutes, String weapon) {
         this.GAME_DURATION_MILLIS = gameDurationMinutes * 60 * 1000L;
@@ -140,7 +144,7 @@ public class GameController {
             killingAllMonster(playerX, playerY, radius, monster);
         }
 
-        for(Monster monster : monsterController.getElderMonster()){
+        for (Monster monster : monsterController.getElderMonster()) {
             killingAllMonster(playerX, playerY, radius, monster);
         }
     }
@@ -182,7 +186,7 @@ public class GameController {
     }
 
     public void killEyeBat() {
-        for(Monster monster : monsterController.getEyebatMonsters()){
+        for (Monster monster : monsterController.getEyebatMonsters()) {
             monster.setHealth(-1);
         }
     }
@@ -198,9 +202,9 @@ public class GameController {
 
     public void endGame() {
         String username;
-        if(Main.currentUser != null){
+        if (Main.currentUser != null) {
             username = Main.currentUser.getUsername();
-        }else{
+        } else {
             username = "guest";
         }
 
@@ -212,24 +216,54 @@ public class GameController {
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
     }
 
-    public ArrayList<Monster> allMonsters(){
+    public ArrayList<Monster> allMonsters() {
         ArrayList<Monster> monsters = new ArrayList<>();
-        for(Monster monster : monsterController.getTentacleMonsters()){
+        for (Monster monster : monsterController.getTentacleMonsters()) {
             monsters.add(monster);
         }
 
-        for(Monster monster : monsterController.getEyebatMonsters()){
+        for (Monster monster : monsterController.getEyebatMonsters()) {
             monsters.add(monster);
         }
 
-        for(Monster monster : monsterController.getTreeMonsters()){
+        for (Monster monster : monsterController.getTreeMonsters()) {
             monsters.add(monster);
         }
 
-        for(Monster monster : monsterController.getElderMonster()){
+        for (Monster monster : monsterController.getElderMonster()) {
             monsters.add(monster);
         }
         return monsters;
     }
 
+    public void startGame() {
+        this.startTimeMillis = System.currentTimeMillis();
+    }
+
+    // Call when pausing the game
+    public void pauseGame() {
+        if (!isPaused) {
+            isPaused = true;
+            pauseStartTime = System.currentTimeMillis();
+            Main.getMain().setScreen(new PauseMenuView(this));
+        }
+    }
+
+    public void resumeGame() {
+        if (isPaused) {
+            isPaused = false;
+
+            startTimeMillis += (System.currentTimeMillis() - pauseStartTime);
+            Main.getMain().setScreen(view);
+        }
+    }
+
+    public long getElapsedTime() {
+        if (isPaused) {
+            return totalElapsedTime;
+        } else {
+            return totalElapsedTime + (System.currentTimeMillis() - startTimeMillis);
+        }
+    }
 }
+

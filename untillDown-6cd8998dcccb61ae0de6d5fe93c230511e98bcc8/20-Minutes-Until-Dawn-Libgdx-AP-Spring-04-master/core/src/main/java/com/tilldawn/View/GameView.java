@@ -32,6 +32,7 @@ public class GameView extends InputAdapter implements Screen {
     private GameController controller;
     private Array<DamagePopup> damagePopups = new Array<>();
     private ImageButton settingsButton;
+    private ImageButton pauseButton;
     private Animation<TextureRegion> treeAnimation;
     private Animation<TextureRegion> playerAnimation;
     private float stateTime;
@@ -82,6 +83,16 @@ public class GameView extends InputAdapter implements Screen {
         });
         stage.addActor(settingsButton);
 
+        pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("pause_icon.png")))));
+        pauseButton.setPosition(Gdx.graphics.getWidth() - 60, 10);  // Positioned at bottom-right
+        pauseButton.setSize(50, 50);
+        pauseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.pauseGame();
+            }
+        });
+        stage.addActor(pauseButton);
 
         Animation<com.badlogic.gdx.graphics.Texture> rawPlayerAnim = assetManager.getCharacter1_idle_animation();
         Array<TextureRegion> playerFrames = new Array<>();
