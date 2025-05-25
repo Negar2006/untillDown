@@ -37,29 +37,57 @@ public class WorldController {
     public void update() {
         Player player = playerController.getPlayer();
 
+        // Adjust camera position based on the player's position
         camera.position.set(player.getPosX(), player.getPosY(), 0);
         camera.update();
 
+        // Set the camera projection matrix to adjust for camera position and zoom
         Main.getBatch().setProjectionMatrix(camera.combined);
 
-        // Draw background texture
-        Main.getBatch().draw(backgroundTexture, 0, 0);
+        // Draw background texture (background shrinks with radial)
+        drawBackground(player);
 
         // Apply the radial gradient effect around the player
         applyRadialGradient(player);
     }
 
+    private void drawBackground(Player player) {
+        SpriteBatch batch = Main.getBatch();
+
+        // Calculate the size of the background based on the shieldRadius (or player's position)
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        // The background shrinks with the radial size (to match the player's position)
+        float backgroundWidth = Math.max(screenWidth, shieldRadius * 2);
+        float backgroundHeight = Math.max(screenHeight, shieldRadius * 2);
+
+        // Adjust the background to fit the player and radial size
+        batch.setColor(1, 1, 1, 1); // Make sure the texture is fully opaque
+
+        // Draw the background around the player's position
+        batch.draw(backgroundTexture,
+            player.getPosX() - backgroundWidth / 2,
+            player.getPosY() - backgroundHeight / 2,
+            backgroundWidth,
+            backgroundHeight);
+    }
+
     private void applyRadialGradient(Player player) {
         SpriteBatch batch = Main.getBatch();
 
-        // Calculate the size of the radial gradient texture to match the shield radius
-        float size = shieldRadius * 2; // Since the texture will cover the diameter of the circle
+        // Get the player's position (this will be the center of the gradient)
+        float playerX = player.getPosX();
+        float playerY = player.getPosY();
 
-        // Set the position of the radial gradient texture to the player's position
+        // Calculate the size of the radial gradient texture
+        float size = shieldRadius * 2; // Make it cover the screen
+
+        // Set the position of the radial gradient texture based on the player's position
         batch.setColor(1, 1, 1, 1); // Make sure the texture is fully opaque
 
-        // Draw the radial gradient texture around the player
-        batch.draw(radialGradientTexture, player.getPosX() - shieldRadius, player.getPosY() - shieldRadius, size, size);
+        // Draw the radial gradient around the player, centered at their position
+        batch.draw(radialGradientTexture, playerX - shieldRadius, playerY - shieldRadius, size, size);
     }
 
     public OrthographicCamera getCamera() {

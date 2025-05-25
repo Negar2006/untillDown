@@ -13,11 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.tilldawn.Control.GameController;
 import com.tilldawn.Control.GameOverController;
 import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.RegisterMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
+import com.tilldawn.Model.GameSaver;
 
 public class GameOverView implements Screen {
     private Stage stage;
@@ -26,12 +28,21 @@ public class GameOverView implements Screen {
     private BitmapFont largeFont;
     private Texture backgroundTexture;
     private SpriteBatch batch;
+    private GameController gameController;
 
     public GameOverView(GameOverController gameOverController, Skin skin) {
         this.gameOverController = gameOverController;
         this.skin = skin;
         this.largeFont = new BitmapFont(); // default font
-        this.largeFont.getData().setScale(3); // make it really big
+        this.largeFont.getData().setScale(3);
+    }
+
+    public GameController getGameController() {
+        return gameController;
+    }
+
+    public void setGameController(GameController gameController) {
+        this.gameController = gameController;
     }
 
     @Override

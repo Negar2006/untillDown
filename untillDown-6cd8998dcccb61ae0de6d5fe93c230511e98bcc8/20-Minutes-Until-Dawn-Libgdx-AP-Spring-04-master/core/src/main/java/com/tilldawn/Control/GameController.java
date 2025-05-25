@@ -11,6 +11,8 @@ import com.tilldawn.Model.Weapon;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
 
+import java.util.ArrayList;
+
 public class GameController {
     private GameView view;
     private PlayerController playerController;
@@ -208,6 +210,26 @@ public class GameController {
 
         GameOverController gameOverController = new GameOverController(username, score, kills, health);
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
+    }
+
+    public ArrayList<Monster> allMonsters(){
+        ArrayList<Monster> monsters = new ArrayList<>();
+        for(Monster monster : monsterController.getTentacleMonsters()){
+            monsters.add(monster);
+        }
+
+        for(Monster monster : monsterController.getEyebatMonsters()){
+            monsters.add(monster);
+        }
+
+        for(Monster monster : monsterController.getTreeMonsters()){
+            monsters.add(monster);
+        }
+
+        for(Monster monster : monsterController.getElderMonster()){
+            monsters.add(monster);
+        }
+        return monsters;
     }
 
 }
