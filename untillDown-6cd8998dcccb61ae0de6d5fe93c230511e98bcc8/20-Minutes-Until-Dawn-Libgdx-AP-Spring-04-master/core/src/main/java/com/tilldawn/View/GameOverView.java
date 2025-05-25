@@ -76,9 +76,9 @@ public class GameOverView implements Screen {
 
         // Use button style from skin (defined in your skin.json or skin file)
         TextButton mainMenuButton = new TextButton("Go Back to Main Menu", skin);
-        mainMenuButton.getLabel().getStyle().fontColor = Color.WHITE;
-        mainMenuButton.getLabel().setFontScale(0.6f); // Make button text bigger
-        mainMenuButton.setColor(1, 0, 0, 1); // RGB Red, fully opaque
+        mainMenuButton.getLabel().getStyle().fontColor = Color.RED;
+        mainMenuButton.getLabel().setFontScale(0.6f);
+        mainMenuButton.setColor(1, 0, 0, 1);
         mainMenuButton.setSize(400, 100);
         mainMenuButton.setPosition(Gdx.graphics.getWidth() / 2f - 200, 100);
 
