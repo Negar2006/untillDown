@@ -30,7 +30,6 @@ public class GameController {
     private weaponType weaponType;
     private boolean isPaused = false;
     private long pausedTimeMillis = 0;
-    private long totalElapsedTime = 0;
     private long pauseStartTime = 0;
 
     public GameController(int gameDurationMinutes, String weapon) {
@@ -219,31 +218,6 @@ public class GameController {
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
     }
 
-    public ArrayList<Monster> allMonsters() {
-        ArrayList<Monster> monsters = new ArrayList<>();
-        for (Monster monster : monsterController.getTentacleMonsters()) {
-            monsters.add(monster);
-        }
-
-        for (Monster monster : monsterController.getEyebatMonsters()) {
-            monsters.add(monster);
-        }
-
-        for (Monster monster : monsterController.getTreeMonsters()) {
-            monsters.add(monster);
-        }
-
-        for (Monster monster : monsterController.getElderMonster()) {
-            monsters.add(monster);
-        }
-        return monsters;
-    }
-
-    public void startGame() {
-        this.startTimeMillis = System.currentTimeMillis();
-    }
-
-    // Call when pausing the game
     public void pauseGame() {
         if (!isPaused) {
             isPaused = true;
@@ -354,6 +328,10 @@ public class GameController {
         this.GAME_DURATION_MILLIS = GAME_DURATION_MILLIS;
     }
 
+    public MonsterController getMonsterController() {
+        return monsterController;
+    }
+
     public void setWeaponType(weaponType weaponType) {
         this.weaponType = weaponType;
     }
@@ -364,10 +342,6 @@ public class GameController {
 
     public void setPausedTimeMillis(long pausedTimeMillis) {
         this.pausedTimeMillis = pausedTimeMillis;
-    }
-
-    public void setTotalElapsedTime(long totalElapsedTime) {
-        this.totalElapsedTime = totalElapsedTime;
     }
 
     public void setPauseStartTime(long pauseStartTime) {
