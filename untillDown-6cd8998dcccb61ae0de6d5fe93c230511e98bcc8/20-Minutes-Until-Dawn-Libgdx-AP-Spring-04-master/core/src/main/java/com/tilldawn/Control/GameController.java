@@ -277,44 +277,101 @@ public class GameController {
         float playerY = player.getPosY();
         float playerHealth = player.getPlayerHealth();
 
-        // Get the current hour
         long currentMillis = System.currentTimeMillis();
-        String currentHour = java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")
-            .format(java.time.Instant.ofEpochMilli(currentMillis));
-
+        long duration = GAME_DURATION_MILLIS;
         String weapon = this.weaponType.name();
 
-        // Initialize a Map for tree monster positions
-        Map<String, Float> treeMonsterPositions = new HashMap<>();
+        Map<Float, Float> treeMonsterPositions = new HashMap<>();
         for (Monster monster : monsterController.getTreeMonsters()) {
-            // Store both X and Y coordinates as a combined String key
-            treeMonsterPositions.put("X_" + monster.getX(), monster.getY());
+            treeMonsterPositions.put(monster.getX(), monster.getY());
         }
 
-        // Check if the elder monster has appeared
+        float ElderMonsterPositionX = 0;
+        float ElderMonsterPositionY = 0;
         boolean elderMonsterAppeared = !monsterController.getElderMonster().isEmpty();
+        if (elderMonsterAppeared) {
+            for(Monster monster : monsterController.getElderMonster()) {
+                ElderMonsterPositionX = monster.getX();
+                ElderMonsterPositionY = monster.getY();
+            }
+        }
 
-        // Create the GameState object and populate it
-        GameState gameState = new GameState();
-        gameState.setPlayerName(playerName);
-        gameState.setPlayerX(playerX);
-        gameState.setPlayerY(playerY);
-        gameState.setPlayerHealth(playerHealth);
-        gameState.setCurrentHour(currentHour);
-        gameState.setWeaponType(weapon);
-        gameState.setTreeMonsterCount(monsterController.getTreeMonsters().size());
-        gameState.setTreeMonsterPositions(treeMonsterPositions);
-        gameState.setElderMonsterAppeared(elderMonsterAppeared);
+        Map<String, Object> gameStateData = new HashMap<>();
+        gameStateData.put("playerName", playerName);
+        gameStateData.put("playerX", playerX);
+        gameStateData.put("playerY", playerY);
+        gameStateData.put("playerHealth", playerHealth);
+        gameStateData.put("time: currentTimeMillis", currentMillis);
+        gameStateData.put("duration: duration", duration);
+        gameStateData.put("weaponType", weapon);
+        gameStateData.put("treeMonsterCount", monsterController.getTreeMonsters().size());
+        gameStateData.put("treeMonsterPositions", treeMonsterPositions);
+        gameStateData.put("elderMonsterAppeared", elderMonsterAppeared);
+        gameStateData.put("elderMonsterPositionX", ElderMonsterPositionX);
+        gameStateData.put("elderMonsterPositionY", ElderMonsterPositionY);
 
-        // Serialize the gameState to JSON and save it to a file
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(playerName + ".json")) {
-            gson.toJson(gameState, writer);
+            gson.toJson(gameStateData, writer);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void setView(GameView view) {
+        this.view = view;
+    }
 
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
+    }
+
+    public void setWorldController(WorldController worldController) {
+        this.worldController = worldController;
+    }
+
+    public void setWeaponController(WeaponController weaponController) {
+        this.weaponController = weaponController;
+    }
+
+    public void setMonsterController(MonsterController monsterController) {
+        this.monsterController = monsterController;
+    }
+
+    public void setAutoAimEnabled(boolean autoAimEnabled) {
+        this.autoAimEnabled = autoAimEnabled;
+    }
+
+    public void setStartTimeMillis(long startTimeMillis) {
+        this.startTimeMillis = startTimeMillis;
+    }
+
+    public void setRemainingTimeMillis(long remainingTimeMillis) {
+        this.remainingTimeMillis = remainingTimeMillis;
+    }
+
+    public void setGAME_DURATION_MILLIS(long GAME_DURATION_MILLIS) {
+        this.GAME_DURATION_MILLIS = GAME_DURATION_MILLIS;
+    }
+
+    public void setWeaponType(weaponType weaponType) {
+        this.weaponType = weaponType;
+    }
+
+    public void setPaused(boolean paused) {
+        isPaused = paused;
+    }
+
+    public void setPausedTimeMillis(long pausedTimeMillis) {
+        this.pausedTimeMillis = pausedTimeMillis;
+    }
+
+    public void setTotalElapsedTime(long totalElapsedTime) {
+        this.totalElapsedTime = totalElapsedTime;
+    }
+
+    public void setPauseStartTime(long pauseStartTime) {
+        this.pauseStartTime = pauseStartTime;
+    }
 }
 

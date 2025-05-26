@@ -1,6 +1,8 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.tilldawn.Model.Bullet;
 import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.Player;
@@ -172,6 +174,10 @@ public class MonsterController {
 
     public ArrayList<Seed> getSeeds() {
         return seeds;
+    }
+
+    public void setTreeMonsters(ArrayList<Monster> treeMonsters) {
+        this.treeMonsters = treeMonsters;
     }
 }
 
