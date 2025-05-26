@@ -5,15 +5,18 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -23,9 +26,6 @@ import com.tilldawn.Control.GameController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class GameView extends InputAdapter implements Screen {
     private Stage stage;
@@ -42,8 +42,9 @@ public class GameView extends InputAdapter implements Screen {
     private Label killsLabel;
     private Label scoreLabel;
     private String nameOfTexture;
-    private Label levelLabel;  // Level label
-    private ProgressBar expBar;
+    private Label levelLabel;
+    private Label expLable;
+    private ProgressBar expProgressBar;
 
     public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
@@ -74,20 +75,32 @@ public class GameView extends InputAdapter implements Screen {
         scoreLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
         stage.addActor(scoreLabel);
 
+        // Create Level label
         levelLabel = new Label("Level: " + controller.getPlayerController().getPlayer().getLevel(), skin);
-        levelLabel.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 60);
+        levelLabel.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 40);
         stage.addActor(levelLabel);
 
-        // Add EXP progress bar at the top right
-        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
-        progressBarStyle.background = skin.getDrawable("white");
-        progressBarStyle.knob = skin.getDrawable("white"); // You can customize the knob appearance if needed
+        expLable = new Label("exp: " + controller.getPlayerController().getPlayer().getExp(), skin);
+        expLable.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 80);
+        stage.addActor(expLable);
 
-        expBar = new ProgressBar(0, 1, 0.01f, false, progressBarStyle);
-        expBar.setValue(0);
-        expBar.setWidth(200);
-        expBar.setPosition(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 90);
-        stage.addActor(expBar);
+        expProgressBar = new ProgressBar(0, 100, 1, false, skin.get("default-horizontal", ProgressBar.ProgressBarStyle.class));
+        expProgressBar.setValue(0);
+        expProgressBar.setAnimateDuration(0.25f);
+        expProgressBar.setSize(300, 10);
+        expProgressBar.setPosition(stage.getWidth() - 320, stage.getHeight() - 120);
+
+        // Change the color of the progress bar when full
+        expProgressBar.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (expProgressBar.getValue() == expProgressBar.getMaxValue()) {
+                    expProgressBar.setColor(Color.RED);
+                }
+            }
+        });
+
+        stage.addActor(expProgressBar);
 
         pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("pause_icon.png")))));
         pauseButton.setPosition(Gdx.graphics.getWidth() - 60, 10);  // Positioned at bottom-right
@@ -128,12 +141,12 @@ public class GameView extends InputAdapter implements Screen {
         healthLabel.setText("HP: " + controller.getPlayerHealth());
         killsLabel.setText("Kills: " + controller.getKillCount());
         scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
-
         levelLabel.setText("Level: " + controller.getPlayerController().getPlayer().getLevel());
+        expLable.setText("exp: " + controller.getPlayerController().getPlayer().getExp());
 
-        float exp = controller.getPlayerController().getPlayer().getExp();
-        float maxExp = 20 * controller.getPlayerController().getPlayer().getLevel();
-        expBar.setValue(exp / maxExp);
+        expProgressBar.setRange(0, controller.getPlayerController().getPlayer().getLevel() * 20);
+        expProgressBar.setValue(controller.getPlayerController().getPlayer().getExp());
+
         controller.updateGame();
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
@@ -157,13 +170,16 @@ public class GameView extends InputAdapter implements Screen {
     }
 
     @Override
-    public void pause() { }
+    public void pause() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
-    public void hide() { }
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
@@ -184,11 +200,11 @@ public class GameView extends InputAdapter implements Screen {
             controller.killMonster();
             return true;
         }
-        if(keycode == Input.Keys.E){
+        if (keycode == Input.Keys.E) {
             controller.killEyeBat();
             return true;
         }
-        if(keycode == Input.Keys.T){
+        if (keycode == Input.Keys.T) {
             controller.addTime(60000);
             return true;
         }
