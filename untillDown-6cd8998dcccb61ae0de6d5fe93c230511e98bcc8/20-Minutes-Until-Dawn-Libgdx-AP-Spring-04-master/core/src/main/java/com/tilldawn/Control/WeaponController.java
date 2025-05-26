@@ -1,6 +1,7 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -35,6 +36,11 @@ public class WeaponController {
     }
 
     public void update(ArrayList<Monster> monsters) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            if (!weapon.isReloading()) {
+                weapon.reload();
+            }
+        }
         if (controller != null && controller.isAutoAimEnabled()) {
             Monster closest = findClosestMonster(monsters);
             if (closest != null) {
@@ -65,6 +71,7 @@ public class WeaponController {
     }
 
     public void handleWeaponShoot(int x, int y) {
+        if (weapon.isReloading()) return;
         Player player = controller.getPlayerController().getPlayer();
         Sprite playerSprite = player.getPlayerSprite();
         float playerX = playerSprite.getX() + playerSprite.getWidth() / 2;

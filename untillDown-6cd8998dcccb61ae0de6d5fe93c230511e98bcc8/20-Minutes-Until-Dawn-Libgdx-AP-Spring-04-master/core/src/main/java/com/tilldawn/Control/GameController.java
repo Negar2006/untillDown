@@ -54,7 +54,7 @@ public class GameController {
     public void setView(GameView view, Texture playerTexture, String characterName) {
         this.view = view;
         playerController = new PlayerController(new Player(playerTexture), characterName, this);
-        weaponController = new WeaponController(new Weapon());
+        weaponController = new WeaponController(new Weapon(weaponType));
         worldController = new WorldController(playerController);
         monsterController = new MonsterController();
         monsterController.setGameController(this);
