@@ -1,6 +1,7 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,13 +9,7 @@ import com.tilldawn.Main;
 import com.tilldawn.Model.*;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
-
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GameController {
     private GameView view;
@@ -31,11 +26,13 @@ public class GameController {
     private boolean isPaused = false;
     private long pausedTimeMillis = 0;
     private long pauseStartTime = 0;
+    private String fileName;
 
     public GameController(int gameDurationMinutes, String weapon) {
         this.GAME_DURATION_MILLIS = gameDurationMinutes * 60 * 1000L;
         this.remainingTimeMillis = GAME_DURATION_MILLIS;
         this.startTimeMillis = System.currentTimeMillis();
+        this.monsterController = new MonsterController();
         switch (weapon) {
             case "SMGs Dual":
                 this.weaponType = com.tilldawn.Model.enums.weaponType.SMG_DUAL;
@@ -53,6 +50,7 @@ public class GameController {
 
     public void setView(GameView view, Texture playerTexture, String characterName) {
         this.view = view;
+        this.fileName = characterName;
         playerController = new PlayerController(new Player(playerTexture), characterName, this);
         weaponController = new WeaponController(new Weapon(weaponType));
         worldController = new WorldController(playerController);
@@ -244,53 +242,45 @@ public class GameController {
     }
 
     public void saveGameState() {
-        // Gather information
         Player player = playerController.getPlayer();
-        String playerName = player.getCharacterName();
-        float playerX = player.getPosX();
-        float playerY = player.getPosY();
-        float playerHealth = player.getPlayerHealth();
+        SaveData data = new SaveData();
+        data.playerName = player.getCharacterName();
+        data.playerX = player.getPosX();
+        data.playerY = player.getPosY();
+        data.playerHealth = player.getPlayerHealth();
 
-        long currentMillis = System.currentTimeMillis();
-        long duration = GAME_DURATION_MILLIS;
-        String weapon = this.weaponType.name();
+        String nameOfFile = player.getPlayerTexture().toString().replaceAll(".png", "");
+        data.NameOfFile = nameOfFile;
 
-        Map<Float, Float> treeMonsterPositions = new HashMap<>();
-        for (Monster monster : monsterController.getTreeMonsters()) {
-            treeMonsterPositions.put(monster.getX(), monster.getY());
+        System.out.println(data.NameOfFile);
+
+        data.currentTimeMillis = System.currentTimeMillis();
+        data.duration = (int) (remainingTimeMillis / 60_000L);
+        data.weapon = this.weaponType.name();
+
+        // Tree-monster positions
+        data.treeMonsterPositionX = new ArrayList<>();
+        data.treeMonsterPositionY = new ArrayList<>();
+        for (Monster m : monsterController.getTreeMonsters()) {
+            data.treeMonsterPositionX.add(m.getX());
+            data.treeMonsterPositionY.add(m.getY());
         }
+        data.treeMonsterCount = data.treeMonsterPositionX.size();
 
-        float ElderMonsterPositionX = 0;
-        float ElderMonsterPositionY = 0;
-        boolean elderMonsterAppeared = !monsterController.getElderMonster().isEmpty();
-        if (elderMonsterAppeared) {
-            for(Monster monster : monsterController.getElderMonster()) {
-                ElderMonsterPositionX = monster.getX();
-                ElderMonsterPositionY = monster.getY();
-            }
+        data.elderMonsterAppeared = !monsterController.getElderMonster().isEmpty();
+        if (data.elderMonsterAppeared) {
+            Monster elder = monsterController.getElderMonster().get(0);
+            data.elderMonsterPositionX = elder.getX();
+            data.elderMonsterPositionY = elder.getY();
         }
-
-        Map<String, Object> gameStateData = new HashMap<>();
-        gameStateData.put("playerName", playerName);
-        gameStateData.put("playerX", playerX);
-        gameStateData.put("playerY", playerY);
-        gameStateData.put("playerHealth", playerHealth);
-        gameStateData.put("time: currentTimeMillis", currentMillis);
-        gameStateData.put("duration: duration", duration);
-        gameStateData.put("weaponType", weapon);
-        gameStateData.put("treeMonsterCount", monsterController.getTreeMonsters().size());
-        gameStateData.put("treeMonsterPositions", treeMonsterPositions);
-        gameStateData.put("elderMonsterAppeared", elderMonsterAppeared);
-        gameStateData.put("elderMonsterPositionX", ElderMonsterPositionX);
-        gameStateData.put("elderMonsterPositionY", ElderMonsterPositionY);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter(playerName + ".json")) {
-            gson.toJson(gameStateData, writer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String jsonOut = gson.toJson(data);
+
+        FileHandle file = Gdx.files.local(data.playerName + ".json");
+        file.writeString(jsonOut, false);
     }
+
 
     public void setView(GameView view) {
         this.view = view;

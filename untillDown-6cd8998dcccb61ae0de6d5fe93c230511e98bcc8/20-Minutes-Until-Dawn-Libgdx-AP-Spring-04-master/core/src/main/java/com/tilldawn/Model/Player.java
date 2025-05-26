@@ -25,9 +25,9 @@ public class Player {
     private float speed = 100f;
     private int score = 0;
     private boolean isPlayerIdle = true;
-    private float invincibleTimer = 0f;
-    private final float INVINCIBLE_DURATION = 1.0f;
     private PlayerController playerController;
+    private int Level;
+    private int exp;
 
     public Player(Texture playerTexture) {
         if(Main.currentUser!= null) name = Main.currentUser.getUsername();
@@ -40,8 +40,9 @@ public class Player {
         posY = playerSprite.getY();
 
         centerPlayerOnScreen();
-
         rect = new CollisionRect(posX, posY, playerSprite.getWidth(), playerSprite.getHeight());
+        this.Level = 1;
+        this.exp = 0;
     }
 
     private void centerPlayerOnScreen() {
@@ -166,5 +167,21 @@ public class Player {
 
     public void setCharacterName(String playerName) {
         this.name = playerName;
+    }
+
+    public int getExp() {
+        return exp;
+    }
+
+    public void addEXP(int exp) {
+        this.exp += exp;
+        if(this.exp >= 20 * Level){
+            Level += 1;
+            this.exp = 0;
+        }
+    }
+
+    public int getLevel() {
+        return this.Level;
     }
 }

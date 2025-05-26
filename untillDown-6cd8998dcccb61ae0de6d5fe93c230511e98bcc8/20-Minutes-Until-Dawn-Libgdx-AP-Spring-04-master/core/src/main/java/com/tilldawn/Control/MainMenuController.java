@@ -3,7 +3,6 @@ package com.tilldawn.Control;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Json;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Monster;
@@ -11,6 +10,8 @@ import com.tilldawn.Model.Player;
 import com.tilldawn.Model.SaveData;
 import com.tilldawn.Model.enums.monsterTypes;
 import com.tilldawn.View.*;
+import com.google.gson.Gson;
+import com.tilldawn.Model.enums.weaponType;
 
 import java.util.ArrayList;
 
@@ -44,42 +45,71 @@ public class MainMenuController {
             }
 
             if (view.getContinueButton().isChecked()) {
-                Main.getMain().getScreen().dispose();
+                view.getContinueButton().setChecked(false);  // Prevent multiple clicks
 
                 String playerName = Main.currentUser.getUsername();
                 FileHandle file = Gdx.files.local(playerName + ".json");
 
-                if (file.exists()) {
-                    String jsonContent = file.readString();
-                    Json json = new Json();
-                    SaveData data = json.fromJson(SaveData.class, jsonContent);
+                if (!file.exists()) {
+                    System.out.println("Error: No saved game found!");
+                    return;
+                }
 
-                    Texture playerTexture = new Texture(Gdx.files.internal("DIAMOND.png"));
+                try {
+                    SaveData data = new Gson().fromJson(file.readString(), SaveData.class);
+
+                    String fileName = data.NameOfFile + ".png";
+                    Texture playerTexture = new Texture(Gdx.files.internal(fileName));
+
                     Player player = new Player(playerTexture);
                     player.setCharacterName(data.playerName);
                     player.setPosX(data.playerX);
                     player.setPosY(data.playerY);
                     player.setPlayerHealth(data.playerHealth);
 
+                    MonsterController monsterController = new MonsterController();
+                    monsterController.setTreesSpawned(true);
+
                     GameController gameController = new GameController(data.duration, data.weapon);
-                    PlayerController playerController = new PlayerController(player, playerName, gameController);
+
+                    String newFileName = fileName.replaceAll(".png", "");
+
+                    PlayerController playerController = new PlayerController(player, newFileName, gameController);
                     gameController.setPlayerController(playerController);
 
-                    ArrayList<Monster> treeMonsters = new ArrayList<>();
-                    for (int i = 0; i < data.treeMonsterCount; i++) {
-                        float x = data.treeMonsterPositionX.get(i);
-                        float y = data.treeMonsterPositionY.get(i);
-                        Monster monster = new Monster(monsterTypes.TreeMonster);
-                        monster.setPosX(x);
-                        monster.setPosY(y);
-                        treeMonsters.add(monster);
+                    if (data.treeMonsterCount > 0) {
+                        ArrayList<Monster> treeMonsters = new ArrayList<>(data.treeMonsterCount);
+                        for (int i = 0; i < data.treeMonsterCount; i++) {
+                            Monster m = new Monster(monsterTypes.TreeMonster);
+                            m.setPosX(data.treeMonsterPositionX.get(i));
+                            m.setPosY(data.treeMonsterPositionY.get(i));
+                            treeMonsters.add(m);
+                        }
+                        gameController.getMonsterController().setTreeMonsters(treeMonsters);
                     }
-                    gameController.getMonsterController().setTreeMonsters(treeMonsters);
 
-                    Main.getMain().setScreen(new GameView(new GameController(10, "Sward"), GameAssetManager.getGameAssetManager().getSkin(), playerTexture, playerName));
+                    if (data.elderMonsterAppeared) {
+                        Monster elder = new Monster(monsterTypes.Elder);
+                        elder.setPosX(data.elderMonsterPositionX);
+                        elder.setPosY(data.elderMonsterPositionY);
 
-                } else {
-                    System.out.println("Error: No saved game found!");
+                        if (gameController.getMonsterController().getElderMonster() == null) {
+                            gameController.getMonsterController().setElderMonster(new ArrayList<>());
+                        }
+
+                        gameController.getMonsterController().getElderMonster().add(elder);
+                    }
+
+                    // Switch to GameView
+                    Main.getMain().getScreen().dispose();
+                    Main.getMain().setScreen(new GameView(gameController,
+                        GameAssetManager.getGameAssetManager().getSkin(),
+                        playerTexture,
+                        newFileName));
+                    gameController.getPlayerController().setPlayer(player);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error loading save data!");
                 }
             }
 
@@ -94,4 +124,5 @@ public class MainMenuController {
             }
         }
     }
+
 }

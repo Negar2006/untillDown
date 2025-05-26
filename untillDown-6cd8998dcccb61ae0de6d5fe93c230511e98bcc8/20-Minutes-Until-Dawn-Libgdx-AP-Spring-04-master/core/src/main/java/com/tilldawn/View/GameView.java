@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -31,7 +32,6 @@ public class GameView extends InputAdapter implements Screen {
     private Skin skin;
     private GameController controller;
     private Array<DamagePopup> damagePopups = new Array<>();
-    private ImageButton settingsButton;
     private ImageButton pauseButton;
     private Animation<TextureRegion> treeAnimation;
     private Animation<TextureRegion> playerAnimation;
@@ -41,6 +41,9 @@ public class GameView extends InputAdapter implements Screen {
     private Label healthLabel;
     private Label killsLabel;
     private Label scoreLabel;
+    private String nameOfTexture;
+    private Label levelLabel;  // Level label
+    private ProgressBar expBar;
 
     public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
@@ -48,7 +51,7 @@ public class GameView extends InputAdapter implements Screen {
         controller.setView(this, playerTexture, name);
         this.assetManager = GameAssetManager.getGameAssetManager();
         this.stateTime = 0f;
-
+        this.nameOfTexture = name;
     }
 
     @Override
@@ -71,17 +74,20 @@ public class GameView extends InputAdapter implements Screen {
         scoreLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
         stage.addActor(scoreLabel);
 
+        levelLabel = new Label("Level: " + controller.getPlayerController().getPlayer().getLevel(), skin);
+        levelLabel.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 60);
+        stage.addActor(levelLabel);
 
-        settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("gear.png")))));
-        settingsButton.setPosition(Gdx.graphics.getWidth() - 60, Gdx.graphics.getHeight() - 60);
-        settingsButton.setSize(50, 50);
-        settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.goToSettingsMenu();
-            }
-        });
-        stage.addActor(settingsButton);
+        // Add EXP progress bar at the top right
+        ProgressBar.ProgressBarStyle progressBarStyle = new ProgressBar.ProgressBarStyle();
+        progressBarStyle.background = skin.getDrawable("white");
+        progressBarStyle.knob = skin.getDrawable("white"); // You can customize the knob appearance if needed
+
+        expBar = new ProgressBar(0, 1, 0.01f, false, progressBarStyle);
+        expBar.setValue(0);
+        expBar.setWidth(200);
+        expBar.setPosition(Gdx.graphics.getWidth() - 200, Gdx.graphics.getHeight() - 90);
+        stage.addActor(expBar);
 
         pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("pause_icon.png")))));
         pauseButton.setPosition(Gdx.graphics.getWidth() - 60, 10);  // Positioned at bottom-right
@@ -122,6 +128,12 @@ public class GameView extends InputAdapter implements Screen {
         healthLabel.setText("HP: " + controller.getPlayerHealth());
         killsLabel.setText("Kills: " + controller.getKillCount());
         scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
+
+        levelLabel.setText("Level: " + controller.getPlayerController().getPlayer().getLevel());
+
+        float exp = controller.getPlayerController().getPlayer().getExp();
+        float maxExp = 20 * controller.getPlayerController().getPlayer().getLevel();
+        expBar.setValue(exp / maxExp);
         controller.updateGame();
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
@@ -183,15 +195,6 @@ public class GameView extends InputAdapter implements Screen {
         return false;
     }
 
-    public Label getScoreLabel() {
-        return scoreLabel;
-    }
-
-    public void setScoreLabel(Label scoreLabel) {
-        this.scoreLabel = scoreLabel;
-    }
-
-
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         controller.getWeaponController().handleWeaponShoot(screenX, screenY);
@@ -234,73 +237,5 @@ public class GameView extends InputAdapter implements Screen {
 
     public Array<DamagePopup> getDamagePopups() {
         return damagePopups;
-    }
-
-    public void setDamagePopups(Array<DamagePopup> damagePopups) {
-        this.damagePopups = damagePopups;
-    }
-
-    public ImageButton getSettingsButton() {
-        return settingsButton;
-    }
-
-    public void setSettingsButton(ImageButton settingsButton) {
-        this.settingsButton = settingsButton;
-    }
-
-    public Animation<TextureRegion> getTreeAnimation() {
-        return treeAnimation;
-    }
-
-    public void setTreeAnimation(Animation<TextureRegion> treeAnimation) {
-        this.treeAnimation = treeAnimation;
-    }
-
-    public Animation<TextureRegion> getPlayerAnimation() {
-        return playerAnimation;
-    }
-
-    public void setPlayerAnimation(Animation<TextureRegion> playerAnimation) {
-        this.playerAnimation = playerAnimation;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
-    }
-
-    public GameAssetManager getAssetManager() {
-        return assetManager;
-    }
-
-    public void setAssetManager(GameAssetManager assetManager) {
-        this.assetManager = assetManager;
-    }
-
-    public Label getTimerLabel() {
-        return timerLabel;
-    }
-
-    public void setTimerLabel(Label timerLabel) {
-        this.timerLabel = timerLabel;
-    }
-
-    public Label getHealthLabel() {
-        return healthLabel;
-    }
-
-    public void setHealthLabel(Label healthLabel) {
-        this.healthLabel = healthLabel;
-    }
-
-    public Label getKillsLabel() {
-        return killsLabel;
-    }
-
-    public void setKillsLabel(Label killsLabel) {
-        this.killsLabel = killsLabel;
-    }
-
-    public float getStateTime() {
-        return stateTime;
     }
 }

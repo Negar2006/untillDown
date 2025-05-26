@@ -65,7 +65,13 @@ public class MonsterController {
             isElder = true;
         }
 
-        seeds.removeIf(seed -> player.getPlayerSprite().getBoundingRectangle().overlaps(seed.getBounds()));
+        seeds.removeIf(seed -> {
+            if (player.getPlayerSprite().getBoundingRectangle().overlaps(seed.getBounds())) {
+                player.addEXP(3);
+                return true;
+            }
+            return false;
+        });
 
         Iter(player, batch, tentacleMonsters);
         Iter(player, batch, treeMonsters);
@@ -178,6 +184,14 @@ public class MonsterController {
 
     public void setTreeMonsters(ArrayList<Monster> treeMonsters) {
         this.treeMonsters = treeMonsters;
+    }
+
+    public void setElderMonster(ArrayList<Monster> monsters) {
+        this.ElderMonster = monsters;
+    }
+
+    public void setTreesSpawned(boolean treesSpawned) {
+        this.treesSpawned = treesSpawned;
     }
 }
 
