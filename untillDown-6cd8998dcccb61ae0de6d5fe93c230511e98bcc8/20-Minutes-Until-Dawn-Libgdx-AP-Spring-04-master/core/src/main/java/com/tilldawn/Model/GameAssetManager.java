@@ -133,6 +133,27 @@ public class GameAssetManager {
     private final String smg = "smg/SMGStill.png";
     private final Texture smgTexture = new Texture(smg);
 
+    private final String shotGun = "smg/RevolverStill.png";
+    private final Texture shotGunTexture = new Texture(shotGun);
+
+    private final String smgDual = "smg/T_DualSMGs_Icon.png";
+    private final Texture smgDualTexture = new Texture(smgDual);
+
+    private final String vitality = "Icon/Icon_Vitality.png";
+    private final Texture vitalityTexture = new Texture(vitality);
+
+    private final String damager = "Icon/Icon_Miniclip.png";
+    private final Texture damagerTexture = new Texture(damager);
+
+    private final String proCrease = "Icon/Icon_Make_It_Rain.png";
+    private final Texture proCreaseTexture = new Texture(proCrease);
+
+    private final String amoCrease = "Icon/Icon_Recharge.png";
+    private final Texture amoCreaseTexture = new Texture(amoCrease);
+
+    private final String speedy = "Icon/Icon_Generator.png";
+    private final Texture speedyTexture = new Texture(speedy);
+
     private final String bullet = "bullet.png";
 
 
@@ -593,5 +614,61 @@ public class GameAssetManager {
 
     public String getEyeBat0() {
         return EyeBat0;
+    }
+
+    public String getShotGun() {
+        return shotGun;
+    }
+
+    public Texture getShotGunTexture() {
+        return shotGunTexture;
+    }
+
+    public String getSmgDual() {
+        return smgDual;
+    }
+
+    public Texture getSmgDualTexture() {
+        return smgDualTexture;
+    }
+
+    public String getVitality() {
+        return vitality;
+    }
+
+    public Texture getVitalityTexture() {
+        return vitalityTexture;
+    }
+
+    public String getDamager() {
+        return damager;
+    }
+
+    public Texture getDamagerTexture() {
+        return damagerTexture;
+    }
+
+    public String getProCrease() {
+        return proCrease;
+    }
+
+    public Texture getProCreaseTexture() {
+        return proCreaseTexture;
+    }
+
+    public String getAmoCrease() {
+        return amoCrease;
+    }
+
+    public Texture getAmoCreaseTexture() {
+        return amoCreaseTexture;
+    }
+
+    public String getSpeedy() {
+        return speedy;
+    }
+
+    public Texture getSpeedyTexture() {
+        return speedyTexture;
     }
 }

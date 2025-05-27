@@ -81,4 +81,12 @@ public class Weapon {
     public void setPosition(float x, float y) {
         smgSprite.setPosition(x, y);
     }
+
+    public void addAmmo(int i) {
+        this.ammo += i;
+    }
+
+    public void addDamage(float v) {
+
+    }
 }

@@ -2,6 +2,7 @@ package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +18,8 @@ public class WeaponController {
     private final ArrayList<Bullet> bullets = new ArrayList<>();
     private GameView gameView;
     private GameController controller;
+    private Texture crosshairTexture = new Texture(Gdx.files.internal("shooting.png"));
+    private Sprite crosshairSprite = new Sprite(crosshairTexture);
 
     public void setGameController(GameController controller) {
         this.controller = controller;
@@ -33,6 +36,7 @@ public class WeaponController {
 
     public WeaponController(Weapon weapon) {
         this.weapon = weapon;
+        crosshairSprite.setSize(crosshairSprite.getWidth() / 8, crosshairSprite.getHeight() / 8);
     }
 
     public void update(ArrayList<Monster> monsters) {
@@ -57,6 +61,12 @@ public class WeaponController {
         weapon.setPosition(weaponX, weaponY);
         weapon.getSmgSprite().draw(Main.getBatch());
         updateBullets(monsters);
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+        crosshairSprite.setPosition(mouseX - crosshairSprite.getWidth() / 2, mouseY - crosshairSprite.getHeight() / 2);
+        crosshairSprite.draw(Main.getBatch());
     }
 
     public void handleWeaponRotation(int x, int y) {
@@ -144,4 +154,6 @@ public class WeaponController {
         handleWeaponRotation((int) targetX, (int) targetY);
     }
 
+    public void addProjectile(int i) {
+    }
 }

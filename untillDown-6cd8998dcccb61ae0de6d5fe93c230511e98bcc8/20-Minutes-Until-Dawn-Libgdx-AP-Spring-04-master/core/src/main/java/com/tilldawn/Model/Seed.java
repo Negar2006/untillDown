@@ -26,7 +26,7 @@ public class Seed {
                 texture = new Texture("Elder_EM.png");
                 break;
         }
-        this.bounds = new Rectangle(x, y, texture.getWidth() * 2f, texture.getHeight() * 2f);
+        this.bounds = new Rectangle(x, y, texture.getWidth() * 5f, texture.getHeight() * 5f);
     }
 
     public void draw(SpriteBatch batch) {

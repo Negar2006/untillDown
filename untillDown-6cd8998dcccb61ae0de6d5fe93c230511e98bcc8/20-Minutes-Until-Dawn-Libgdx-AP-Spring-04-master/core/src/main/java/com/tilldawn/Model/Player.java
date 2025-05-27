@@ -9,6 +9,7 @@ import com.tilldawn.Control.PlayerController;
 import com.tilldawn.Control.PreGameMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.View.GameOverView;
+import com.tilldawn.View.GameView;
 import com.tilldawn.View.PreGameMenuView;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Player {
     private PlayerController playerController;
     private int Level;
     private int exp;
+    private ArrayList<Ability> gainAbilities = new ArrayList<>();
 
     public Player(Texture playerTexture) {
         if(Main.currentUser!= null) name = Main.currentUser.getUsername();
@@ -178,10 +180,38 @@ public class Player {
         if(this.exp >= 20 * Level){
             Level += 1;
             this.exp = 0;
+
+            if (Main.getMain().getScreen() instanceof GameView) {
+                ((GameView) Main.getMain().getScreen()).showAbilitySelectionDialog();
+            }
         }
+    }
+
+    public void setExp(int exp) {
+        this.exp = exp;
     }
 
     public int getLevel() {
         return this.Level;
+    }
+    public ArrayList<Ability> getGainAbilities() {
+        return gainAbilities;
+    }
+
+    public void addAbility(Ability ability) {
+        gainAbilities.add(ability);
+    }
+
+    public boolean hasAbility(Ability ability) {
+        return gainAbilities.contains(ability);
+    }
+
+    public void removeAbility(Ability ability) {
+        for(Ability ability1 : gainAbilities) {
+            if(ability.equals(ability1)) {
+                gainAbilities.remove(ability);
+                break;
+            }
+        }
     }
 }

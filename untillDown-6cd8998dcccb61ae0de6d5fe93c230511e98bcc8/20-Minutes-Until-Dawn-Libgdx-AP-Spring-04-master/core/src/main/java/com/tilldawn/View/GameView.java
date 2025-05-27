@@ -12,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -24,8 +21,14 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.GameController;
 import com.tilldawn.Main;
+import com.tilldawn.Model.Ability;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
+import com.tilldawn.Model.Player;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameView extends InputAdapter implements Screen {
     private Stage stage;
@@ -41,10 +44,24 @@ public class GameView extends InputAdapter implements Screen {
     private Label healthLabel;
     private Label killsLabel;
     private Label scoreLabel;
+    private Label speedLable;
     private String nameOfTexture;
     private Label levelLabel;
     private Label expLable;
     private ProgressBar expProgressBar;
+    private float firstHearth;
+
+    Texture emptyHeartTexture = new Texture(Gdx.files.internal("heart/HeartAnimation_3.png"));
+    Texture fullHeartTexture1 = new Texture(Gdx.files.internal("heart/HeartAnimation_1.png"));
+    Texture fullHeartTexture2 = new Texture(Gdx.files.internal("heart/HeartAnimation_2.png"));
+
+    // Create TextureRegions for full and half heart
+    TextureRegion[] fullHeartFrames = {
+        new TextureRegion(fullHeartTexture1),
+        new TextureRegion(fullHeartTexture2)
+    };
+
+    Animation<TextureRegion> fullHeartAnimation = new Animation<>(0.5f, fullHeartFrames);
 
     public GameView(GameController controller, Skin skin, Texture playerTexture, String name) {
         this.skin = skin;
@@ -53,6 +70,7 @@ public class GameView extends InputAdapter implements Screen {
         this.assetManager = GameAssetManager.getGameAssetManager();
         this.stateTime = 0f;
         this.nameOfTexture = name;
+        this.firstHearth = controller.getPlayerController().getPlayer().getPlayerHealth();
     }
 
     @Override
@@ -75,20 +93,24 @@ public class GameView extends InputAdapter implements Screen {
         scoreLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
         stage.addActor(scoreLabel);
 
+        speedLable = new Label("Speed: " + controller.getPlayerController().getPlayer().getSpeed(), skin);
+        speedLable.setPosition(Gdx.graphics.getWidth() - 400, Gdx.graphics.getHeight() - 40);
+        stage.addActor(speedLable);
+
         // Create Level label
         levelLabel = new Label("Level: " + controller.getPlayerController().getPlayer().getLevel(), skin);
-        levelLabel.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 40);
+        levelLabel.setPosition(Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 40);
         stage.addActor(levelLabel);
 
         expLable = new Label("exp: " + controller.getPlayerController().getPlayer().getExp(), skin);
-        expLable.setPosition(Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 80);
+        expLable.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 40);
         stage.addActor(expLable);
 
         expProgressBar = new ProgressBar(0, 100, 1, false, skin.get("default-horizontal", ProgressBar.ProgressBarStyle.class));
         expProgressBar.setValue(0);
         expProgressBar.setAnimateDuration(0.25f);
         expProgressBar.setSize(300, 10);
-        expProgressBar.setPosition(stage.getWidth() - 320, stage.getHeight() - 120);
+        expProgressBar.setPosition(stage.getWidth() - 320, stage.getHeight() - 80);
 
         // Change the color of the progress bar when full
         expProgressBar.addListener(new ChangeListener() {
@@ -143,10 +165,11 @@ public class GameView extends InputAdapter implements Screen {
         scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
         levelLabel.setText("Level: " + controller.getPlayerController().getPlayer().getLevel());
         expLable.setText("exp: " + controller.getPlayerController().getPlayer().getExp());
+        speedLable.setText("Speed: " + controller.getPlayerController().getPlayer().getSpeed());
 
         expProgressBar.setRange(0, controller.getPlayerController().getPlayer().getLevel() * 20);
         expProgressBar.setValue(controller.getPlayerController().getPlayer().getExp());
-
+        updateHearts();
         controller.updateGame();
 
         for (int i = damagePopups.size - 1; i >= 0; i--) {
@@ -158,6 +181,7 @@ public class GameView extends InputAdapter implements Screen {
             }
         }
 
+        displayGainedAbilities();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
@@ -208,6 +232,72 @@ public class GameView extends InputAdapter implements Screen {
             controller.addTime(60000);
             return true;
         }
+        if (keycode == Input.Keys.B) {
+            int newEXP = controller.getPlayerController().getPlayer().getLevel() * 20;
+            controller.getPlayerController().getPlayer().setExp(newEXP);
+            return true;
+        }
+
+        if (keycode == Input.Keys.V) {
+            if (controller.getPlayerController().getPlayer().hasAbility(Ability.VITALITY)) {
+                float newHealth = controller.getPlayerController().getPlayer().getPlayerHealth() + 20;
+                controller.getPlayerController().getPlayer().setPlayerHealth(newHealth);
+                controller.getPlayerController().getPlayer().removeAbility(Ability.VITALITY);
+            }
+            return true;
+        }
+
+        if (keycode == Input.Keys.S) {
+            Player player = controller.getPlayerController().getPlayer();
+            if (player.hasAbility(Ability.SPEEDY)) {
+                // Double the player's speed
+                player.setSpeed(player.getSpeed() * 2);
+
+                float speedDuration = 10f;
+                new Thread(() -> {
+                    try {
+                        Thread.sleep((long) (speedDuration * 1000));
+                        player.setSpeed(player.getSpeed() / 2);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+                player.removeAbility(Ability.SPEEDY);
+            }
+            return true;
+        }
+
+
+        if (keycode == Input.Keys.A) {
+            Player player = controller.getPlayerController().getPlayer();
+            if (player.hasAbility(Ability.AMOCREASE)) {
+                controller.getWeaponController().getWeapon().addAmmo(5);
+                player.removeAbility(Ability.AMOCREASE);
+            }
+            return true;
+        }
+
+        if (keycode == Input.Keys.P) {
+            Player player = controller.getPlayerController().getPlayer();
+
+            if (player.hasAbility(Ability.PROCREASE)) {
+                controller.getWeaponController().addProjectile(1);  // Assuming WeaponController has addProjectile method
+                System.out.println("Procrease used! Projectiles increased.");
+                player.removeAbility(Ability.PROCREASE);
+            }
+            return true;
+        }
+
+        if (keycode == Input.Keys.D) {
+            Player player = controller.getPlayerController().getPlayer();
+            if (player.hasAbility(Ability.DAMAGER)) {
+                controller.getWeaponController().getWeapon().addDamage(1.25f);  // Assuming WeaponController has setWeaponDamage method
+                System.out.println("Damager used! Weapon damage is now 125%.");
+                player.removeAbility(Ability.DAMAGER);
+            }
+            return true;
+        }
+
         return false;
     }
 
@@ -253,5 +343,113 @@ public class GameView extends InputAdapter implements Screen {
 
     public Array<DamagePopup> getDamagePopups() {
         return damagePopups;
+    }
+
+    private void updateHearts() {
+        int playerHealth = (int) controller.getPlayerHealth();
+        int numberOfFullHearts = playerHealth / 20;
+        int remainingHealth = playerHealth % 20;
+
+        float heartX = healthLabel.getX() + healthLabel.getWidth() + 10;
+
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof Image) {
+                actor.remove();
+            }
+        }
+
+        for (int i = 0; i < numberOfFullHearts; i++) {
+            Image fullHeart = new Image(fullHeartAnimation.getKeyFrame(stateTime, true));
+            fullHeart.setPosition(heartX + i * 30, healthLabel.getY() - 5);
+            stage.addActor(fullHeart);
+        }
+
+        if (remainingHealth > 0) {
+            Image halfHeart = new Image(fullHeartAnimation.getKeyFrame(stateTime, true));
+            halfHeart.setPosition(heartX + numberOfFullHearts * 30, healthLabel.getY() - 5);
+            stage.addActor(halfHeart);
+        }
+
+        for (int i = numberOfFullHearts + (remainingHealth > 0 ? 1 : 0); i < 5; i++) {
+            Image emptyHeart = new Image(new TextureRegion(emptyHeartTexture));
+            emptyHeart.setPosition(heartX + i * 30, healthLabel.getY() - 5);
+            stage.addActor(emptyHeart);
+        }
+    }
+
+    public void showAbilitySelectionDialog() {
+        Array<Ability> availableAbilities = new Array<>(Ability.values());
+        Array<Ability> randomAbilities = new Array<>();
+
+        for (int i = 0; i < 3; i++) {
+            Ability ability;
+            do {
+                ability = availableAbilities.random(); // Get random ability
+            } while (randomAbilities.contains(ability, false)); // Avoid duplicates
+
+            randomAbilities.add(ability); // Add the ability to the list
+        }
+
+        Dialog abilityDialog = new Dialog("Choose an Ability", skin);
+        abilityDialog.getContentTable().padTop(20);
+        abilityDialog.setSize(400, 300);
+
+        for (Ability ability : randomAbilities) {
+            TextButton abilityButton = new TextButton(ability.getDescription(), skin);
+            abilityButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    controller.getPlayerController().getPlayer().addAbility(ability);
+                    abilityDialog.hide();
+
+                }
+            });
+            abilityDialog.getContentTable().add(abilityButton).fillX().pad(10);
+            abilityDialog.getContentTable().row();
+        }
+
+        abilityDialog.button("Close", true);
+        abilityDialog.show(stage);
+    }
+
+    private void displayGainedAbilities() {
+        ArrayList<Ability> abilities = controller.getPlayerController().getPlayer().getGainAbilities();
+
+        float xPosition = 10;
+        float yPosition = Gdx.graphics.getHeight() - 150;
+        float screenWidth = Gdx.graphics.getWidth();
+
+        for (Actor actor : stage.getActors()) {
+            if (actor instanceof Image || actor instanceof Label) {
+                if (actor.getName() != null && actor.getName().equalsIgnoreCase("ability")) {
+                    actor.remove();
+                }
+            }
+        }
+
+        HashMap<Ability, Integer> abilityCounts = new HashMap<>();
+        for (Ability ability : abilities) {
+            abilityCounts.put(ability, abilityCounts.getOrDefault(ability, 0) + 1);
+        }
+
+        for (Map.Entry<Ability, Integer> entry : abilityCounts.entrySet()) {
+            Ability ability = entry.getKey();
+            int count = entry.getValue();
+
+            Image abilityImage = new Image(ability.getTexture());
+            abilityImage.setPosition(xPosition, yPosition);
+            stage.addActor(abilityImage);
+
+            Label abilityLabel = new Label(String.valueOf(count), skin);
+            abilityLabel.setPosition(xPosition + abilityImage.getWidth() + 5, yPosition);
+            stage.addActor(abilityLabel);
+
+            xPosition += abilityImage.getWidth() + abilityLabel.getWidth() + 20;
+
+            if (xPosition + 200 > screenWidth) {
+                xPosition = 10;
+                yPosition -= 50;
+            }
+        }
     }
 }
