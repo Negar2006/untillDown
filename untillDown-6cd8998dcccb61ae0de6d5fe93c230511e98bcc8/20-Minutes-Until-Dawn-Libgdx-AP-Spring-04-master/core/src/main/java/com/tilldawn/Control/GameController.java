@@ -209,10 +209,12 @@ public class GameController {
         }
 
         int score = playerController.getPlayer().getScore(); // Get player score
-        int kills = numberOfKill; // Number of kills
+        int kills = numberOfKill;
         float health = playerController.getPlayer().getPlayerHealth(); // Player health
 
         GameOverController gameOverController = new GameOverController(username, score, kills, health);
+        Main.currentUser.addNumberOfKilling(kills);
+        Main.currentUser.addScore(score);
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
     }
 
@@ -336,6 +338,10 @@ public class GameController {
 
     public void setPauseStartTime(long pauseStartTime) {
         this.pauseStartTime = pauseStartTime;
+    }
+
+    public boolean isReloadAutoEnabled() {
+        return autoAimEnabled;
     }
 }
 

@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.GameController;
 import com.tilldawn.Main;
-import com.tilldawn.Model.Ability;
+import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Player;
@@ -297,7 +297,10 @@ public class GameView extends InputAdapter implements Screen {
             }
             return true;
         }
-
+        if(keycode == Input.Keys.R) {
+            controller.getWeaponController().getWeapon().setAmmo(controller.getWeaponController().getWeapon().getType().maxAmmo);
+            return true;
+        }
         return false;
     }
 
@@ -436,27 +439,21 @@ public class GameView extends InputAdapter implements Screen {
             abilityCounts.put(ability, abilityCounts.getOrDefault(ability, 0) + 1);
         }
 
-        // Add the ability images and labels for the gained abilities
         for (Map.Entry<Ability, Integer> entry : abilityCounts.entrySet()) {
             Ability ability = entry.getKey();
             int count = entry.getValue();
 
-            // Create and add the ability image
             Image abilityImage = new Image(ability.getTexture());
             abilityImage.setPosition(xPosition, yPosition);
-            abilityImage.setName("ability"); // Name it to identify it later for removal
+            abilityImage.setName("ability");
             stage.addActor(abilityImage);
 
-            // Create and add the count label for the ability
             Label abilityLabel = new Label(String.valueOf(count), skin);
             abilityLabel.setPosition(xPosition + abilityImage.getWidth() + 5, yPosition);
-            abilityLabel.setName("ability"); // Name it to identify it later for removal
+            abilityLabel.setName("ability");
             stage.addActor(abilityLabel);
-
-            // Move to the next position for the next ability
             xPosition += abilityImage.getWidth() + abilityLabel.getWidth() + 20;
 
-            // If the abilities are overflowing the screen width, move to the next line
             if (xPosition + 200 > screenWidth) {
                 xPosition = 10;
                 yPosition -= 50;

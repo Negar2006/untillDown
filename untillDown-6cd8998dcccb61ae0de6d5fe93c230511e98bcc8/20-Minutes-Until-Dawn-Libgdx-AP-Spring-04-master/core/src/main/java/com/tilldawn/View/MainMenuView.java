@@ -22,9 +22,12 @@ public class MainMenuView implements Screen {
     private final TextButton continueButton;
     private final TextButton logoutButton;
     private final TextButton talentButton;
+    private final TextButton registerButton;
+    private final TextButton exitButton;
     private Image avatarImage;
     private String avatarPath;
     private final Label usernameLabel;
+    private final Label numberOfKilling;
     private final Label scoreLabel;
     private final MainMenuController controller;
 
@@ -39,11 +42,13 @@ public class MainMenuView implements Screen {
         this.scoreboardButton = new TextButton("Scoreboard", skin);
         this.continueButton = new TextButton("Continue", skin);
         this.logoutButton = new TextButton("Logout", skin);
+        this.registerButton = new TextButton("Register", skin);
+        this.exitButton = new TextButton("Exit", skin);
         this.talentButton = new TextButton("Talent", skin);
         setAvatar(Main.currentUser.getSelectedCharacter());
-        this.usernameLabel = new Label("Username: Guest", skin);
-        this.scoreLabel = new Label("Score: 0", skin);
-
+        this.usernameLabel = new Label("Username: " + Main.currentUser.getUsername(), skin);
+        this.scoreLabel = new Label("Score: " + Main.currentUser.getScore(), skin);
+        this.numberOfKilling = new Label("Kills: " + Main.currentUser.getNumberOfKillingMonster(), skin);
 
         controller.setView(this);
     }
@@ -55,30 +60,34 @@ public class MainMenuView implements Screen {
 
         table.setFillParent(true);
         table.top().pad(15);
-        table.add(gameTitle).colspan(2).padBottom(20).row();
+
+        table.add(gameTitle).colspan(3).padBottom(30).row();
+
         if (avatarImage != null) {
-            table.add(avatarImage).size(100).padBottom(10).row();
+            table.add(avatarImage).size(150).padBottom(20).colspan(3).row();
         }
-        table.add(usernameLabel);
-        table.row();
-        table.add(scoreLabel).padBottom(20);
-        table.row();
-        table.add(playButton).width(300).pad(5);
-        table.row();
-        table.add(continueButton).width(300).pad(5);
-        table.row();
-        table.add(talentButton).width(300).pad(5);
-        table.row();
-        table.add(settingsButton).width(300).pad(5);
-        table.row();
-        table.add(profileButton).width(300).pad(5);
-        table.row();
-        table.add(scoreboardButton).width(300).pad(5);
-        table.row();
-        table.add(logoutButton).width(300).pad(5);
+
+        updateUserInfo();
+
+        table.add(usernameLabel).colspan(3).padBottom(20).row();
+        table.add(scoreLabel).padBottom(30).colspan(3).row();
+        table.add(numberOfKilling).padBottom(20).colspan(3).row();
+
+        table.add(playButton).width(300).height( 120).pad(15);
+        table.add(settingsButton).width(300).height( 120).pad(15);
+        table.add(profileButton).width(300).height( 120).pad(15).row();
+
+        table.add(scoreboardButton).width(300).height( 120).pad(15);
+        table.add(continueButton).width(300).height( 120).pad(15);
+        table.add(logoutButton).width(300).height( 120).pad(15).row();
+
+        table.add(talentButton).width(300).height( 120).pad(15);
+        table.add(registerButton).width(300).height( 120).pad(15);
+        table.add(exitButton).width(300).height( 120).pad(15).row();
 
         stage.addActor(table);
     }
+
 
     @Override
     public void render(float delta) {
@@ -151,10 +160,69 @@ public class MainMenuView implements Screen {
         return talentButton;
     }
 
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Label getGameTitle() {
+        return gameTitle;
+    }
+
+    public Table getTable() {
+        return table;
+    }
+
+    public void setTable(Table table) {
+        this.table = table;
+    }
+
+    public TextButton getRegisterButton() {
+        return registerButton;
+    }
+
+    public TextButton getExitButton() {
+        return exitButton;
+    }
+
+    public Image getAvatarImage() {
+        return avatarImage;
+    }
+
+    public void setAvatarImage(Image avatarImage) {
+        this.avatarImage = avatarImage;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
+    }
+
+    public void setAvatarPath(String avatarPath) {
+        this.avatarPath = avatarPath;
+    }
+
+    public Label getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public Label getScoreLabel() {
+        return scoreLabel;
+    }
+
     public void setAvatar(String path) {
         this.avatarPath = path;
         Texture avatarTexture = new Texture(Gdx.files.internal(path));
         avatarImage = new Image(avatarTexture);
         avatarImage.setSize(100, 100);
     }
+
+    public void updateUserInfo() {
+        usernameLabel.setText("Username: " + Main.currentUser.getUsername());
+        scoreLabel.setText("Score: " + Main.currentUser.getScore());
+        numberOfKilling.setText("Kills: " + Main.currentUser.getNumberOfKillingMonster());
+    }
+
 }

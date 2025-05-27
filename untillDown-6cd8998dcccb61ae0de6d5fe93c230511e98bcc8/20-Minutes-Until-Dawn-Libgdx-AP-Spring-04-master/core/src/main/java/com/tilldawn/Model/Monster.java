@@ -180,7 +180,7 @@ public class Monster {
     private void shootBullet(float targetX, float targetY) {
         float startX = getX();
         float startY = getY();
-        bullets.add(new Bullet(targetX, targetY, startX, startY));
+        bullets.add(new Bullet(targetX, targetY, startX, startY, 5));
     }
 
 

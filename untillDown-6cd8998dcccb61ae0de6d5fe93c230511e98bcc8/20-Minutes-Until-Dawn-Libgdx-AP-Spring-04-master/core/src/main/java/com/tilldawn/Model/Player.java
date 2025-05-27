@@ -3,14 +3,12 @@ package com.tilldawn.Model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.tilldawn.Control.GameController;
 import com.tilldawn.Control.GameOverController;
 import com.tilldawn.Control.PlayerController;
-import com.tilldawn.Control.PreGameMenuController;
 import com.tilldawn.Main;
+import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.View.GameOverView;
 import com.tilldawn.View.GameView;
-import com.tilldawn.View.PreGameMenuView;
 
 import java.util.ArrayList;
 

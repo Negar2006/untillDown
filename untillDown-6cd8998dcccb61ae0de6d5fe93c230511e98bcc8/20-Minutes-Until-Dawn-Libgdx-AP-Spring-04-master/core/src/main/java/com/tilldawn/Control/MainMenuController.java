@@ -122,6 +122,15 @@ public class MainMenuController {
                 Main.getMain().getScreen().dispose();
                 Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
+
+            if (view.getRegisterButton().isChecked()){
+                Main.getMain().getScreen().dispose();
+                Main.getMain().setScreen(new RegisterMenuViews(new RegisterMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+            }
+
+            if (view.getExitButton().isChecked()) {
+                System.exit(0);
+            }
         }
     }
 

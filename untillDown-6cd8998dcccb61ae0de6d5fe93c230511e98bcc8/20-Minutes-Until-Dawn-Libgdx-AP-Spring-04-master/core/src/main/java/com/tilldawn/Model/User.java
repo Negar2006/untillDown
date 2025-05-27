@@ -6,6 +6,7 @@ public class User {
     private String securityAnswer;
     private String selectedCharacter;
     private int Score;
+    private int numberOfKillingMonster;
 
     public User() {}
 
@@ -15,6 +16,7 @@ public class User {
         this.securityAnswer = securityAnswer;
         this.selectedCharacter = selectedCharacter;
         Score = 0;
+        numberOfKillingMonster = 0;
     }
 
     public String getUsername() {
@@ -51,6 +53,18 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public void addNumberOfKilling(int numberOfKillingMonster) {
+        this.numberOfKillingMonster += numberOfKillingMonster;
+    }
+
+    public void addScore(int score) {
+        Score += score;
+    }
+
+    public int getNumberOfKillingMonster() {
+        return numberOfKillingMonster;
     }
 
     @Override

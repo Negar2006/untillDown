@@ -1,8 +1,6 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -18,8 +16,6 @@ public class WeaponController {
     private final ArrayList<Bullet> bullets = new ArrayList<>();
     private GameView gameView;
     private GameController controller;
-    private Texture crosshairTexture = new Texture(Gdx.files.internal("shooting.png"));
-    private Sprite crosshairSprite = new Sprite(crosshairTexture);
 
     public void setGameController(GameController controller) {
         this.controller = controller;
@@ -36,15 +32,9 @@ public class WeaponController {
 
     public WeaponController(Weapon weapon) {
         this.weapon = weapon;
-        crosshairSprite.setSize(crosshairSprite.getWidth() / 8, crosshairSprite.getHeight() / 8);
     }
 
     public void update(ArrayList<Monster> monsters) {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
-            if (!weapon.isReloading()) {
-                weapon.reload();
-            }
-        }
         if (controller != null && controller.isAutoAimEnabled()) {
             Monster closest = findClosestMonster(monsters);
             if (closest != null) {
@@ -60,13 +50,8 @@ public class WeaponController {
 
         weapon.setPosition(weaponX, weaponY);
         weapon.getSmgSprite().draw(Main.getBatch());
+        weapon.reload(Gdx.graphics.getDeltaTime());
         updateBullets(monsters);
-
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-        crosshairSprite.setPosition(mouseX - crosshairSprite.getWidth() / 2, mouseY - crosshairSprite.getHeight() / 2);
-        crosshairSprite.draw(Main.getBatch());
     }
 
     public void handleWeaponRotation(int x, int y) {
@@ -82,21 +67,33 @@ public class WeaponController {
 
     public void handleWeaponShoot(int x, int y) {
         if (weapon.isReloading()) return;
+
+        if (weapon.getAmmo() <= 0) {
+            if (controller.isReloadAutoEnabled()) {
+                weapon.startReload();
+            }
+            return;
+        }
+
         Player player = controller.getPlayerController().getPlayer();
         Sprite playerSprite = player.getPlayerSprite();
         float playerX = playerSprite.getX() + playerSprite.getWidth() / 2;
         float playerY = playerSprite.getY() + playerSprite.getHeight() / 3;
-
         float angleDeg = weapon.getSmgSprite().getRotation();
-
         float fixedAngle = angleDeg + 360;
 
-        float targetX = playerX + MathUtils.cosDeg(fixedAngle) * 1000;
-        float targetY = playerY + MathUtils.sinDeg(fixedAngle) * 1000;
+        for (int i = 0; i < weapon.getProjectileCount(); i++) {
+            float spread = MathUtils.random(-5f, 5f); // randomize for shotgun
+            float finalAngle = fixedAngle + spread;
+            float targetX = playerX + MathUtils.cosDeg(finalAngle) * 1000;
+            float targetY = playerY + MathUtils.sinDeg(finalAngle) * 1000;
 
-        bullets.add(new Bullet(targetX, targetY, playerX, playerY));
+            bullets.add(new Bullet(targetX, targetY, playerX, playerY, weapon.getDamage()));
+        }
+
         weapon.setAmmo(weapon.getAmmo() - 1);
     }
+
 
     public void updateBullets(ArrayList<Monster> monsters) {
         Iterator<Bullet> bulletIterator = bullets.iterator();

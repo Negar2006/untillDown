@@ -1,6 +1,7 @@
-package com.tilldawn.Model;
+package com.tilldawn.Model.enums;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.tilldawn.Model.GameAssetManager;
 
 public enum Ability {
     VITALITY(GameAssetManager.getGameAssetManager().getVitalityTexture(), "Vitality"),
