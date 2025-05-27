@@ -413,43 +413,55 @@ public class GameView extends InputAdapter implements Screen {
     }
 
     private void displayGainedAbilities() {
+        // Get the player's gained abilities
         ArrayList<Ability> abilities = controller.getPlayerController().getPlayer().getGainAbilities();
 
         float xPosition = 10;
         float yPosition = Gdx.graphics.getHeight() - 150;
         float screenWidth = Gdx.graphics.getWidth();
 
+        // Remove only the ability-related images and labels
         for (Actor actor : stage.getActors()) {
             if (actor instanceof Image || actor instanceof Label) {
-                if (actor.getName() != null && actor.getName().equalsIgnoreCase("ability")) {
+                // Check if the actor is related to abilities
+                if (actor.getName() != null && actor.getName().equals("ability")) {
                     actor.remove();
                 }
             }
         }
 
+        // Create a HashMap to track the count of each ability
         HashMap<Ability, Integer> abilityCounts = new HashMap<>();
         for (Ability ability : abilities) {
             abilityCounts.put(ability, abilityCounts.getOrDefault(ability, 0) + 1);
         }
 
+        // Add the ability images and labels for the gained abilities
         for (Map.Entry<Ability, Integer> entry : abilityCounts.entrySet()) {
             Ability ability = entry.getKey();
             int count = entry.getValue();
 
+            // Create and add the ability image
             Image abilityImage = new Image(ability.getTexture());
             abilityImage.setPosition(xPosition, yPosition);
+            abilityImage.setName("ability"); // Name it to identify it later for removal
             stage.addActor(abilityImage);
 
+            // Create and add the count label for the ability
             Label abilityLabel = new Label(String.valueOf(count), skin);
             abilityLabel.setPosition(xPosition + abilityImage.getWidth() + 5, yPosition);
+            abilityLabel.setName("ability"); // Name it to identify it later for removal
             stage.addActor(abilityLabel);
 
+            // Move to the next position for the next ability
             xPosition += abilityImage.getWidth() + abilityLabel.getWidth() + 20;
 
+            // If the abilities are overflowing the screen width, move to the next line
             if (xPosition + 200 > screenWidth) {
                 xPosition = 10;
                 yPosition -= 50;
             }
         }
     }
+
 }
