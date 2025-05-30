@@ -43,7 +43,16 @@ public class SettingsView implements Screen {
         musicSelectBox.setSelected(ctrl.getCurrentMusic());
 
         final CheckBox sfxToggle = new CheckBox("Enable Sound Effects", skin);
-        sfxToggle.setChecked(ctrl.isSfxEnabled());
+        sfxToggle.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ctrl.setSfxEnabled(sfxToggle.isChecked());
+
+                if (sfxToggle.isChecked()) {
+                    ctrl.playSfx(ctrl.getClickSound());
+                }
+            }
+        });
 
         final CheckBox autoReloadToggle = new CheckBox("Enable Auto Reload", skin);
         autoReloadToggle.setChecked(ctrl.isAutoReloadEnabled());

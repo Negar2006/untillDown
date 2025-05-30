@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 
 import java.util.HashMap;
 
@@ -18,6 +19,8 @@ public class SettingsController {
     private final HashMap<String, Music> musicTracks = new HashMap<>();
     private Music currentPlayingMusic;
     private ShaderProgram grayscaleShader;
+    private final Sound clickSound;
+
 
     public SettingsController() {
         // load tracks (keys all lowercase for consistency)
@@ -34,6 +37,8 @@ public class SettingsController {
         if (!grayscaleShader.isCompiled()) {
             Gdx.app.error("Shader", "Compile error: " + grayscaleShader.getLog());
         }
+
+        clickSound = Gdx.audio.newSound(Gdx.files.internal("sfx/gunShot.mp3"));
     }
 
     public void setMusicVolume(float volume) {
@@ -103,4 +108,15 @@ public class SettingsController {
     public ShaderProgram getGrayscaleShader() {
         return grayscaleShader;
     }
+
+    public void playSfx(Sound sound) {
+        if (sfxEnabled && sound != null) {
+            sound.play();
+        }
+    }
+
+    public Sound getClickSound() {
+        return clickSound;
+    }
+
 }
