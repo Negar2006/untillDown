@@ -67,4 +67,13 @@ public class ProfileController {
         existingUsernames.remove(username);
         Main.currentUser = null;
     }
+
+    public void changePassword(String newPassword) {
+        if (Main.currentUser == null) return;
+
+        Main.currentUser.setPassword(newPassword);
+
+//        Main.currentUser.saveToJson();
+    }
+
 }

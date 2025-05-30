@@ -43,6 +43,16 @@ public class ProfileView implements Screen {
         });
         table.add(changeUsernameButton).width(200).pad(10).center().row();
 
+        TextButton changePasswordButton = new TextButton("Change Password", skin);
+        changePasswordButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                showPasswordChangeDialog();
+            }
+        });
+        table.add(changePasswordButton).width(200).pad(10).center().row();
+
+
         TextButton changeAvatarButton = new TextButton("Change Avatar", skin);
         changeAvatarButton.addListener(new ClickListener() {
             @Override
@@ -130,6 +140,36 @@ public class ProfileView implements Screen {
         dialog.show(stage);
     }
 
+    private void showPasswordChangeDialog() {
+        final TextField passwordField = new TextField("", skin);
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
+
+        Dialog dialog = new Dialog("Change Password", skin) {
+            @Override
+            protected void result(Object obj) {
+                if ((boolean) obj) {
+                    String newPassword = passwordField.getText().trim();
+                    if (newPassword.isEmpty()) {
+                        controller.showError("Password cannot be empty.", stage, skin);
+                    } else {
+                        controller.changePassword(newPassword);
+                        controller.showInfo("Password changed successfully.", stage, skin);
+                        this.hide();
+                    }
+                }
+            }
+        };
+
+        dialog.getContentTable().add(new Label("New Password:", skin)).pad(10);
+        dialog.getContentTable().row();
+        dialog.getContentTable().add(passwordField).width(200).pad(10);
+        dialog.button("Confirm", true);
+        dialog.button("Cancel", false);
+        dialog.show(stage);
+    }
+
+
     private void showDeleteAccountDialog() {
         Dialog dialog = new Dialog("Delete Account", skin) {
             @Override
@@ -188,7 +228,6 @@ public class ProfileView implements Screen {
         stage.act(delta);
         stage.draw();
 
-        // ✅ بررسی فایل دراپ شده برای تغییر آواتار
         String path = Main.getDroppedFilePath();
         if (path != null) {
             if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")) {
