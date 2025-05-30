@@ -53,7 +53,6 @@ public class GameView extends InputAdapter implements Screen {
     private float firstHearth;
     private ShaderProgram grayscaleShader;
     private boolean grayscaleEnabled = false;
-
     Texture emptyHeartTexture = new Texture(Gdx.files.internal("heart/HeartAnimation_3.png"));
     Texture fullHeartTexture1 = new Texture(Gdx.files.internal("heart/HeartAnimation_1.png"));
     Texture fullHeartTexture2 = new Texture(Gdx.files.internal("heart/HeartAnimation_2.png"));

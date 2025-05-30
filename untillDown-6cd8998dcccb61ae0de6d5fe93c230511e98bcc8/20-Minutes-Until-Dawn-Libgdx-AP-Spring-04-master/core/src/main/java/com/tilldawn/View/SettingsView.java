@@ -1,6 +1,7 @@
 package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -41,11 +42,11 @@ public class SettingsView implements Screen {
         musicSelectBox.setSelected(ctrl.getCurrentMusic());
 
         final CheckBox sfxToggle = new CheckBox("Enable Sound Effects", skin);
+        sfxToggle.setChecked(ctrl.isSfxEnabled());
         sfxToggle.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 ctrl.setSfxEnabled(sfxToggle.isChecked());
-
                 if (sfxToggle.isChecked()) {
                     ctrl.playSfx(ctrl.getClickSound());
                 }
@@ -54,6 +55,14 @@ public class SettingsView implements Screen {
 
         final CheckBox autoReloadToggle = new CheckBox("Enable Auto Reload", skin);
         autoReloadToggle.setChecked(ctrl.isAutoReloadEnabled());
+        autoReloadToggle.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                ctrl.setAutoReloadEnabled(autoReloadToggle.isChecked());
+//                ctrl.setAutoReloadEnabled(true);
+            }
+        });
+
 
         final CheckBox gray = new CheckBox("Enable Grayscale Mode", skin);
         gray.setChecked(ctrl.isGrayscaleEnabled());
@@ -63,9 +72,63 @@ public class SettingsView implements Screen {
             }
         });
 
+        // Cheat Key Customization
+        Label changeKeyLabel = new Label("Change Cheat Key:", skin);
+        final SelectBox<String> actionSelectBox = new SelectBox<>(skin);
+        actionSelectBox.setItems(
+            "Return to Main Menu",
+            "Kill Monster",
+            "Kill EyeBat",
+            "Add Time",
+            "Level Up",
+            "Reload"
+        );
+
+        final TextField keyInput = new TextField("", skin);
+        TextButton setKeyButton = new TextButton("Set Key", skin);
+
+        setKeyButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String input = keyInput.getText().toUpperCase();
+                try {
+                    int key = Input.Keys.valueOf(input);
+                    String keyName = null;
+                    switch (actionSelectBox.getSelected()) {
+                        case "Return to Main Menu":
+                            keyName = "RETURN_MENU";
+                            break;
+                        case "Kill Monster":
+                            keyName = "KILL_MONSTER";
+                            break;
+                        case "Kill EyeBat":
+                            keyName = "KILL_EYEBAT";
+                            break;
+                        case "Add Time":
+                            keyName = "ADD_TIME";
+                            break;
+                        case "Level Up":
+                            keyName = "LEVEL_UP";
+                            break;
+                        case "Reload":
+                            keyName = "RELOAD";
+                            break;
+                    }
+
+                    if (keyName != null) {
+                        ctrl.setCheatKey(keyName, key);
+                        ctrl.playSfx(ctrl.getClickSound());
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid key name");
+                }
+            }
+        });
+
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(event -> {
             if (backButton.isPressed()) {
+                ctrl.playSfx(ctrl.getClickSound());
                 Main.getMain().setScreen(new MainMenuView(
                     new MainMenuController(),
                     GameAssetManager.getGameAssetManager().getSkin()
@@ -75,7 +138,7 @@ public class SettingsView implements Screen {
         });
 
         final TextButton pauseMusicButton = getTextButton();
-        // Listeners
+
         volumeSlider.addListener(event -> {
             if (volumeSlider.isDragging()) return false;
             ctrl.setMusicVolume(volumeSlider.getValue());
@@ -87,18 +150,6 @@ public class SettingsView implements Screen {
             return true;
         });
 
-        sfxToggle.addListener(event -> {
-            ctrl.setSfxEnabled(sfxToggle.isChecked());
-            return true;
-        });
-
-        autoReloadToggle.addListener(event -> {
-            ctrl.setAutoReloadEnabled(autoReloadToggle.isChecked());
-            return true;
-        });
-
-
-        // Layout
         table.add(volumeLabel).pad(10).row();
         table.add(volumeSlider).width(300).pad(10).row();
         table.add(musicLabel).pad(10).row();
@@ -106,8 +157,14 @@ public class SettingsView implements Screen {
         table.add(sfxToggle).pad(10).row();
         table.add(autoReloadToggle).pad(10).row();
         table.add(gray).pad(10).row();
+
+        table.add(changeKeyLabel).padTop(20).row();
+        table.add(actionSelectBox).width(250).padBottom(5).row();
+        table.add(keyInput).width(200).padBottom(5).row();
+        table.add(setKeyButton).padBottom(20).row();
+
         table.add(pauseMusicButton).pad(10).row();
-        table.add(backButton).pad(20);
+        table.add(backButton).pad(20).row();
 
         stage.addActor(table);
     }
@@ -116,6 +173,8 @@ public class SettingsView implements Screen {
         final TextButton pauseMusicButton = new TextButton("Pause Music", skin);
         pauseMusicButton.addListener(event -> {
             if (!pauseMusicButton.isPressed()) return false;
+
+            ctrl.playSfx(ctrl.getClickSound());
 
             if (ctrl.isMusicPlaying()) {
                 ctrl.pauseMusic();
@@ -147,26 +206,9 @@ public class SettingsView implements Screen {
         batch.setShader(null);
     }
 
-    @Override
-    public void resize(int width, int height) { }
-
-    @Override
-    public void pause() {
-        ctrl.pauseMusic(); // optional
-    }
-
-    @Override
-    public void resume() {
-        ctrl.resumeMusic(); // optional
-    }
-
-    @Override
-    public void hide() {
-        dispose();
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() { ctrl.pauseMusic(); }
+    @Override public void resume() { ctrl.resumeMusic(); }
+    @Override public void hide() { dispose(); }
+    @Override public void dispose() { stage.dispose(); }
 }

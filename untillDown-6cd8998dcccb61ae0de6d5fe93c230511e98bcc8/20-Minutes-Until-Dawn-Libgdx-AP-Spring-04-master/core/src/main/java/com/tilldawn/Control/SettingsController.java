@@ -14,7 +14,7 @@ public class SettingsController {
     private float musicVolume = 0.5f;
     private String currentMusic = "montero";
     private boolean sfxEnabled = true;
-    private boolean autoReloadEnabled = false;
+    private boolean autoReloadEnabled;
     private boolean grayscaleEnabled = false;
     private final HashMap<String, Music> musicTracks = new HashMap<>();
     private Music currentPlayingMusic;
@@ -23,6 +23,7 @@ public class SettingsController {
     private final HashMap<String, Integer> cheatKeys = new HashMap<>();
 
     public SettingsController() {
+        autoReloadEnabled = true;
         musicTracks.put("montero", Gdx.audio.newMusic(Gdx.files.internal("Montero.mp3")));
         musicTracks.put("rise_up", Gdx.audio.newMusic(Gdx.files.internal("rise_up.mp3")));
         musicTracks.put("walk_thru_fire", Gdx.audio.newMusic(Gdx.files.internal("walk_thru_fire.mp3")));
