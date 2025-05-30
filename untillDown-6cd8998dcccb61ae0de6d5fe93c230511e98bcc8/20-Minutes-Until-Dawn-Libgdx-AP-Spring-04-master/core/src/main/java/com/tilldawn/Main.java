@@ -27,7 +27,6 @@ public class Main extends Game {
     public static HashMap<String, User> usersDB = new HashMap<>();
     public static User currentUser = null;
     private static SettingsController settings;
-    private static String droppedFilePath;
 
     @Override
     public void create() {
@@ -50,15 +49,6 @@ public class Main extends Game {
     public static Main getMain() {
         return main;
     }
-
-    public static void setDroppedFilePath(String path) {
-        droppedFilePath = path;
-    }
-
-    public static String getDroppedFilePath() {
-        return droppedFilePath;
-    }
-
 
     public static void setMain(Main main) {
         Main.main = main;

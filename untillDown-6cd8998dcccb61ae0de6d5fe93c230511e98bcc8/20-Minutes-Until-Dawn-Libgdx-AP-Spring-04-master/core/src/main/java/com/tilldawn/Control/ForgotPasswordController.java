@@ -68,7 +68,6 @@ public class ForgotPasswordController {
         file.writeString(json.prettyPrint(user), false); // false = overwrite
     }
 
-
     public void render(float delta) {
         view.getStage().act(delta);
         view.getStage().draw();

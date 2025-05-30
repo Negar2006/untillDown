@@ -2,6 +2,7 @@ package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.ProfileController;
+import com.tilldawn.Control.RegisterMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 
@@ -41,7 +43,7 @@ public class ProfileView implements Screen {
                 showUsernameChangeDialog();
             }
         });
-        table.add(changeUsernameButton).width(200).pad(10).center().row();
+        table.add(changeUsernameButton).width(600).pad(10).center().row();
 
         TextButton changePasswordButton = new TextButton("Change Password", skin);
         changePasswordButton.addListener(new ClickListener() {
@@ -50,8 +52,7 @@ public class ProfileView implements Screen {
                 showPasswordChangeDialog();
             }
         });
-        table.add(changePasswordButton).width(200).pad(10).center().row();
-
+        table.add(changePasswordButton).width(600).pad(10).center().row();
 
         TextButton changeAvatarButton = new TextButton("Change Avatar", skin);
         changeAvatarButton.addListener(new ClickListener() {
@@ -60,7 +61,41 @@ public class ProfileView implements Screen {
                 showAvatarSelectionDialog();
             }
         });
-        table.add(changeAvatarButton).width(200).pad(10).center().row();
+        table.add(changeAvatarButton).width(600).pad(10).center().row();
+
+        TextButton randomPCAvatarButton = new TextButton("Random Avatar from PC", skin);
+        randomPCAvatarButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    java.io.File downloadsDir = new java.io.File("C:/Users/Negar/Downloads");
+
+                    if (!downloadsDir.exists() || !downloadsDir.isDirectory()) {
+                        controller.showError("Downloads folder not found.", stage, skin);
+                        return;
+                    }
+
+                    java.io.File[] imageFiles = downloadsDir.listFiles((dir, name) -> {
+                        String lower = name.toLowerCase();
+                        return lower.endsWith(".png") || lower.endsWith(".jpg") || lower.endsWith(".jpeg");
+                    });
+
+                    if (imageFiles == null || imageFiles.length == 0) {
+                        controller.showError("No image files found in Downloads.", stage, skin);
+                        return;
+                    }
+
+                    int index = (int) (Math.random() * imageFiles.length);
+                    String randomPath = imageFiles[index].getAbsolutePath();
+
+                    controller.changeAvatar(randomPath);
+                    controller.showInfo("Random avatar selected:\n" + randomPath, stage, skin);
+                } catch (Exception e) {
+                    controller.showError("Error selecting random avatar.", stage, skin);
+                }
+            }
+        });
+        table.add(randomPCAvatarButton).width(600).pad(10).center().row();
 
         TextButton selectFromPCButton = new TextButton("Select Avatar from PC", skin);
         selectFromPCButton.addListener(new ClickListener() {
@@ -88,7 +123,7 @@ public class ProfileView implements Screen {
                 }
             }
         });
-        table.add(selectFromPCButton).width(200).pad(10).center().row();
+        table.add(selectFromPCButton).width(600).pad(10).center().row();
 
         TextButton deleteAccountButton = new TextButton("Delete Account", skin);
         deleteAccountButton.addListener(new ClickListener() {
@@ -97,8 +132,7 @@ public class ProfileView implements Screen {
                 showDeleteAccountDialog();
             }
         });
-
-        table.add(deleteAccountButton).width(200).pad(10).center().row();
+        table.add(deleteAccountButton).width(600).pad(10).center().row();
 
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ClickListener() {
@@ -108,7 +142,7 @@ public class ProfileView implements Screen {
                 dispose();
             }
         });
-        table.add(backButton).width(200).pad(10).center().row();
+        table.add(backButton).width(600).pad(10).center().row();
     }
 
     private void showUsernameChangeDialog() {
@@ -169,7 +203,6 @@ public class ProfileView implements Screen {
         dialog.show(stage);
     }
 
-
     private void showDeleteAccountDialog() {
         Dialog dialog = new Dialog("Delete Account", skin) {
             @Override
@@ -177,7 +210,7 @@ public class ProfileView implements Screen {
                 if ((boolean) obj) {
                     controller.deleteCurrentUser();
                     controller.showInfo("Account deleted.", stage, skin);
-                    Main.getMain().setScreen(new MainMenuView(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                    Main.getMain().setScreen(new RegisterMenuViews(new RegisterMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
                     dispose();
                 }
             }
@@ -227,15 +260,6 @@ public class ProfileView implements Screen {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
-
-        String path = Main.getDroppedFilePath();
-        if (path != null) {
-            if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")) {
-                controller.changeAvatar(path);
-                controller.showInfo("Avatar set from dropped file:\n" + path, stage, skin);
-            }
-            Main.setDroppedFilePath(null); // reset
-        }
     }
 
     @Override public void resize(int width, int height) {}
