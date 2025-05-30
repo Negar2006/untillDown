@@ -1,23 +1,28 @@
+//// SettingsView.java
 package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.SettingsController;
+import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 
 public class SettingsView implements Screen {
     private Stage stage;
-    private final SettingsController controller;
+    private final SettingsController ctrl;
     private final Skin skin;
     private final Table table;
 
     public SettingsView(SettingsController controller, Skin skin) {
-        this.controller = controller;
+        this.ctrl = controller;
         this.skin = skin;
         this.table = new Table();
     }
@@ -30,22 +35,27 @@ public class SettingsView implements Screen {
 
         Label volumeLabel = new Label("Music Volume", skin);
         final Slider volumeSlider = new Slider(0, 1, 0.1f, false, skin);
-        volumeSlider.setValue(controller.getMusicVolume());
+        volumeSlider.setValue(ctrl.getMusicVolume());
 
         Label musicLabel = new Label("Background Music", skin);
         final SelectBox<String> musicSelectBox = new SelectBox<>(skin);
         musicSelectBox.setItems("Montero", "rise_up", "walk_thru_fire");
-        musicSelectBox.setSelected(controller.getCurrentMusic());
+        musicSelectBox.setSelected(ctrl.getCurrentMusic());
 
         final CheckBox sfxToggle = new CheckBox("Enable Sound Effects", skin);
-        sfxToggle.setChecked(controller.isSfxEnabled());
+        sfxToggle.setChecked(ctrl.isSfxEnabled());
 
         final CheckBox autoReloadToggle = new CheckBox("Enable Auto Reload", skin);
-        autoReloadToggle.setChecked(controller.isAutoReloadEnabled());
+        autoReloadToggle.setChecked(ctrl.isAutoReloadEnabled());
 
-        final CheckBox grayscaleToggle = new CheckBox("Enable Grayscale Mode", skin);
-        grayscaleToggle.setChecked(controller.isGrayscaleEnabled());
-        // Back button to go to main menu
+        final CheckBox gray = new CheckBox("Enable Grayscale Mode", skin);
+        gray.setChecked(ctrl.isGrayscaleEnabled());
+        gray.addListener(new ChangeListener() {
+            @Override public void changed(ChangeEvent event, Actor actor) {
+                ctrl.setGrayscaleEnabled(gray.isChecked());
+            }
+        });
+
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(event -> {
             if (backButton.isPressed()) {
@@ -57,46 +67,29 @@ public class SettingsView implements Screen {
             return true;
         });
 
-        final TextButton pauseMusicButton = new TextButton("Pause Music", skin);
-        pauseMusicButton.addListener(event -> {
-            if (!pauseMusicButton.isPressed()) return false;
-
-            if (controller.isMusicPlaying()) {
-                controller.pauseMusic();
-                pauseMusicButton.setText("Resume Music");
-            } else {
-                controller.resumeMusic();
-                pauseMusicButton.setText("Pause Music");
-            }
-
-            return true;
-        });
+        final TextButton pauseMusicButton = getTextButton();
         // Listeners
         volumeSlider.addListener(event -> {
             if (volumeSlider.isDragging()) return false;
-            controller.setMusicVolume(volumeSlider.getValue());
+            ctrl.setMusicVolume(volumeSlider.getValue());
             return true;
         });
 
         musicSelectBox.addListener(event -> {
-            controller.setCurrentMusic(musicSelectBox.getSelected());
+            ctrl.setCurrentMusic(musicSelectBox.getSelected());
             return true;
         });
 
         sfxToggle.addListener(event -> {
-            controller.setSfxEnabled(sfxToggle.isChecked());
+            ctrl.setSfxEnabled(sfxToggle.isChecked());
             return true;
         });
 
         autoReloadToggle.addListener(event -> {
-            controller.setAutoReloadEnabled(autoReloadToggle.isChecked());
+            ctrl.setAutoReloadEnabled(autoReloadToggle.isChecked());
             return true;
         });
 
-        grayscaleToggle.addListener(event -> {
-            controller.setGrayscaleEnabled(grayscaleToggle.isChecked());
-            return true;
-        });
 
         // Layout
         table.add(volumeLabel).pad(10).row();
@@ -105,18 +98,46 @@ public class SettingsView implements Screen {
         table.add(musicSelectBox).width(300).pad(10).row();
         table.add(sfxToggle).pad(10).row();
         table.add(autoReloadToggle).pad(10).row();
-        table.add(grayscaleToggle).pad(10).row();
+        table.add(gray).pad(10).row();
         table.add(pauseMusicButton).pad(10).row();
-        table.add(backButton).pad(20); // back button
+        table.add(backButton).pad(20);
 
         stage.addActor(table);
+    }
+
+    private TextButton getTextButton() {
+        final TextButton pauseMusicButton = new TextButton("Pause Music", skin);
+        pauseMusicButton.addListener(event -> {
+            if (!pauseMusicButton.isPressed()) return false;
+
+            if (ctrl.isMusicPlaying()) {
+                ctrl.pauseMusic();
+                pauseMusicButton.setText("Resume Music");
+            } else {
+                ctrl.resumeMusic();
+                pauseMusicButton.setText("Pause Music");
+            }
+
+            return true;
+        });
+        return pauseMusicButton;
     }
 
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
+
+        SpriteBatch batch = (SpriteBatch) stage.getBatch();
+
+        if (ctrl.isGrayscaleEnabled() && ctrl.getGrayscaleShader().isCompiled()) {
+            batch.setShader(ctrl.getGrayscaleShader());
+        } else {
+            batch.setShader(null);
+        }
+
         stage.act(delta);
         stage.draw();
+        batch.setShader(null);
     }
 
     @Override
@@ -124,12 +145,12 @@ public class SettingsView implements Screen {
 
     @Override
     public void pause() {
-        controller.pauseMusic(); // optional
+        ctrl.pauseMusic(); // optional
     }
 
     @Override
     public void resume() {
-        controller.resumeMusic(); // optional
+        ctrl.resumeMusic(); // optional
     }
 
     @Override

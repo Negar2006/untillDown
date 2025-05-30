@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.RegisterMenuController;
+import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.User;
 import com.tilldawn.View.LoginMenuView;
@@ -17,7 +18,9 @@ import com.tilldawn.View.RegisterMenuViews;
 
 import java.util.HashMap;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
+/**
+ * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms.
+ */
 public class Main extends Game {
     private static Main main;
     private static SpriteBatch batch;

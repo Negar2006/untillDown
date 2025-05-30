@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Main;
-import com.tilldawn.Model.GameAssetManager;
 
 public class TalentView implements Screen {
     private static final float LABEL_PADDING = 5f;
@@ -42,7 +41,6 @@ public class TalentView implements Screen {
         mainTable.setFillParent(true);
         mainTable.top().pad(TABLE_PADDING_TOP);
 
-        // نمایش دکمه‌های اصلی
         addMainMenuButton("Hero Stats", this::showHeroStatsPage);
         addMainMenuButton("Key Bindings", this::showKeyBindingsPage);
         addMainMenuButton("Abilities", this::showAbilitiesPage);
@@ -50,7 +48,6 @@ public class TalentView implements Screen {
         stage.addActor(mainTable);
     }
 
-    // دکمه‌های منو برای نمایش هر بخش
     private void addMainMenuButton(String sectionTitle, Runnable action) {
         TextButton button = new TextButton(sectionTitle, skin);
         button.addListener(new ClickListener() {
@@ -145,7 +142,6 @@ public class TalentView implements Screen {
         dialog.show(stage);
     }
 
-    // اضافه کردن دکمه "بازگشت به منوی اصلی"
     private void addBackToMainMenuButton(Table table) {
         TextButton backToMainMenuButton = new TextButton("Back to Main Menu", skin);
         backToMainMenuButton.addListener(new ClickListener() {

@@ -103,13 +103,13 @@ public class PauseMenuView implements Screen {
         stage.addActor(saveGameButton);
 
         // Settings Button
-        settingsButton = new TextButton("Settings", skin);
+        settingsButton = new TextButton("Color", skin);
         settingsButton.setSize(buttonWidth, buttonHeight);
         settingsButton.setPosition(centerX, startY - 5 * (buttonHeight + 10));
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.goToSettingsMenu(); // Open settings menu
+
             }
         });
         stage.addActor(settingsButton);
