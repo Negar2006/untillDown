@@ -115,7 +115,7 @@ public class MainMenuController {
 
             if (view.getTalentButton().isChecked()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new TalentView(new TalentController(), GameAssetManager.getGameAssetManager().getSkin()));
+                Main.getMain().setScreen(new TalentView(GameAssetManager.getGameAssetManager().getSkin()));
             }
 
             if (view.getLogoutButton().isChecked()) {
