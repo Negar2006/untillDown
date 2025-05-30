@@ -15,6 +15,9 @@ import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.GL20;
+import com.tilldawn.Model.enums.Ability;
+
+import java.util.ArrayList;
 
 
 public class PauseMenuView implements Screen {
@@ -73,9 +76,27 @@ public class PauseMenuView implements Screen {
         cheatCodesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Show cheat codes here
+                StringBuilder cheatText = new StringBuilder("Cheat Keys:\n");
+                cheatText.append("- N: Return to Main Menu\n");
+                cheatText.append("- K: Kill current monster\n");
+                cheatText.append("- E: Kill EyeBat\n");
+                cheatText.append("- T: Add 60 seconds to timer\n");
+                cheatText.append("- B: Gain EXP to level up\n");
+
+                Label cheatLabel = new Label(cheatText.toString(), skin);
+                cheatLabel.setPosition(stage.getWidth() / 2f - 200, stage.getHeight() / 2f - 120);
+                stage.addActor(cheatLabel);
+
+                com.badlogic.gdx.utils.Timer.schedule(new com.badlogic.gdx.utils.Timer.Task() {
+                    @Override
+                    public void run() {
+                        cheatLabel.remove();
+                        controller.resumeGame();
+                    }
+                }, 5);
             }
         });
+
         stage.addActor(cheatCodesButton);
 
         // Abilities Button
@@ -85,12 +106,32 @@ public class PauseMenuView implements Screen {
         abilitiesButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Show abilities here
+
+                ArrayList<Ability> abilities = controller.getPlayerController().getPlayer().getGainAbilities();
+
+                StringBuilder abilitiesText = new StringBuilder("Abilities:\n");
+                for (Ability ability : abilities) {
+                    abilitiesText.append("- ").append(ability.name()).append("\n");
+                }
+
+                Label abilityLabel = new Label(abilitiesText.toString(), skin);
+                abilityLabel.setPosition(stage.getWidth() / 2f - 150, stage.getHeight() / 2f);
+                stage.addActor(abilityLabel);
+
+                Gdx.app.postRunnable(() -> {
+                    Gdx.app.log("Abilities", "Returning to game in 5 seconds...");
+                    com.badlogic.gdx.utils.Timer.schedule(new com.badlogic.gdx.utils.Timer.Task() {
+                        @Override
+                        public void run() {
+                            controller.resumeGame();
+                        }
+                    }, 5);
+                });
             }
         });
+
         stage.addActor(abilitiesButton);
 
-        // Give Up Button
         giveUpButton = new TextButton("Give Up", skin);
         giveUpButton.setSize(buttonWidth, buttonHeight);
         giveUpButton.setPosition(centerX, startY - 3 * (buttonHeight + 10));
