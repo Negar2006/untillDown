@@ -62,7 +62,6 @@ public class TalentView implements Screen {
         mainTable.add(button).expandX().padTop(20f).row();
     }
 
-    // نمایش صفحه Hero Stats
     private void showHeroStatsPage() {
         Table heroStatsTable = new Table(skin);
         heroStatsTable.clear();
@@ -81,7 +80,6 @@ public class TalentView implements Screen {
         stage.addActor(mainTable);
     }
 
-    // نمایش صفحه Key Bindings
     private void showKeyBindingsPage() {
         Table keyBindingsTable = new Table(skin);
         keyBindingsTable.clear();
