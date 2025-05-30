@@ -57,7 +57,6 @@ public class GameView extends InputAdapter implements Screen {
     Texture fullHeartTexture1 = new Texture(Gdx.files.internal("heart/HeartAnimation_1.png"));
     Texture fullHeartTexture2 = new Texture(Gdx.files.internal("heart/HeartAnimation_2.png"));
 
-    // Create TextureRegions for full and half heart
     TextureRegion[] fullHeartFrames = {
         new TextureRegion(fullHeartTexture1),
         new TextureRegion(fullHeartTexture2)
@@ -302,7 +301,7 @@ public class GameView extends InputAdapter implements Screen {
             Player player = controller.getPlayerController().getPlayer();
 
             if (player.hasAbility(Ability.PROCREASE)) {
-                controller.getWeaponController().addProjectile(1);  // Assuming WeaponController has addProjectile method
+                controller.getWeaponController().addProjectile(1);
                 System.out.println("Procrease used! Projectiles increased.");
                 player.removeAbility(Ability.PROCREASE);
             }
@@ -312,7 +311,7 @@ public class GameView extends InputAdapter implements Screen {
         if (keycode == Input.Keys.D) {
             Player player = controller.getPlayerController().getPlayer();
             if (player.hasAbility(Ability.DAMAGER)) {
-                controller.getWeaponController().getWeapon().addDamage(1.25f);  // Assuming WeaponController has setWeaponDamage method
+                controller.getWeaponController().getWeapon().addDamage(1.25f);
                 System.out.println("Damager used! Weapon damage is now 125%.");
                 player.removeAbility(Ability.DAMAGER);
             }
@@ -405,10 +404,10 @@ public class GameView extends InputAdapter implements Screen {
         for (int i = 0; i < 3; i++) {
             Ability ability;
             do {
-                ability = availableAbilities.random(); // Get random ability
-            } while (randomAbilities.contains(ability, false)); // Avoid duplicates
+                ability = availableAbilities.random();
+            } while (randomAbilities.contains(ability, false));
 
-            randomAbilities.add(ability); // Add the ability to the list
+            randomAbilities.add(ability);
         }
 
         Dialog abilityDialog = new Dialog("Choose an Ability", skin);
@@ -434,24 +433,20 @@ public class GameView extends InputAdapter implements Screen {
     }
 
     private void displayGainedAbilities() {
-        // Get the player's gained abilities
         ArrayList<Ability> abilities = controller.getPlayerController().getPlayer().getGainAbilities();
 
         float xPosition = 10;
         float yPosition = Gdx.graphics.getHeight() - 150;
         float screenWidth = Gdx.graphics.getWidth();
 
-        // Remove only the ability-related images and labels
         for (Actor actor : stage.getActors()) {
             if (actor instanceof Image || actor instanceof Label) {
-                // Check if the actor is related to abilities
                 if (actor.getName() != null && actor.getName().equals("ability")) {
                     actor.remove();
                 }
             }
         }
 
-        // Create a HashMap to track the count of each ability
         HashMap<Ability, Integer> abilityCounts = new HashMap<>();
         for (Ability ability : abilities) {
             abilityCounts.put(ability, abilityCounts.getOrDefault(ability, 0) + 1);

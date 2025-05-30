@@ -78,10 +78,7 @@ public class GameController {
             }
             worldController.update();
             float delta = Gdx.graphics.getDeltaTime();
-            weaponController.update(monsterController.getTentacleMonsters());
-            weaponController.update(monsterController.getTreeMonsters());
-            weaponController.update(monsterController.getEyebatMonsters());
-            weaponController.update(monsterController.getElderMonster());
+            weaponController.update();
             playerController.update(delta);
 
             float totalGameTime = (currentTime - startTimeMillis) / 1000f;
@@ -108,27 +105,8 @@ public class GameController {
         return weaponController;
     }
 
-    private void checkIfPlayerOutOfScreen() {
-        Player player = playerController.getPlayer();
-
-        float worldX = player.getPosX();
-        float worldY = player.getPosY();
-
-        float WORLD_WIDTH = 1920;
-        float WORLD_HEIGHT = 1080;
-
-        if (worldX < 0 || worldX > WORLD_WIDTH || worldY < 0 || worldY > WORLD_HEIGHT) {
-            System.out.println("💀 You can't go out of bounds! YOU LOST! 💀");
-            Main.getMain().setScreen(new MainMenuView(new MainMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
-        }
-    }
-
     public void returnToMainMenu() {
         Main.getMain().setScreen(new RegisterMenuViews(new RegisterMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
-    }
-
-    public void goToSettingsMenu() {
-        Main.getMain().setScreen(new SettingsView(new SettingsController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
 
     public void killMonster() {
@@ -166,20 +144,8 @@ public class GameController {
         }
     }
 
-    public int getNumberOfKill() {
-        return numberOfKill;
-    }
-
     public void setNumberOfKill(int numberOfKill) {
         this.numberOfKill = numberOfKill;
-    }
-
-    public WorldController getWorldController() {
-        return worldController;
-    }
-
-    public long getStartTimeMillis() {
-        return startTimeMillis;
     }
 
     public float getPlayerHealth() {
@@ -258,14 +224,6 @@ public class GameController {
         }
     }
 
-    public boolean isPaused() {
-        return isPaused;
-    }
-
-    public long getPausedTimeMillis() {
-        return pausedTimeMillis;
-    }
-
     public void saveGameState() {
         Player player = playerController.getPlayer();
         SaveData data = new SaveData();
@@ -315,56 +273,11 @@ public class GameController {
         this.playerController = playerController;
     }
 
-    public void setWorldController(WorldController worldController) {
-        this.worldController = worldController;
-    }
-
-    public void setWeaponController(WeaponController weaponController) {
-        this.weaponController = weaponController;
-    }
-
-    public void setMonsterController(MonsterController monsterController) {
-        this.monsterController = monsterController;
-    }
-
-    public void setAutoAimEnabled(boolean autoAimEnabled) {
-        this.autoAimEnabled = autoAimEnabled;
-    }
-
-    public void setStartTimeMillis(long startTimeMillis) {
-        this.startTimeMillis = startTimeMillis;
-    }
-
-    public void setRemainingTimeMillis(long remainingTimeMillis) {
-        this.remainingTimeMillis = remainingTimeMillis;
-    }
-
-    public void setGAME_DURATION_MILLIS(long GAME_DURATION_MILLIS) {
-        this.GAME_DURATION_MILLIS = GAME_DURATION_MILLIS;
-    }
-
     public MonsterController getMonsterController() {
         return monsterController;
-    }
-
-    public void setWeaponType(weaponType weaponType) {
-        this.weaponType = weaponType;
-    }
-
-    public void setPaused(boolean paused) {
-        isPaused = paused;
-    }
-
-    public void setPausedTimeMillis(long pausedTimeMillis) {
-        this.pausedTimeMillis = pausedTimeMillis;
-    }
-
-    public void setPauseStartTime(long pauseStartTime) {
-        this.pauseStartTime = pauseStartTime;
     }
 
     public boolean isReloadAutoEnabled() {
         return autoAimEnabled;
     }
 }
-

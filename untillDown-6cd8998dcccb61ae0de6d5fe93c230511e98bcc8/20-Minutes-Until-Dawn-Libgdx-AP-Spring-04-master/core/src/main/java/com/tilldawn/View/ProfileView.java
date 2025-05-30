@@ -186,7 +186,15 @@ public class ProfileView implements Screen {
                     String newPassword = passwordField.getText().trim();
                     if (newPassword.isEmpty()) {
                         controller.showError("Password cannot be empty.", stage, skin);
-                    } else {
+                    }else if (newPassword.length() < 8) {
+                        controller.showError("Password must be at least 8 characters.", stage, skin);
+                    } else if (!newPassword.matches(".*\\d.*")) {
+                        controller.showError("Password must include a number.", stage, skin);
+                    } else if (!newPassword.matches(".*[A-Z].*")) {
+                        controller.showError("Password must include an uppercase letter.", stage, skin);
+                    } else if (!newPassword.matches(".*[()\\*$%@#].*")) {
+                        controller.showError("Password must include a special character: ()*$%@#", stage, skin);
+                    }else {
                         controller.changePassword(newPassword);
                         controller.showInfo("Password changed successfully.", stage, skin);
                         this.hide();

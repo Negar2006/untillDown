@@ -34,9 +34,23 @@ public class WeaponController {
         this.weapon = weapon;
     }
 
-    public void update(ArrayList<Monster> monsters) {
+    public void update() {
+
+        ArrayList<Monster> allMonsters = new ArrayList<>();
+        allMonsters.addAll(controller.getMonsterController().getTentacleMonsters());
+        allMonsters.addAll(controller.getMonsterController().getTreeMonsters());
+        allMonsters.addAll(controller.getMonsterController().getEyebatMonsters());
+        allMonsters.addAll(controller.getMonsterController().getElderMonster());
+
         if (controller != null && controller.isAutoAimEnabled()) {
-            Monster closest = findClosestMonster(monsters);
+            Monster closest = findClosestMonster(allMonsters);
+            if (closest != null) {
+                autoAimAt(closest);
+            }
+        }
+
+        if (controller != null && controller.isAutoAimEnabled()) {
+            Monster closest = findClosestMonster(allMonsters);
             if (closest != null) {
                 autoAimAt(closest);
             }
@@ -51,7 +65,7 @@ public class WeaponController {
         weapon.setPosition(weaponX, weaponY);
         weapon.getSmgSprite().draw(Main.getBatch());
         weapon.reload(Gdx.graphics.getDeltaTime());
-        updateBullets(monsters);
+        updateBullets(allMonsters);
     }
 
     public void handleWeaponRotation(int x, int y) {
