@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.tilldawn.Control.GameController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.GL20;
+
 
 public class PauseMenuView implements Screen {
     private Stage stage;
@@ -24,9 +27,13 @@ public class PauseMenuView implements Screen {
     private TextButton giveUpButton;
     private TextButton settingsButton;
     private TextButton saveGameButton;
+    private ShaderProgram grayscaleShader;
+    private boolean grayscaleEnabled = false;
+    private GameView gameView;
 
-    public PauseMenuView(GameController controller) {
+    public PauseMenuView(GameController controller, GameView gameView) {
         this.controller = controller;
+        this.gameView = gameView;
         this.skin = GameAssetManager.getGameAssetManager().getSkin();
     }
 
@@ -35,11 +42,17 @@ public class PauseMenuView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // Button size
+        String vertexShader = Gdx.files.internal("shaders/grayscale.glsl").readString();
+        String fragmentShader = Gdx.files.internal("shaders/grayscale.frag").readString();
+        grayscaleShader = new ShaderProgram(vertexShader, fragmentShader);
+        if (!grayscaleShader.isCompiled()) {
+            Gdx.app.error("Shader", "Shader compile error: " + grayscaleShader.getLog());
+        }
+
         final float buttonWidth = 300;
         final float buttonHeight = 60;
-        final float centerX = stage.getWidth() / 2 - buttonWidth / 2;  // Center X position
-        float startY = stage.getHeight() - 100;  // Start Y position for the first button
+        final float centerX = stage.getWidth() / 2 - buttonWidth / 2;
+        float startY = stage.getHeight() - 100;
 
         // Resume Button
         resumeButton = new TextButton("Resume", skin);
@@ -89,7 +102,6 @@ public class PauseMenuView implements Screen {
         });
         stage.addActor(giveUpButton);
 
-        // Save Game Button
         saveGameButton = new TextButton("Save/Leave", skin);
         saveGameButton.setSize(buttonWidth, buttonHeight);
         saveGameButton.setPosition(centerX, startY - 4 * (buttonHeight + 10));
@@ -102,17 +114,17 @@ public class PauseMenuView implements Screen {
         });
         stage.addActor(saveGameButton);
 
-        // Settings Button
         settingsButton = new TextButton("Color", skin);
         settingsButton.setSize(buttonWidth, buttonHeight);
         settingsButton.setPosition(centerX, startY - 5 * (buttonHeight + 10));
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-
+                gameView.setGrayscale(true);
             }
         });
         stage.addActor(settingsButton);
+
     }
 
     @Override

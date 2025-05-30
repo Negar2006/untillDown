@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -25,7 +26,6 @@ import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Player;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +50,8 @@ public class GameView extends InputAdapter implements Screen {
     private Label expLable;
     private ProgressBar expProgressBar;
     private float firstHearth;
+    private ShaderProgram grayscaleShader;
+    private boolean grayscaleEnabled = false;
 
     Texture emptyHeartTexture = new Texture(Gdx.files.internal("heart/HeartAnimation_3.png"));
     Texture fullHeartTexture1 = new Texture(Gdx.files.internal("heart/HeartAnimation_1.png"));
@@ -76,6 +78,14 @@ public class GameView extends InputAdapter implements Screen {
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());
+
+        String vert = Gdx.files.internal("shaders/grayscale.glsl").readString();
+        String frag = Gdx.files.internal("shaders/grayscale.frag").readString();
+        grayscaleShader = new ShaderProgram(vert, frag);
+        if (!grayscaleShader.isCompiled()) {
+            Gdx.app.error("Shader", "Shader compile error: " + grayscaleShader.getLog());
+        }
+
 
         timerLabel = new Label("Time Left: 10:00", skin);
         timerLabel.setPosition(10, Gdx.graphics.getHeight() - 30);
@@ -153,6 +163,11 @@ public class GameView extends InputAdapter implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         stateTime += delta;
+        if (grayscaleEnabled && grayscaleShader.isCompiled()) {
+            Main.getBatch().setShader(grayscaleShader);
+        } else {
+            Main.getBatch().setShader(null);
+        }
         Main.getBatch().begin();
 
         long remainingMillis = controller.getRemainingTimeMillis();
@@ -459,6 +474,9 @@ public class GameView extends InputAdapter implements Screen {
                 yPosition -= 50;
             }
         }
+    }
+    public void setGrayscale(boolean enable) {
+        grayscaleEnabled = enable;
     }
 
 }

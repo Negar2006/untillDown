@@ -245,7 +245,7 @@ public class GameController {
         if (!isPaused) {
             isPaused = true;
             pauseStartTime = System.currentTimeMillis();
-            Main.getMain().setScreen(new PauseMenuView(this));
+            Main.getMain().setScreen(new PauseMenuView(this, view));
         }
     }
 
