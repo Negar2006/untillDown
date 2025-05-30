@@ -10,9 +10,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ProfileController {
-
-    // فرض کردم لیست یوزرنیم‌های ثبت‌شده رو به صورت static در اینجا شبیه‌سازی کردم
-    // تو باید این رو با دیتابیس یا جایی که یوزرها ذخیره میشن جایگزین کنی
     private static Set<String> existingUsernames = new HashSet<>();
 
     public ProfileController() {

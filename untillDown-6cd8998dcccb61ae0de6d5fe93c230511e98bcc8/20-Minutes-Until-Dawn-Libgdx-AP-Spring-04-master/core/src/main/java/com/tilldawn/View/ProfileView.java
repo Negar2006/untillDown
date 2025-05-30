@@ -43,6 +43,7 @@ public class ProfileView implements Screen {
         });
         table.add(changeUsernameButton).width(200).pad(10).center().row();
 
+        // تغییر آواتار از لیست داخلی
         TextButton changeAvatarButton = new TextButton("Change Avatar", skin);
         changeAvatarButton.addListener(new ClickListener() {
             @Override
@@ -52,7 +53,7 @@ public class ProfileView implements Screen {
         });
         table.add(changeAvatarButton).width(200).pad(10).center().row();
 
-
+        // حذف اکانت
         TextButton deleteAccountButton = new TextButton("Delete Account", skin);
         deleteAccountButton.addListener(new ClickListener() {
             @Override
@@ -62,8 +63,7 @@ public class ProfileView implements Screen {
         });
         table.add(deleteAccountButton).width(200).pad(10).center().row();
 
-
-
+        // بازگشت
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ClickListener() {
             @Override
@@ -161,6 +161,16 @@ public class ProfileView implements Screen {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+
+        // ✅ بررسی فایل دراپ شده برای تغییر آواتار
+        String path = Main.getDroppedFilePath();
+        if (path != null) {
+            if (path.endsWith(".png") || path.endsWith(".jpg") || path.endsWith(".jpeg")) {
+                controller.changeAvatar(path);
+                controller.showInfo("Avatar set from dropped file:\n" + path, stage, skin);
+            }
+            Main.setDroppedFilePath(null); // reset
+        }
     }
 
     @Override public void resize(int width, int height) {}

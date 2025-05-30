@@ -1,0 +1,13 @@
+plugins {
+  id 'java'
+  id 'application'
+}
+
+dependencies {
+  implementation project(":core")
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+}
+
+application {
+  mainClass = "com.tilldawn.DesktopLauncher"
+}
