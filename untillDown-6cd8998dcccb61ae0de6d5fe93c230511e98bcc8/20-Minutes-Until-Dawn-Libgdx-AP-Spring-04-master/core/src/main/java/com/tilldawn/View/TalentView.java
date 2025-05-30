@@ -24,7 +24,6 @@ public class TalentView implements Screen {
     private final Stage stage;
     private final Skin skin;
     private final Table mainTable;
-    private Table currentTable;
 
     public TalentView(Skin skin) {
         if (skin == null) {
@@ -33,7 +32,6 @@ public class TalentView implements Screen {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport());
         this.mainTable = new Table(skin);
-        this.currentTable = new Table(skin);
     }
 
     @Override
@@ -45,16 +43,16 @@ public class TalentView implements Screen {
         mainTable.top().pad(TABLE_PADDING_TOP);
 
         // نمایش دکمه‌های اصلی
-        addMainMenuButton("Hero Stats", "Show Hero Stats", this::showHeroStats);
-        addMainMenuButton("Key Bindings", "Show Key Bindings", this::showKeyBindings);
-        addMainMenuButton("Abilities", "Show Abilities", this::showAbilities);
+        addMainMenuButton("Hero Stats", this::showHeroStatsPage);
+        addMainMenuButton("Key Bindings", this::showKeyBindingsPage);
+        addMainMenuButton("Abilities", this::showAbilitiesPage);
 
         stage.addActor(mainTable);
     }
 
     // دکمه‌های منو برای نمایش هر بخش
-    private void addMainMenuButton(String sectionTitle, String buttonText, Runnable action) {
-        TextButton button = new TextButton(buttonText, skin);
+    private void addMainMenuButton(String sectionTitle, Runnable action) {
+        TextButton button = new TextButton(sectionTitle, skin);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -64,62 +62,67 @@ public class TalentView implements Screen {
         mainTable.add(button).expandX().padTop(20f).row();
     }
 
-    // نمایش جدول اطلاعات Hero Stats
-    private void showHeroStats() {
-        currentTable.clear();
-        addTableTitle("Hero Stats:");
+    // نمایش صفحه Hero Stats
+    private void showHeroStatsPage() {
+        Table heroStatsTable = new Table(skin);
+        heroStatsTable.clear();
+        addTableTitle(heroStatsTable, "Hero Stats:");
 
-        addTableRow("SHANA", "Health: 40, Speed: 80", "Shana is a balanced hero.");
-        addTableRow("SCARLET", "Health: 30, Speed: 100", "Scarlet is a fast attacker.");
-        addTableRow("LILITH", "Health: 50, Speed: 60", "Lilith is a powerful hero.");
-        addTableRow("DASHER", "Health: 20, Speed: 200", "Dasher is extremely fast.");
-        addTableRow("DIAMOND", "Health: 70, Speed: 20", "Diamond is a tank with high health.");
+        addTableRow(heroStatsTable, "SHANA", "Health: 40, Speed: 80", "Shana is a balanced hero.");
+        addTableRow(heroStatsTable, "SCARLET", "Health: 30, Speed: 100", "Scarlet is a fast attacker.");
+        addTableRow(heroStatsTable, "LILITH", "Health: 50, Speed: 60", "Lilith is a powerful hero.");
+        addTableRow(heroStatsTable, "DASHER", "Health: 20, Speed: 200", "Dasher is extremely fast.");
+        addTableRow(heroStatsTable, "DIAMOND", "Health: 70, Speed: 20", "Diamond is a tank with high health.");
 
-        addBackToMainMenuButton();
+        addBackToMainMenuButton(heroStatsTable);
 
         mainTable.clearChildren();
-        mainTable.add(currentTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
+        mainTable.add(heroStatsTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
         stage.addActor(mainTable);
     }
 
-    private void showKeyBindings() {
-        currentTable.clear();
-        addTableTitle("Key Bindings:");
+    // نمایش صفحه Key Bindings
+    private void showKeyBindingsPage() {
+        Table keyBindingsTable = new Table(skin);
+        keyBindingsTable.clear();
+        addTableTitle(keyBindingsTable, "Key Bindings:");
 
-        addTableRow("N", "Return to Main Menu", "Returns to the main menu.");
-        addTableRow("SPACE", "Toggle Auto Aim", "Activates or deactivates auto aim.");
-        addTableRow("K", "Kill Monster", "Kills the monster in the vicinity.");
-        addTableRow("E", "Kill Eye Bat", "Kills the eye bat enemy.");
-
-        addBackToMainMenuButton();
+        addTableRow(keyBindingsTable, "N", "Return to Main Menu", "Returns to the main menu.");
+        addTableRow(keyBindingsTable, "SPACE", "Toggle Auto Aim", "Activates or deactivates auto aim.");
+        addTableRow(keyBindingsTable, "K", "Kill Monster", "Kills the monster in the vicinity.");
+        addTableRow(keyBindingsTable, "E", "Kill Eye Bat", "Kills the eye bat enemy.");
+        addTableRow(keyBindingsTable, "T", "change time", "Moves the time forward one minute.");
+        addTableRow(keyBindingsTable, "B", "add ability", "change ability one level");
+        addBackToMainMenuButton(keyBindingsTable);
 
         mainTable.clearChildren();
-        mainTable.add(currentTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
+        mainTable.add(keyBindingsTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
         stage.addActor(mainTable);
     }
 
-    private void showAbilities() {
-        currentTable.clear();
-        addTableTitle("Abilities Explained:");
+    private void showAbilitiesPage() {
+        Table abilitiesTable = new Table(skin);
+        abilitiesTable.clear();
+        addTableTitle(abilitiesTable, "Abilities Explained:");
 
-        addTableRow("VITALITY", "Restores +20 HP", "Restores 20 health points.");
-        addTableRow("SPEEDY", "Doubles player's speed", "Increases the player's speed for 10 seconds.");
-        addTableRow("AMOCREASE", "Adds 5 extra ammo", "Adds 5 extra ammo to your weapon.");
-        addTableRow("PROCREASE", "Increases projectile count", "Adds one extra projectile to your weapon.");
-        addTableRow("DAMAGER", "Increases weapon damage", "Increases weapon damage by 25%.");
+        addTableRow(abilitiesTable, "VITALITY", "Restores +20 HP", "Restores 20 health points.");
+        addTableRow(abilitiesTable, "SPEEDY", "Doubles player's speed", "Increases the player's speed for 10 seconds.");
+        addTableRow(abilitiesTable, "AMOCREASE", "Adds 5 extra ammo", "Adds 5 extra ammo to your weapon.");
+        addTableRow(abilitiesTable, "PROCREASE", "Increases projectile count", "Adds one extra projectile to your weapon.");
+        addTableRow(abilitiesTable, "DAMAGER", "Increases weapon damage", "Increases weapon damage by 25%.");
 
-        addBackToMainMenuButton();
+        addBackToMainMenuButton(abilitiesTable);
 
         mainTable.clearChildren();
-        mainTable.add(currentTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
+        mainTable.add(abilitiesTable).expandX().top().padTop(TABLE_PADDING_TOP).row();
         stage.addActor(mainTable);
     }
 
-    private void addTableTitle(String title) {
-        currentTable.add(new Label(title, skin)).colspan(2).padBottom(LABEL_PADDING).row();
+    private void addTableTitle(Table table, String title) {
+        table.add(new Label(title, skin)).colspan(2).padBottom(LABEL_PADDING).row();
     }
 
-    private void addTableRow(String name, String info, String description) {
+    private void addTableRow(Table table, String name, String info, String description) {
         TextButton rowButton = new TextButton(name + ": " + info, skin);
         rowButton.addListener(new ClickListener() {
             @Override
@@ -127,7 +130,7 @@ public class TalentView implements Screen {
                 showInfoDialog(name, description);
             }
         });
-        currentTable.add(rowButton).expandX().padTop(15f).row();
+        table.add(rowButton).expandX().padTop(15f).row();
     }
 
     private void showInfoDialog(String name, String description) {
@@ -144,7 +147,8 @@ public class TalentView implements Screen {
         dialog.show(stage);
     }
 
-    private void addBackToMainMenuButton() {
+    // اضافه کردن دکمه "بازگشت به منوی اصلی"
+    private void addBackToMainMenuButton(Table table) {
         TextButton backToMainMenuButton = new TextButton("Back to Main Menu", skin);
         backToMainMenuButton.addListener(new ClickListener() {
             @Override
@@ -152,7 +156,7 @@ public class TalentView implements Screen {
                 Main.getMain().setScreen(new MainMenuView(new MainMenuController(), skin));
             }
         });
-        currentTable.add(backToMainMenuButton).colspan(2).padTop(BUTTON_PADDING_TOP).row();
+        table.add(backToMainMenuButton).colspan(2).padTop(BUTTON_PADDING_TOP).row();
     }
 
     @Override
