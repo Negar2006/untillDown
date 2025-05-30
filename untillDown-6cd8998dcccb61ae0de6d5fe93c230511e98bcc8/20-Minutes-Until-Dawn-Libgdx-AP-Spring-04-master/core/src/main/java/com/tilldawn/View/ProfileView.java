@@ -43,7 +43,6 @@ public class ProfileView implements Screen {
         });
         table.add(changeUsernameButton).width(200).pad(10).center().row();
 
-        // تغییر آواتار از لیست داخلی
         TextButton changeAvatarButton = new TextButton("Change Avatar", skin);
         changeAvatarButton.addListener(new ClickListener() {
             @Override
@@ -53,7 +52,34 @@ public class ProfileView implements Screen {
         });
         table.add(changeAvatarButton).width(200).pad(10).center().row();
 
-        // حذف اکانت
+        TextButton selectFromPCButton = new TextButton("Select Avatar from PC", skin);
+        selectFromPCButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    java.awt.FileDialog dialog = new java.awt.FileDialog((java.awt.Frame) null, "Choose Avatar");
+                    dialog.setMode(java.awt.FileDialog.LOAD);
+                    dialog.setVisible(true);
+
+                    String file = dialog.getFile();
+                    String dir = dialog.getDirectory();
+
+                    if (file != null && dir != null) {
+                        String fullPath = dir + file;
+                        if (fullPath.endsWith(".png") || fullPath.endsWith(".jpg") || fullPath.endsWith(".jpeg")) {
+                            controller.changeAvatar(fullPath);
+                            controller.showInfo("Avatar set to:\n" + fullPath, stage, skin);
+                        } else {
+                            controller.showError("Please select a valid image file.", stage, skin);
+                        }
+                    }
+                } catch (Exception e) {
+                    controller.showError("File selection failed.", stage, skin);
+                }
+            }
+        });
+        table.add(selectFromPCButton).width(200).pad(10).center().row();
+
         TextButton deleteAccountButton = new TextButton("Delete Account", skin);
         deleteAccountButton.addListener(new ClickListener() {
             @Override
@@ -61,9 +87,9 @@ public class ProfileView implements Screen {
                 showDeleteAccountDialog();
             }
         });
+
         table.add(deleteAccountButton).width(200).pad(10).center().row();
 
-        // بازگشت
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ClickListener() {
             @Override
