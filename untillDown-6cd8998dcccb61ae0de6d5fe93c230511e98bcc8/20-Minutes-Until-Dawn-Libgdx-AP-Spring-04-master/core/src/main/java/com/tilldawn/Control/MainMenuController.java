@@ -31,7 +31,7 @@ public class MainMenuController {
 
             if (view.getSettingsButton().isChecked()) {
                 Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new SettingsView(new SettingsController(), GameAssetManager.getGameAssetManager().getSkin()));
+                Main.getMain().setScreen(new SettingsView(Main.getMain().getSettingsController(), GameAssetManager.getGameAssetManager().getSkin()));
             }
 
             if (view.getProfileButton().isChecked()) {
@@ -45,7 +45,7 @@ public class MainMenuController {
             }
 
             if (view.getContinueButton().isChecked()) {
-                view.getContinueButton().setChecked(false);  // Prevent multiple clicks
+                view.getContinueButton().setChecked(false);
 
                 String playerName = Main.currentUser.getUsername();
                 FileHandle file = Gdx.files.local(playerName + ".json");

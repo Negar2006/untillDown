@@ -2,6 +2,7 @@
 package com.tilldawn.Control;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.audio.Music;
@@ -15,22 +16,19 @@ public class SettingsController {
     private boolean sfxEnabled = true;
     private boolean autoReloadEnabled = false;
     private boolean grayscaleEnabled = false;
-
     private final HashMap<String, Music> musicTracks = new HashMap<>();
     private Music currentPlayingMusic;
     private ShaderProgram grayscaleShader;
     private final Sound clickSound;
-
+    private final HashMap<String, Integer> cheatKeys = new HashMap<>();
 
     public SettingsController() {
-        // load tracks (keys all lowercase for consistency)
         musicTracks.put("montero", Gdx.audio.newMusic(Gdx.files.internal("Montero.mp3")));
         musicTracks.put("rise_up", Gdx.audio.newMusic(Gdx.files.internal("rise_up.mp3")));
         musicTracks.put("walk_thru_fire", Gdx.audio.newMusic(Gdx.files.internal("walk_thru_fire.mp3")));
 
         setCurrentMusic(currentMusic);
 
-        // compile shader
         String vert = Gdx.files.internal("shaders/grayscale.glsl").readString();
         String frag = Gdx.files.internal("shaders/grayscale.frag").readString();
         grayscaleShader = new ShaderProgram(vert, frag);
@@ -39,6 +37,7 @@ public class SettingsController {
         }
 
         clickSound = Gdx.audio.newSound(Gdx.files.internal("sfx/gunShot.mp3"));
+        setDefaultCheatKeys();
     }
 
     public void setMusicVolume(float volume) {
@@ -80,7 +79,6 @@ public class SettingsController {
         }
     }
 
-    // getters...
     public float getMusicVolume() { return musicVolume; }
     public String getCurrentMusic() { return currentMusic; }
     public boolean isSfxEnabled() { return sfxEnabled; }
@@ -89,7 +87,6 @@ public class SettingsController {
     public boolean isMusicPlaying() {
         return currentPlayingMusic != null && currentPlayingMusic.isPlaying();
     }
-
     public void pauseMusic() {
         if (isMusicPlaying()) currentPlayingMusic.pause();
     }
@@ -117,6 +114,23 @@ public class SettingsController {
 
     public Sound getClickSound() {
         return clickSound;
+    }
+
+    public void setDefaultCheatKeys() {
+        cheatKeys.put("RETURN_MENU", Input.Keys.N);
+        cheatKeys.put("KILL_MONSTER", Input.Keys.K);
+        cheatKeys.put("KILL_EYEBAT", Input.Keys.E);
+        cheatKeys.put("ADD_TIME", Input.Keys.T);
+        cheatKeys.put("LEVEL_UP", Input.Keys.B);
+        cheatKeys.put("RELOAD", Input.Keys.R);
+    }
+
+    public int getCheatKey(String name) {
+        return cheatKeys.getOrDefault(name, Input.Keys.UNKNOWN);
+    }
+
+    public void setCheatKey(String name, int key) {
+        cheatKeys.put(name, key);
     }
 
 }

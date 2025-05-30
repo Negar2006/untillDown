@@ -26,10 +26,12 @@ public class Main extends Game {
     private static SpriteBatch batch;
     public static HashMap<String, User> usersDB = new HashMap<>();
     public static User currentUser = null;
+    private static SettingsController settings;
 
     @Override
     public void create() {
         main = this;
+        settings = new SettingsController();
         batch = new SpriteBatch();
         getMain().setScreen(new RegisterMenuViews(new RegisterMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
     }
@@ -58,5 +60,9 @@ public class Main extends Game {
 
     public static void setBatch(SpriteBatch batch) {
         Main.batch = batch;
+    }
+
+    public SettingsController getSettingsController() {
+        return settings;
     }
 }

@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.GameController;
+import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.DamagePopup;
@@ -227,29 +228,36 @@ public class GameView extends InputAdapter implements Screen {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.N) {
+        SettingsController settings = Main.getMain().getSettingsController();
+
+        if (keycode == settings.getCheatKey("RETURN_MENU")) {
             controller.returnToMainMenu();
             return true;
         }
-        if (keycode == Input.Keys.SPACE) {
-            controller.toggleAutoAim();
-            return true;
-        }
-        if (keycode == Input.Keys.K) {
+        if (keycode == settings.getCheatKey("KILL_MONSTER")) {
             controller.killMonster();
             return true;
         }
-        if (keycode == Input.Keys.E) {
+        if (keycode == settings.getCheatKey("KILL_EYEBAT")) {
             controller.killEyeBat();
             return true;
         }
-        if (keycode == Input.Keys.T) {
+        if (keycode == settings.getCheatKey("ADD_TIME")) {
             controller.addTime(60000);
             return true;
         }
-        if (keycode == Input.Keys.B) {
+        if (keycode == settings.getCheatKey("LEVEL_UP")) {
             int newEXP = controller.getPlayerController().getPlayer().getLevel() * 20;
             controller.getPlayerController().getPlayer().setExp(newEXP);
+            return true;
+        }
+        if (keycode == settings.getCheatKey("RELOAD") && settings.isAutoReloadEnabled()) {
+            controller.getWeaponController().getWeapon().setAmmo(controller.getWeaponController().getWeapon().getType().maxAmmo);
+            return true;
+        }
+
+        if (keycode == Input.Keys.SPACE) {
+            controller.toggleAutoAim();
             return true;
         }
 
@@ -265,7 +273,6 @@ public class GameView extends InputAdapter implements Screen {
         if (keycode == Input.Keys.S) {
             Player player = controller.getPlayerController().getPlayer();
             if (player.hasAbility(Ability.SPEEDY)) {
-                // Double the player's speed
                 player.setSpeed(player.getSpeed() * 2);
 
                 float speedDuration = 10f;
@@ -312,10 +319,7 @@ public class GameView extends InputAdapter implements Screen {
             }
             return true;
         }
-        if(keycode == Input.Keys.R) {
-            controller.getWeaponController().getWeapon().setAmmo(controller.getWeaponController().getWeapon().getType().maxAmmo);
-            return true;
-        }
+
         return false;
     }
 
