@@ -3,12 +3,17 @@ package com.tilldawn.Control;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Json;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tilldawn.Main;
 import com.tilldawn.Model.*;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
+
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameController {
@@ -208,14 +213,32 @@ public class GameController {
             username = "guest";
         }
 
-        int score = playerController.getPlayer().getScore(); // Get player score
+        int score = playerController.getPlayer().getScore();
         int kills = numberOfKill;
-        float health = playerController.getPlayer().getPlayerHealth(); // Player health
+        float health = playerController.getPlayer().getPlayerHealth();
 
         GameOverController gameOverController = new GameOverController(username, score, kills, health);
+
+        if (Main.currentUser != null) {
+            Main.currentUser.addNumberOfKilling(kills);
+            Main.currentUser.addScore(score);
+        }
+
+        saveUserToJson(Main.currentUser);
+
         Main.currentUser.addNumberOfKilling(kills);
-        Main.currentUser.addScore(score);
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
+    }
+
+    private void saveUserToJson(User user) {
+        Json json = new Json();
+        FileHandle file = Gdx.files.local("users/" + user.getUsername() + ".json");
+
+        if (!file.parent().exists()) {
+            file.parent().mkdirs();
+        }
+
+        file.writeString(json.prettyPrint(json.toJson(user)), false);
     }
 
     public void pauseGame() {

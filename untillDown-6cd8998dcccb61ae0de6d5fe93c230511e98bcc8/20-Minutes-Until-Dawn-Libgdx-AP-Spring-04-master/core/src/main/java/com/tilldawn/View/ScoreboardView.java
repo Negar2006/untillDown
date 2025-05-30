@@ -2,75 +2,145 @@ package com.tilldawn.View;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.tilldawn.Control.ScoreboardController;
-
-import java.io.FileReader;
-import java.io.IOException;
+import com.tilldawn.Model.User;
 
 public class ScoreboardView implements Screen {
+
     private Stage stage;
-    private Skin skin;
-    private ScoreboardController controller;
+    private final Skin skin;
+    private final ScoreboardController controller;
     private Table table;
+    private TextButton sortByScoreButton;
+    private TextButton sortByKillsButton;
+    private TextButton sortByTimeAliveButton;
+    private TextButton sortByUsernameButton;
 
     public ScoreboardView(ScoreboardController controller, Skin skin) {
         this.controller = controller;
         this.skin = skin;
         this.stage = new Stage();
         this.table = new Table();
+        this.table.setSkin(skin);  // Set the Skin for the Table here
     }
 
     @Override
     public void show() {
-        Array<Player> players = loadPlayersFromJson("players.json"); // Example JSON file
+        final Array<User> users = loadUsersFromJson("users/");
+
+        sortByScoreButton = new TextButton("Sort by Score", skin);
+        sortByKillsButton = new TextButton("Sort by Kills", skin);
+        sortByTimeAliveButton = new TextButton("Sort by Time Alive", skin);
+        sortByUsernameButton = new TextButton("Sort by Username", skin);
+
+        Table buttonTable = new Table();
+        buttonTable.top().padTop(10).padLeft(10);
+        buttonTable.add(sortByScoreButton).pad(10).colspan(5).fillX().row();
+        buttonTable.add(sortByKillsButton).pad(10).colspan(5).fillX().row();
+        buttonTable.add(sortByTimeAliveButton).pad(10).colspan(5).fillX().row();
+        buttonTable.add(sortByUsernameButton).pad(10).colspan(5).fillX().row();
+
+        stage.addActor(buttonTable);
+
+        sortByScoreButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Array<User> sortedUsers = controller.sortUsersByScore(users);
+                updateTable(sortedUsers);
+            }
+        });
+
+        sortByKillsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Array<User> sortedUsers = controller.sortUsersByKills(users);
+                updateTable(sortedUsers);
+            }
+        });
+
+        sortByTimeAliveButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Array<User> sortedUsers = controller.sortUsersByTimeAlive(users);
+                updateTable(sortedUsers);
+            }
+        });
+
+        sortByUsernameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Array<User> sortedUsers = controller.sortUsersByUsername(users);
+                updateTable(sortedUsers);
+            }
+        });
 
         table.setFillParent(true);
         stage.addActor(table);
-        table.top().pad(15);
+        table.top().pad(60);
 
-        // Add headers
-        table.add("Username").pad(10);
-        table.add("Score").pad(10);
-        table.add("Kills").pad(10);
-        table.add("Avatar").pad(10).row();
-
-        // Add player data to table
-        for (Player player : players) {
-            table.add(player.name).pad(10);
-            table.add(String.valueOf(player.score)).pad(10);
-            table.add(String.valueOf(player.kills)).pad(10);
-
-            // Load and display the player image
-            Texture texture = new Texture(Gdx.files.internal(player.image));
-            Image avatar = new Image(texture);
-            table.add(avatar).size(50, 50).pad(10).row();
-        }
+        updateTable(users);
 
         Gdx.input.setInputProcessor(stage);
     }
 
-    private Array<Player> loadPlayersFromJson(String filePath) {
-        Json json = new Json();
-        Array<Player> players = new Array<>();
 
-        try {
-            // Read the JSON file
-            FileReader reader = new FileReader(filePath);
-            Player[] playerArray = json.fromJson(Player[].class, reader);
-            for (Player player : playerArray) {
-                players.add(player);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    private void updateTable(Array<User> users) {
+        table.clear();
+
+        table.add("Username").pad(10);
+        table.add("Score").pad(10);
+        table.add("Kills").pad(10);
+        table.add("Time Alive").pad(10);
+        table.add("Avatar").pad(10).row();
+
+        for (int i = 0; i < users.size; i++) {
+            User user = users.get(i);
+            table.add(user.getUsername()).pad(10);
+            table.add(String.valueOf(user.getScore())).pad(10);
+            table.add(String.valueOf(user.getNumberOfKillingMonster())).pad(10);
+            table.add(formatTime(user.getTimeAliveMillis())).pad(10);
+
+            Texture avatarTexture = new Texture(user.getSelectedCharacter());
+            Image avatar = new Image(avatarTexture);
+            table.add(avatar).size(50, 50).pad(10).row();
         }
+    }
 
-        return players;
+    private String formatTime(long timeMillis) {
+        long seconds = timeMillis / 1000;
+        long minutes = seconds / 60;
+        long remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
+    }
+
+    private Array<User> loadUsersFromJson(String folderPath) {
+        Json json = new Json();
+        Array<User> users = new Array<>();
+
+        FileHandle[] files = Gdx.files.local(folderPath).list();
+        for (FileHandle file : files) {
+            if (file.extension().equals("json")) {
+                try {
+                    User user = json.fromJson(User.class, file.reader());
+                    users.add(user);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return users;
     }
 
     @Override
@@ -81,31 +151,19 @@ public class ScoreboardView implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-    }
+    public void resize(int width, int height) {}
 
     @Override
-    public void pause() {
-    }
+    public void pause() {}
 
     @Override
-    public void resume() {
-    }
+    public void resume() {}
 
     @Override
-    public void hide() {
-    }
+    public void hide() {}
 
     @Override
     public void dispose() {
         stage.dispose();
-    }
-
-    // Player class representing each player object
-    public static class Player {
-        public String name;
-        public int score;
-        public int kills;
-        public String image;
     }
 }

@@ -50,9 +50,9 @@ public class RegisterMenuController {
                 } else if (!password.matches(".*[()\\*$%@#].*")) {
                     view.setFeedbackText("Password must include a special character: ()*$%@#");
                 } else {
-                    User newUser = new User(username, password, securityAnswer, character);
+                    User newUser = new User(username, password, securityAnswer, character, -1, -1, -1);
                     usersDB.put(username, newUser);
-                    saveUserToJson(newUser); // Save to JSON
+                    saveUserToJson(newUser);
                     Gdx.app.log("Register", "Registered: " + newUser);
                     view.setFeedbackText("Registration successful!");
                     registrationSuccess = true;
@@ -107,11 +107,10 @@ public class RegisterMenuController {
         Json json = new Json();
         FileHandle file = Gdx.files.local("users/" + user.getUsername() + ".json");
 
-        // Make sure the directory exists
         if (!file.parent().exists()) {
             file.parent().mkdirs();
         }
 
-        file.writeString(json.prettyPrint(user), false);
+        file.writeString(json.prettyPrint(json.toJson(user)), false);
     }
 }

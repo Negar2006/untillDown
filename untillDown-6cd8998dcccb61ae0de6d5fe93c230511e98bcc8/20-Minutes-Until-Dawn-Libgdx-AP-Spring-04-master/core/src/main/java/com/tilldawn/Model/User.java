@@ -6,17 +6,19 @@ public class User {
     private String securityAnswer;
     private String selectedCharacter;
     private int Score;
+    private long timeAliveMillis;
     private int numberOfKillingMonster;
 
     public User() {}
 
-    public User(String username, String password, String securityAnswer, String selectedCharacter) {
+    public User(String username, String password, String securityAnswer, String selectedCharacter, int Score, int numberOfKillingMonster, long timeAliveMillis) {
         this.username = username;
         this.password = password;
         this.securityAnswer = securityAnswer;
         this.selectedCharacter = selectedCharacter;
-        Score = 0;
-        numberOfKillingMonster = 0;
+        this.Score = Score;
+        this.numberOfKillingMonster = numberOfKillingMonster;
+        this.timeAliveMillis = timeAliveMillis;
     }
 
     public String getUsername() {
@@ -59,12 +61,28 @@ public class User {
         this.numberOfKillingMonster += numberOfKillingMonster;
     }
 
+    public void setSecurityAnswer(String securityAnswer) {
+        this.securityAnswer = securityAnswer;
+    }
+
+    public void setNumberOfKillingMonster(int numberOfKillingMonster) {
+        this.numberOfKillingMonster = numberOfKillingMonster;
+    }
+
     public void addScore(int score) {
         Score += score;
     }
 
     public int getNumberOfKillingMonster() {
         return numberOfKillingMonster;
+    }
+
+    public long getTimeAliveMillis() {
+        return timeAliveMillis;
+    }
+
+    public String getAvatar() {
+        return securityAnswer;
     }
 
     @Override
