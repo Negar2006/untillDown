@@ -70,10 +70,24 @@ public class Main extends Game {
     }
 
     private void setCustomCursor() {
-        Pixmap pixmap = new Pixmap(Gdx.files.internal("shooting.png"));
-        Cursor cursor = Gdx.graphics.newCursor(pixmap, 0, 0);
+        Pixmap original = new Pixmap(Gdx.files.internal("shooting.png"));
+
+        int scale = 8;
+        int newWidth = Math.max(1, original.getWidth() / scale);
+        int newHeight = Math.max(1, original.getHeight() / scale);
+
+        Pixmap scaled = new Pixmap(newWidth, newHeight, original.getFormat());
+        scaled.drawPixmap(
+            original,
+            0, 0, original.getWidth(), original.getHeight(),
+            0, 0, newWidth, newHeight
+        );
+
+        Cursor cursor = Gdx.graphics.newCursor(scaled, newWidth / 2, newHeight / 2);
         Gdx.graphics.setCursor(cursor);
-        pixmap.dispose();
+
+        original.dispose();
+        scaled.dispose();
     }
 
 }
