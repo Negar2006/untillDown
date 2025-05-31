@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.GameController;
 import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Main;
+import com.tilldawn.Model.Monster;
 import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
@@ -304,6 +305,22 @@ public class GameView extends InputAdapter implements Screen {
                 controller.getWeaponController().addProjectile(1);
                 System.out.println("Procrease used! Projectiles increased.");
                 player.removeAbility(Ability.PROCREASE);
+            }
+            return true;
+        }
+
+        if(keycode == Input.Keys.H){
+            if(controller.getPlayerController().getPlayer().getPlayerHealth() <= 5) {
+                controller.getPlayerController().getPlayer().setHealth(100);
+            }
+            return true;
+        }
+        if(keycode == Input.Keys.F){
+            if(controller.getMonsterController().getElderMonster() != null){
+                Monster monster = controller.getMonsterController().getElderMonster().get(0);
+
+                controller.getPlayerController().getPlayer().setPosX(monster.getX());
+                controller.getPlayerController().getPlayer().setPosY(monster.getY());
             }
             return true;
         }

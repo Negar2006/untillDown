@@ -105,12 +105,16 @@ public class MonsterController {
 
             if (player.getPlayerSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
                 float time = overlapTimers.getOrDefault(m, 0f) + delta;
-                if (time >= 1f) {
+
+                if (!player.isInvincible() && time >= 1f) {
                     player.takeDamage(5);
+                    player.activateInvincibility();
                     time = 0f;
                 }
+
                 overlapTimers.put(m, time);
-            } else {
+            }
+            else {
                 overlapTimers.put(m, 0f);
             }
         }

@@ -28,6 +28,10 @@ public class Player {
     private int Level;
     private int exp;
     private ArrayList<Ability> gainAbilities = new ArrayList<>();
+    private boolean isInvincible = false;
+    private long invincibleStartTime = 0;
+    private final long INVINCIBLE_DURATION = 4000;
+
 
     public Player(Texture playerTexture) {
         if(Main.currentUser!= null) name = Main.currentUser.getUsername();
@@ -60,6 +64,12 @@ public class Player {
         posY += deltaY;
         playerSprite.setPosition(posX, posY);
         rect.move(posX, posY);
+
+        if (isInvincible) {
+            playerSprite.setColor(1, 1, 1, 0.5f);
+        } else {
+            playerSprite.setColor(1, 1, 1, 1);
+        }
     }
 
     public PlayerController getPlayerController() {
@@ -126,27 +136,11 @@ public class Player {
         this.speed = speed;
     }
 
-    public void setPlayerIdle(boolean playerIdle) {
-        isPlayerIdle = playerIdle;
-    }
-
-    public void setTime(float time) {
-        this.time = time;
-    }
-
-    public float getTime() {
-        return time;
-    }
-
     public void takeDamage(int damage) {
-        // Subtract damage from player's health
         playerHealth -= damage;
 
-        // Check if health is less than or equal to 0
         if (playerHealth <= 0) {
-            playerHealth = 0; // Ensure health doesn't go below zero
-
-            // Create a GameOverController instance with the player's stats
+            playerHealth = 0;
             GameOverController gameOverController;
             if (Main.currentUser == null) {
                 gameOverController = new GameOverController("guest", score, playerController.getGameController().getKillCount(), playerHealth);
@@ -212,4 +206,20 @@ public class Player {
             }
         }
     }
+
+    public void activateInvincibility() {
+        isInvincible = true;
+        invincibleStartTime = System.currentTimeMillis();
+    }
+
+    public void updateInvincibility() {
+        if (isInvincible && (System.currentTimeMillis() - invincibleStartTime > INVINCIBLE_DURATION)) {
+            isInvincible = false;
+        }
+    }
+
+    public boolean isInvincible() {
+        return isInvincible;
+    }
+
 }

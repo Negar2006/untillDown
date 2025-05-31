@@ -70,6 +70,7 @@ public class PlayerController {
         Main.getBatch().draw(currentFrame, player.getPosX(), player.getPosY(),
             player.getPlayerSprite().getWidth(), player.getPlayerSprite().getHeight());
 
+        player.updateInvincibility();
     }
 
     public Player getPlayer() {
