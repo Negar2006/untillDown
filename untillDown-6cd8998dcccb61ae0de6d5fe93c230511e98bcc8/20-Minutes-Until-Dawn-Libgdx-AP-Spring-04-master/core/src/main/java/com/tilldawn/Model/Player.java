@@ -31,7 +31,9 @@ public class Player {
     private boolean isInvincible = false;
     private long invincibleStartTime = 0;
     private final long INVINCIBLE_DURATION = 4000;
-
+    private boolean isDead = false;
+    private Texture deadTexture;
+    private Sprite deadSprite;
 
     public Player(Texture playerTexture) {
         if(Main.currentUser!= null) name = Main.currentUser.getUsername();
@@ -47,6 +49,11 @@ public class Player {
         rect = new CollisionRect(posX, posY, playerSprite.getWidth(), playerSprite.getHeight());
         this.Level = 1;
         this.exp = 0;
+
+        deadTexture = new Texture(Gdx.files.internal("dead.png"));
+        deadSprite = new Sprite(deadTexture);
+        deadSprite.setSize(playerSprite.getWidth(), playerSprite.getHeight());
+
     }
 
     private void centerPlayerOnScreen() {
@@ -139,17 +146,45 @@ public class Player {
     public void takeDamage(int damage) {
         playerHealth -= damage;
 
+        if (Main.getMain().getScreen() instanceof GameView) {
+            GameView view = (GameView) Main.getMain().getScreen();
+
+            float popupX = playerSprite.getX() + playerSprite.getWidth() / 2;
+            float popupY = playerSprite.getY() + playerSprite.getHeight();
+
+            view.addDamagePopup(popupX, popupY, "-" + damage);
+        }
+
         if (playerHealth <= 0) {
             playerHealth = 0;
-            GameOverController gameOverController;
-            if (Main.currentUser == null) {
-                gameOverController = new GameOverController("guest", score, playerController.getGameController().getKillCount(), playerHealth);
-            } else {
-                gameOverController = new GameOverController(Main.currentUser.getUsername(), score, playerController.getGameController().getKillCount(), playerHealth);
-            }
-            Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
+            isDead = true;
+
+            deadSprite.setPosition(playerSprite.getX(), playerSprite.getY());
+            playerSprite.setAlpha(0);
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                GameOverController gameOverController;
+                if (Main.currentUser == null) {
+                    gameOverController = new GameOverController("guest", score,
+                        playerController.getGameController().getKillCount(), playerHealth);
+                } else {
+                    gameOverController = new GameOverController(Main.currentUser.getUsername(), score,
+                        playerController.getGameController().getKillCount(), playerHealth);
+                }
+
+                Gdx.app.postRunnable(() -> Main.getMain().setScreen(
+                    new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin())));
+            }).start();
         }
     }
+
+
 
     public String getCharacterName() {
         return name;
@@ -220,6 +255,14 @@ public class Player {
 
     public boolean isInvincible() {
         return isInvincible;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public Sprite getDeadSprite() {
+        return deadSprite;
     }
 
 }

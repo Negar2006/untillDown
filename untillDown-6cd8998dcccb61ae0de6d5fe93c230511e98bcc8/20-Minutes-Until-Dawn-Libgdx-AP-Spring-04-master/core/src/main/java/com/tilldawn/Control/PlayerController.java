@@ -66,9 +66,14 @@ public class PlayerController {
         player.updatePosition(dx, dy);
 
         stateTime += Gdx.graphics.getDeltaTime();
-        TextureRegion currentFrame = playerAnimation.getKeyFrame(stateTime, true);
-        Main.getBatch().draw(currentFrame, player.getPosX(), player.getPosY(),
-            player.getPlayerSprite().getWidth(), player.getPlayerSprite().getHeight());
+
+        if (player.isDead()) {
+            player.getDeadSprite().draw(Main.getBatch());
+        } else {
+            TextureRegion currentFrame = playerAnimation.getKeyFrame(stateTime, true);
+            Main.getBatch().draw(currentFrame, player.getPosX(), player.getPosY(),
+                player.getPlayerSprite().getWidth(), player.getPlayerSprite().getHeight());
+        }
 
         player.updateInvincibility();
     }

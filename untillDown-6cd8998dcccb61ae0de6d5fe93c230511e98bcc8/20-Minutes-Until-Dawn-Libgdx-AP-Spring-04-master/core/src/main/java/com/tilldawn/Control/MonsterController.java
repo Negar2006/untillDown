@@ -92,6 +92,23 @@ public class MonsterController {
             Monster m = iter.next();
 
             if (m.isDead()) {
+                if (!m.isDeathAnimationFinished()) {
+                    if (!m.isDying()) m.playDeathAnimation();  // Only trigger once
+                    m.updateAndDraw(batch, player);
+                    continue;
+                }
+
+                // Now safe to remove
+                iter.remove();
+                overlapTimers.remove(m);
+                int newKill = gameController.getKillCount() + 1;
+                gameController.setNumberOfKill(newKill);
+                player.addScore(m.getType().getScore());
+                seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
+                continue;
+            }
+
+            if (m.isDead()) {
                 iter.remove();
                 overlapTimers.remove(m);  // clean up
                 int newKill = gameController.getKillCount() + 1;

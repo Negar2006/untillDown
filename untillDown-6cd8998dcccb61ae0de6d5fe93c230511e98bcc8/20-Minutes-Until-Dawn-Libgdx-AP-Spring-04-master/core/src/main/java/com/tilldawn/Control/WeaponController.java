@@ -7,7 +7,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.tilldawn.Main;
 import com.tilldawn.Model.*;
 import com.tilldawn.View.GameView;
-
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Robot;
+import java.awt.AWTException;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -80,6 +85,7 @@ public class WeaponController {
     }
 
     public void handleWeaponShoot(int x, int y) {
+        Main.getMain().getSettingsController().playSfx(Main.getMain().getSettingsController().getClickSound());
         if (weapon.isReloading()) return;
 
         if (weapon.getAmmo() <= 0) {
@@ -163,6 +169,21 @@ public class WeaponController {
         float targetY = target.getSprite().getY() + target.getSprite().getHeight() / 2;
 
         handleWeaponRotation((int) targetX, (int) targetY);
+
+        try {
+            Robot robot = new Robot();
+            GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+
+            int windowX = gd.getDefaultConfiguration().getBounds().x;
+            int windowY = gd.getDefaultConfiguration().getBounds().y;
+
+            int screenX = windowX + (int) targetX;
+            int screenY = windowY + Gdx.graphics.getHeight() - (int) targetY;
+
+            robot.mouseMove(screenX, screenY);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addProjectile(int i) {

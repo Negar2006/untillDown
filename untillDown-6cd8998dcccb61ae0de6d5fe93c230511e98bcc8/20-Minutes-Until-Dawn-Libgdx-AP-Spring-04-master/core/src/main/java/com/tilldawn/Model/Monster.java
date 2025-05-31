@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
@@ -25,8 +26,13 @@ public class Monster {
     private float dashSpeed = 10f;
     private float dashDuration = 0.3f;
     private float dashTimePassed = 0f;
+    private boolean dying = false;
+    private boolean deathAnimFinished = false;
+    private Animation<Texture> deathAnimation;
+    private float deathStateTime = 0f;
 
     public Monster(monsterTypes type) {
+        this.deathAnimation = GameAssetManager.getGameAssetManager().getDeathAnimation();
 
         this.type = type;
         switch (type) {
@@ -133,6 +139,20 @@ public class Monster {
 
     public void updateAndDraw(SpriteBatch batch, Player player) {
         float delta = Gdx.graphics.getDeltaTime();
+
+        if (dying) {
+            deathStateTime += delta;
+            Texture currentFrame = deathAnimation.getKeyFrame(deathStateTime, false);
+            sprite.setRegion(currentFrame);
+            sprite.draw(batch);
+
+            // Mark as finished after 1 second
+            if (deathStateTime >= 1f) {
+                deathAnimFinished = true;
+            }
+            return;
+        }
+
         time += delta;
 
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
@@ -224,4 +244,18 @@ public class Monster {
     public void setPosY(float posY) {
         this.posY = posY;
     }
+
+    public void playDeathAnimation() {
+        this.dying = true;
+        this.deathStateTime = 0f;
+    }
+
+    public boolean isDeathAnimationFinished() {
+        return deathAnimFinished;
+    }
+
+    public boolean isDying() {
+        return dying;
+    }
 }
+

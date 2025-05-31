@@ -130,6 +130,18 @@ public class GameAssetManager {
 
     private final Animation<Texture> Boss_idle_animation = new Animation<>(0.2f, Boss0_tex, Boss1_tex, Boss2_tex, Boss3_tex, Boss4_tex);
 
+    private final String death_0 = "death/DeathFX_0.png";
+    private final String death_1 = "death/DeathFX_1.png";
+    private final String death_2 = "death/DeathFX_2.png";
+    private final String death_3 = "death/DeathFX_3.png";
+
+    private final Texture death0_tex = new Texture(death_0);
+    private final Texture death1_tex = new Texture(death_1);
+    private final Texture death2_tex = new Texture(death_2);
+    private final Texture death3_tex = new Texture(death_3);
+
+    private final Animation<Texture> deathAnimation = new Animation<>(0.2f, death0_tex, death1_tex, death2_tex, death3_tex);
+
     private final String smg = "smg/SMGStill.png";
     private final Texture smgTexture = new Texture(smg);
 
@@ -157,12 +169,12 @@ public class GameAssetManager {
     private final String bullet = "bullet.png";
 
 
-    private GameAssetManager(){
+    private GameAssetManager() {
 
     }
 
-    public static GameAssetManager getGameAssetManager(){
-        if (gameAssetManager == null){
+    public static GameAssetManager getGameAssetManager() {
+        if (gameAssetManager == null) {
             gameAssetManager = new GameAssetManager();
         }
         return gameAssetManager;
@@ -264,7 +276,7 @@ public class GameAssetManager {
         return character5_idle_frames;
     }
 
-    public String getCharacter1_idle0(){
+    public String getCharacter1_idle0() {
         return character1_idle0;
     }
 
@@ -560,15 +572,15 @@ public class GameAssetManager {
         return Tree3_tex;
     }
 
-    public Texture getSmgTexture(){
+    public Texture getSmgTexture() {
         return smgTexture;
     }
 
-    public String getSmg(){
+    public String getSmg() {
         return smg;
     }
 
-    public String getBullet(){
+    public String getBullet() {
         return bullet;
     }
 
@@ -670,5 +682,41 @@ public class GameAssetManager {
 
     public Texture getSpeedyTexture() {
         return speedyTexture;
+    }
+
+    public Animation<Texture> getDeathAnimation() {
+        return deathAnimation;
+    }
+
+    public String getDeath_0() {
+        return death_0;
+    }
+
+    public String getDeath_1() {
+        return death_1;
+    }
+
+    public String getDeath_2() {
+        return death_2;
+    }
+
+    public String getDeath_3() {
+        return death_3;
+    }
+
+    public Texture getDeath0_tex() {
+        return death0_tex;
+    }
+
+    public Texture getDeath1_tex() {
+        return death1_tex;
+    }
+
+    public Texture getDeath2_tex() {
+        return death2_tex;
+    }
+
+    public Texture getDeath3_tex() {
+        return death3_tex;
     }
 }
