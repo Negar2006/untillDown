@@ -49,6 +49,7 @@ public class GameOverView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        // Initialize background and fonts
         backgroundTexture = new Texture(Gdx.files.internal("game_over_background.png"));
         batch = new SpriteBatch();
 
@@ -84,7 +85,12 @@ public class GameOverView implements Screen {
         healthLabel.setPosition(Gdx.graphics.getWidth() / 2f - healthLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 560);
         stage.addActor(healthLabel);
 
-        // Use button style from skin (defined in your skin.json or skin file)
+        // Game Result (Win/Loss/Draw)
+        Label gameResultLabel = new Label("Game Result: " + gameOverController.getGameResult(), smallLabelStyle);
+        gameResultLabel.setPosition(Gdx.graphics.getWidth() / 2f - gameResultLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 640);
+        stage.addActor(gameResultLabel);
+
+        // Button to go back to the main menu
         TextButton mainMenuButton = new TextButton("Go Back to Main Menu", skin);
         mainMenuButton.getLabel().getStyle().fontColor = Color.RED;
         mainMenuButton.getLabel().setFontScale(0.6f);
@@ -110,7 +116,6 @@ public class GameOverView implements Screen {
         });
         stage.addActor(mainMenuButton);
     }
-
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);

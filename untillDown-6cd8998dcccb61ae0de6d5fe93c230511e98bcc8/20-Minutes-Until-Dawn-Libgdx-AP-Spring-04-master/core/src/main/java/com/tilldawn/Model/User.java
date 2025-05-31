@@ -85,6 +85,10 @@ public class User {
         return securityAnswer;
     }
 
+    public void setTimeAliveMillis(long timeAliveMillis) {
+        this.timeAliveMillis = timeAliveMillis;
+    }
+
     @Override
     public String toString() {
         return "User{" +

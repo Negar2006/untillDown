@@ -32,6 +32,7 @@ public class GameController {
     private long pausedTimeMillis = 0;
     private long pauseStartTime = 0;
     private String fileName;
+    private String gameResult = "Game Over";
 
     public GameController(int gameDurationMinutes, String weapon) {
         this.GAME_DURATION_MILLIS = gameDurationMinutes * 60 * 1000L;
@@ -162,6 +163,14 @@ public class GameController {
         }
     }
 
+    public long getStartTimeMillis() {
+        return startTimeMillis;
+    }
+
+    public void setStartTimeMillis(long startTimeMillis) {
+        this.startTimeMillis = startTimeMillis;
+    }
+
     public void addTime(long millis) {
         startTimeMillis -= millis;
     }
@@ -179,11 +188,21 @@ public class GameController {
             username = "guest";
         }
 
-        int score = playerController.getPlayer().getScore();
+        int score = (int) ((System.currentTimeMillis() - startTimeMillis) / 1000L * numberOfKill); // Time alive * kills
         int kills = numberOfKill;
+        long time = System.currentTimeMillis() - startTimeMillis;
         float health = playerController.getPlayer().getPlayerHealth();
 
-        GameOverController gameOverController = new GameOverController(username, score, kills, health);
+        // Determine game result (win/loss/quit)
+        if (health <= 0) {
+            gameResult = "Game Over";  // Player lost
+        } else if (remainingTimeMillis <= 0) {
+            gameResult = "Time's Up";
+        } else {
+            gameResult = "You Win";
+        }
+
+        GameOverController gameOverController = new GameOverController(username, score, kills, health, time, gameResult);
 
         if (Main.currentUser != null) {
             Main.currentUser.addNumberOfKilling(kills);
@@ -192,7 +211,6 @@ public class GameController {
 
         saveUserToJson(Main.currentUser);
 
-        Main.currentUser.addNumberOfKilling(kills);
         Main.getMain().setScreen(new GameOverView(gameOverController, GameAssetManager.getGameAssetManager().getSkin()));
     }
 

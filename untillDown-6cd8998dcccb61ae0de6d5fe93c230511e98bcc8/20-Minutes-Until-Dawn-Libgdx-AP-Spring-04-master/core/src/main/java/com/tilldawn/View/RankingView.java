@@ -105,7 +105,6 @@ public class RankingView implements Screen {
         backTable.setFillParent(true);
         backTable.add(backButton).expand().left().pad(20);
 
-        // Add actors to stage
         stage.addActor(table);
         stage.addActor(backTable);
     }

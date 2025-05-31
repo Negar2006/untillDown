@@ -172,10 +172,11 @@ public class Player {
                 GameOverController gameOverController;
                 if (Main.currentUser == null) {
                     gameOverController = new GameOverController("guest", score,
-                        playerController.getGameController().getKillCount(), playerHealth);
+                        playerController.getGameController().getKillCount(), playerHealth, 0, "Game Over");
                 } else {
+                    long time = System.currentTimeMillis() - getPlayerController().getGameController().getStartTimeMillis();
                     gameOverController = new GameOverController(Main.currentUser.getUsername(), score,
-                        playerController.getGameController().getKillCount(), playerHealth);
+                        playerController.getGameController().getKillCount(), playerHealth, time, "Game Over");
                 }
 
                 Gdx.app.postRunnable(() -> Main.getMain().setScreen(

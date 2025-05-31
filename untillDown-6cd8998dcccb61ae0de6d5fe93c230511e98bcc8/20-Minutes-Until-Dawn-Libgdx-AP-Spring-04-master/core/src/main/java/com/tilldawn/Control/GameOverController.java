@@ -5,13 +5,16 @@ public class GameOverController {
     private int score;
     private int kills;
     private float health;
+    private String gameResult;  // new field for game result
+    private long timeAliveMillis;
 
-    // Getters and setters
-    public GameOverController(String username, int score, int kills, float health) {
+    public GameOverController(String username, int score, int kills, float health, long timeAliveMillis, String gameResult) {
         this.username = username;
         this.score = score;
         this.kills = kills;
         this.health = health;
+        this.timeAliveMillis = timeAliveMillis;
+        this.gameResult = gameResult;
     }
 
     public String getUsername() {
@@ -28,5 +31,13 @@ public class GameOverController {
 
     public float getHealth() {
         return health;
+    }
+
+    public void calculateScore() {
+        this.score = (int) (timeAliveMillis / 1000 * kills);
+    }
+
+    public String getGameResult() {
+        return gameResult;
     }
 }

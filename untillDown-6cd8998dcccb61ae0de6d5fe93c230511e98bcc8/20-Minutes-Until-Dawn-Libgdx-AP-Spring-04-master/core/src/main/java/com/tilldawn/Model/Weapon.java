@@ -11,10 +11,12 @@ public class Weapon {
 
     private weaponType type;
     private int ammo;
+    private int damage;
     private boolean isReloading = false;
     private float reloadTimer = 0f;
 
     public Weapon(weaponType type) {
+        this.damage = type.damage;
         this.type = type;
         this.ammo = type.maxAmmo;
         smgSprite.setSize(50, 50);
@@ -39,10 +41,6 @@ public class Weapon {
 
     public void setAmmo(int ammo){
         this.ammo = ammo;
-    }
-
-    public int getDamage() {
-        return type.damage;
     }
 
     public int getProjectileCount() {
@@ -73,8 +71,14 @@ public class Weapon {
     }
 
     public void addAmmo(int i) {
+        this.ammo += i;
     }
 
     public void addDamage(float v) {
+        this.damage += v;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 }

@@ -45,7 +45,6 @@ public class GameView extends InputAdapter implements Screen {
     private Label timerLabel;
     private Label healthLabel;
     private Label killsLabel;
-    private Label scoreLabel;
     private Label speedLable;
     private String nameOfTexture;
     private Label levelLabel;
@@ -54,6 +53,7 @@ public class GameView extends InputAdapter implements Screen {
     private float firstHearth;
     private ShaderProgram grayscaleShader;
     private boolean grayscaleEnabled = false;
+    private Label ammoLabel;
     Texture emptyHeartTexture = new Texture(Gdx.files.internal("heart/HeartAnimation_3.png"));
     Texture fullHeartTexture1 = new Texture(Gdx.files.internal("heart/HeartAnimation_1.png"));
     Texture fullHeartTexture2 = new Texture(Gdx.files.internal("heart/HeartAnimation_2.png"));
@@ -99,9 +99,9 @@ public class GameView extends InputAdapter implements Screen {
         killsLabel.setPosition(10, Gdx.graphics.getHeight() - 90);
         stage.addActor(killsLabel);
 
-        scoreLabel = new Label("Score: " + controller.getPlayerController().getPlayer().getScore(), skin);
-        scoreLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
-        stage.addActor(scoreLabel);
+        ammoLabel = new Label("Ammo: " + controller.getWeaponController().getWeapon().getAmmo(), skin);  // Assuming getAmmo() exists
+        ammoLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
+        stage.addActor(ammoLabel);
 
         speedLable = new Label("Speed: " + controller.getPlayerController().getPlayer().getSpeed(), skin);
         speedLable.setPosition(Gdx.graphics.getWidth() - 400, Gdx.graphics.getHeight() - 40);
@@ -177,7 +177,7 @@ public class GameView extends InputAdapter implements Screen {
 
         healthLabel.setText("HP: " + controller.getPlayerHealth());
         killsLabel.setText("Kills: " + controller.getKillCount());
-        scoreLabel.setText("Score: " + controller.getPlayerController().getPlayer().getScore());
+        ammoLabel.setText("Ammo: " + controller.getWeaponController().getWeapon().getAmmo());
         levelLabel.setText("Level: " + controller.getPlayerController().getPlayer().getLevel());
         expLable.setText("exp: " + controller.getPlayerController().getPlayer().getExp());
         speedLable.setText("Speed: " + controller.getPlayerController().getPlayer().getSpeed());
