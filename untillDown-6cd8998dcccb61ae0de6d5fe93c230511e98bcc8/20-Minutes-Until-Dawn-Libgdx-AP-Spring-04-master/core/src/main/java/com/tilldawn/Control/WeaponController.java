@@ -128,6 +128,7 @@ public class WeaponController {
             for (Monster m : monsters) {
                 if (b.getSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
                     m.takeDamage(b.getDamage());
+                    m.applyKnockback(b.getSprite().getX(), b.getSprite().getY(), 10f);
 
                     if (gameView != null) {
                         float popupX = m.getSprite().getX() + m.getSprite().getWidth() / 2;

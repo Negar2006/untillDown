@@ -93,12 +93,11 @@ public class MonsterController {
 
             if (m.isDead()) {
                 if (!m.isDeathAnimationFinished()) {
-                    if (!m.isDying()) m.playDeathAnimation();  // Only trigger once
+                    if (!m.isDying()) m.playDeathAnimation();
                     m.updateAndDraw(batch, player);
                     continue;
                 }
 
-                // Now safe to remove
                 iter.remove();
                 overlapTimers.remove(m);
                 int newKill = gameController.getKillCount() + 1;

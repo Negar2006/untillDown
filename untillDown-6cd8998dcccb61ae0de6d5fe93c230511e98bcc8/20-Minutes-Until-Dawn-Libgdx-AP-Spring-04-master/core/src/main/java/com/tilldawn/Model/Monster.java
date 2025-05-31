@@ -30,6 +30,10 @@ public class Monster {
     private boolean deathAnimFinished = false;
     private Animation<Texture> deathAnimation;
     private float deathStateTime = 0f;
+    private float knockbackX = 0f;
+    private float knockbackY = 0f;
+    private float knockbackDecay = 0.9f;
+
 
     public Monster(monsterTypes type) {
         this.deathAnimation = GameAssetManager.getGameAssetManager().getDeathAnimation();
@@ -155,6 +159,12 @@ public class Monster {
 
         time += delta;
 
+        if (Math.abs(knockbackX) > 0.01f || Math.abs(knockbackY) > 0.01f) {
+            sprite.translate(knockbackX, knockbackY);
+            knockbackX *= knockbackDecay;
+            knockbackY *= knockbackDecay;
+        }
+
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.Eyebat) {
             moveTowards(player.getPlayerSprite().getX(), player.getPlayerSprite().getY());
         }
@@ -257,5 +267,20 @@ public class Monster {
     public boolean isDying() {
         return dying;
     }
+
+    public void applyKnockback(float fromX, float fromY, float strength) {
+        if (type == monsterTypes.TreeMonster) return;
+
+        float dx = sprite.getX() - fromX;
+        float dy = sprite.getY() - fromY;
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
+        if (length != 0) {
+            dx /= length;
+            dy /= length;
+        }
+        knockbackX = dx * strength;
+        knockbackY = dy * strength;
+    }
+
 }
 
