@@ -13,12 +13,17 @@ import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Main;
 import com.tilldawn.Model.GameAssetManager;
+import com.tilldawn.Model.enums.Language;
 
 public class SettingsView implements Screen {
     private Stage stage;
     private final SettingsController ctrl;
     private final Skin skin;
     private final Table table;
+
+    private Label volumeLabel, changeKeyLabel;
+    private CheckBox sfxToggle, autoReloadToggle, grayToggle;
+    private TextButton setKeyButton, backButton, pauseMusicButton, languageToggleButton;
 
     public SettingsView(SettingsController controller, Skin skin) {
         this.ctrl = controller;
@@ -32,61 +37,31 @@ public class SettingsView implements Screen {
         Gdx.input.setInputProcessor(stage);
         this.table.setFillParent(true);
 
-        Label volumeLabel = new Label("Music Volume", skin);
+        volumeLabel = new Label("Music Volume", skin);
+        changeKeyLabel = new Label("Change Cheat Key:", skin);
+
         final Slider volumeSlider = new Slider(0, 1, 0.1f, false, skin);
         volumeSlider.setValue(ctrl.getMusicVolume());
 
-        Label musicLabel = new Label("Background Music", skin);
         final SelectBox<String> musicSelectBox = new SelectBox<>(skin);
         musicSelectBox.setItems("Montero", "rise_up", "walk_thru_fire");
         musicSelectBox.setSelected(ctrl.getCurrentMusic());
 
-        final CheckBox sfxToggle = new CheckBox("Enable Sound Effects", skin);
+        // چک‌باکس‌ها
+        sfxToggle = new CheckBox("Enable Sound Effects", skin);
         sfxToggle.setChecked(ctrl.isSfxEnabled());
-        sfxToggle.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ctrl.setSfxEnabled(sfxToggle.isChecked());
-                if (sfxToggle.isChecked()) {
-                    ctrl.playSfx(ctrl.getClickSound());
-                }
-            }
-        });
 
-        final CheckBox autoReloadToggle = new CheckBox("Enable Auto Reload", skin);
+        autoReloadToggle = new CheckBox("Enable Auto Reload", skin);
         autoReloadToggle.setChecked(ctrl.isAutoReloadEnabled());
-        autoReloadToggle.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                ctrl.setAutoReloadEnabled(autoReloadToggle.isChecked());
-//                ctrl.setAutoReloadEnabled(true);
-            }
-        });
 
+        grayToggle = new CheckBox("Enable Grayscale Mode", skin);
+        grayToggle.setChecked(ctrl.isGrayscaleEnabled());
 
-        final CheckBox gray = new CheckBox("Enable Grayscale Mode", skin);
-        gray.setChecked(ctrl.isGrayscaleEnabled());
-        gray.addListener(new ChangeListener() {
-            @Override public void changed(ChangeEvent event, Actor actor) {
-                ctrl.setGrayscaleEnabled(gray.isChecked());
-            }
-        });
-
-        // Cheat Key Customization
-        Label changeKeyLabel = new Label("Change Cheat Key:", skin);
         final SelectBox<String> actionSelectBox = new SelectBox<>(skin);
-        actionSelectBox.setItems(
-            "Return to Main Menu",
-            "Kill Monster",
-            "Kill EyeBat",
-            "Add Time",
-            "Level Up",
-            "Reload"
-        );
+        actionSelectBox.setItems("Return to Main Menu", "Kill Monster", "Kill EyeBat", "Add Time", "Level Up", "Reload");
 
         final TextField keyInput = new TextField("", skin);
-        TextButton setKeyButton = new TextButton("Set Key", skin);
-
+        setKeyButton = new TextButton("Set Key", skin);
         setKeyButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -94,25 +69,20 @@ public class SettingsView implements Screen {
                 try {
                     int key = Input.Keys.valueOf(input);
                     String keyName = null;
-                    switch (actionSelectBox.getSelected()) {
-                        case "Return to Main Menu":
-                            keyName = "RETURN_MENU";
-                            break;
-                        case "Kill Monster":
-                            keyName = "KILL_MONSTER";
-                            break;
-                        case "Kill EyeBat":
-                            keyName = "KILL_EYEBAT";
-                            break;
-                        case "Add Time":
-                            keyName = "ADD_TIME";
-                            break;
-                        case "Level Up":
-                            keyName = "LEVEL_UP";
-                            break;
-                        case "Reload":
-                            keyName = "RELOAD";
-                            break;
+                    String selected = actionSelectBox.getSelected();
+
+                    if (selected.equals("Return to Main Menu")) {
+                        keyName = "RETURN_MENU";
+                    } else if (selected.equals("Kill Monster")) {
+                        keyName = "KILL_MONSTER";
+                    } else if (selected.equals("Kill EyeBat")) {
+                        keyName = "KILL_EYEBAT";
+                    } else if (selected.equals("Add Time")) {
+                        keyName = "ADD_TIME";
+                    } else if (selected.equals("Level Up")) {
+                        keyName = "LEVEL_UP";
+                    } else if (selected.equals("Reload")) {
+                        keyName = "RELOAD";
                     }
 
                     if (keyName != null) {
@@ -125,7 +95,7 @@ public class SettingsView implements Screen {
             }
         });
 
-        TextButton backButton = new TextButton("Back", skin);
+        backButton = new TextButton("Back", skin);
         backButton.addListener(event -> {
             if (backButton.isPressed()) {
                 ctrl.playSfx(ctrl.getClickSound());
@@ -137,7 +107,28 @@ public class SettingsView implements Screen {
             return true;
         });
 
-        final TextButton pauseMusicButton = getTextButton();
+        pauseMusicButton = new TextButton("Pause Music", skin);
+        pauseMusicButton.addListener(event -> {
+            if (!pauseMusicButton.isPressed()) return false;
+            ctrl.playSfx(ctrl.getClickSound());
+            if (ctrl.isMusicPlaying()) {
+                ctrl.pauseMusic();
+                pauseMusicButton.setText(ctrl.getCurrentLanguage() == Language.FRENCH ? "Reprendre la musique" : "Resume Music");
+            } else {
+                ctrl.resumeMusic();
+                pauseMusicButton.setText(ctrl.getCurrentLanguage() == Language.FRENCH ? "Mettre en pause" : "Pause Music");
+            }
+            return true;
+        });
+
+        languageToggleButton = new TextButton("Switch to French", skin);
+        languageToggleButton.addListener(event -> {
+            ctrl.toggleLanguage();
+            updateLanguageTexts();
+            languageToggleButton.setText(ctrl.getCurrentLanguage() == Language.ENGLISH
+                ? "Switch to French" : "Changer en anglais");
+            return true;
+        });
 
         volumeSlider.addListener(event -> {
             if (volumeSlider.isDragging()) return false;
@@ -150,13 +141,17 @@ public class SettingsView implements Screen {
             return true;
         });
 
+        ScrollPane scrollPane = new ScrollPane(table, skin);
+        scrollPane.setFillParent(true);
+        scrollPane.setScrollingDisabled(false, false);
+
+        table.add(languageToggleButton).pad(10).row();
         table.add(volumeLabel).pad(10).row();
         table.add(volumeSlider).width(300).pad(10).row();
-        table.add(musicLabel).pad(10).row();
         table.add(musicSelectBox).width(300).pad(10).row();
         table.add(sfxToggle).pad(10).row();
         table.add(autoReloadToggle).pad(10).row();
-        table.add(gray).pad(10).row();
+        table.add(grayToggle).pad(10).row();
 
         table.add(changeKeyLabel).padTop(20).row();
         table.add(actionSelectBox).width(250).padBottom(5).row();
@@ -166,33 +161,28 @@ public class SettingsView implements Screen {
         table.add(pauseMusicButton).pad(10).row();
         table.add(backButton).pad(20).row();
 
-        stage.addActor(table);
+        stage.addActor(scrollPane);
+
+        updateLanguageTexts();
     }
 
-    private TextButton getTextButton() {
-        final TextButton pauseMusicButton = new TextButton("Pause Music", skin);
-        pauseMusicButton.addListener(event -> {
-            if (!pauseMusicButton.isPressed()) return false;
+    private void updateLanguageTexts() {
+        Language lang = ctrl.getCurrentLanguage();
 
-            ctrl.playSfx(ctrl.getClickSound());
-
-            if (ctrl.isMusicPlaying()) {
-                ctrl.pauseMusic();
-                pauseMusicButton.setText("Resume Music");
-            } else {
-                ctrl.resumeMusic();
-                pauseMusicButton.setText("Pause Music");
-            }
-
-            return true;
-        });
-        return pauseMusicButton;
+        volumeLabel.setText(lang == Language.FRENCH ? "Volume de la musique" : "Music Volume");
+        sfxToggle.setText(lang == Language.FRENCH ? "Activer les effets sonores" : "Enable Sound Effects");
+        autoReloadToggle.setText(lang == Language.FRENCH ? "Activer le rechargement automatique" : "Enable Auto Reload");
+        grayToggle.setText(lang == Language.FRENCH ? "Activer le mode niveaux de gris" : "Enable Grayscale Mode");
+        changeKeyLabel.setText(lang == Language.FRENCH ? "Changer la touche de triche :" : "Change Cheat Key:");
+        setKeyButton.setText(lang == Language.FRENCH ? "Définir la touche" : "Set Key");
+        backButton.setText(lang == Language.FRENCH ? "Retour" : "Back");
+        pauseMusicButton.setText(ctrl.isMusicPlaying()
+            ? (lang == Language.FRENCH ? "Mettre en pause" : "Pause Music")
+            : (lang == Language.FRENCH ? "Reprendre la musique" : "Resume Music"));
     }
 
-    @Override
-    public void render(float delta) {
+    @Override public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
-
         SpriteBatch batch = (SpriteBatch) stage.getBatch();
 
         if (ctrl.isGrayscaleEnabled() && ctrl.getGrayscaleShader().isCompiled()) {

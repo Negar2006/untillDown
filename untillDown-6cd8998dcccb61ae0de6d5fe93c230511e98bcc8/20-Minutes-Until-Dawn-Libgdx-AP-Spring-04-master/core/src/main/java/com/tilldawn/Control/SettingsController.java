@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.tilldawn.Model.enums.Language;
 
 import java.util.HashMap;
 
@@ -21,6 +22,7 @@ public class SettingsController {
     private ShaderProgram grayscaleShader;
     private final Sound clickSound;
     private final HashMap<String, Integer> cheatKeys = new HashMap<>();
+    private Language currentLanguage = Language.ENGLISH;
 
     public SettingsController() {
         autoReloadEnabled = true;
@@ -81,6 +83,7 @@ public class SettingsController {
     }
 
     public float getMusicVolume() { return musicVolume; }
+
     public String getCurrentMusic() { return currentMusic; }
     public boolean isSfxEnabled() { return sfxEnabled; }
     public boolean isAutoReloadEnabled() { return autoReloadEnabled; }
@@ -91,7 +94,6 @@ public class SettingsController {
     public void pauseMusic() {
         if (isMusicPlaying()) currentPlayingMusic.pause();
     }
-
     public void resumeMusic() {
         if (currentPlayingMusic != null && !currentPlayingMusic.isPlaying()) {
             currentPlayingMusic.play();
@@ -132,6 +134,14 @@ public class SettingsController {
 
     public void setCheatKey(String name, int key) {
         cheatKeys.put(name, key);
+    }
+
+    public Language getCurrentLanguage() {
+        return currentLanguage;
+    }
+
+    public void toggleLanguage() {
+        currentLanguage = (currentLanguage == Language.ENGLISH) ? Language.FRENCH : Language.ENGLISH;
     }
 
 }
