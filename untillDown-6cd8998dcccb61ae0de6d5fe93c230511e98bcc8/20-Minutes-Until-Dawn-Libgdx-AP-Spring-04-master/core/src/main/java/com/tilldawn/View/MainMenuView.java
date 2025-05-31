@@ -3,6 +3,7 @@ package com.tilldawn.View;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -58,6 +59,28 @@ public class MainMenuView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/new.fnt"));
+
+        gameTitle.setStyle(new Label.LabelStyle(font, gameTitle.getStyle().fontColor));
+        usernameLabel.setStyle(new Label.LabelStyle(font, usernameLabel.getStyle().fontColor));
+        scoreLabel.setStyle(new Label.LabelStyle(font, scoreLabel.getStyle().fontColor));
+        numberOfKilling.setStyle(new Label.LabelStyle(font, numberOfKilling.getStyle().fontColor));
+
+        TextButton[] buttons = {
+            playButton, settingsButton, profileButton,
+            scoreboardButton, continueButton, logoutButton,
+            talentButton, registerButton, exitButton
+        };
+        for (TextButton btn : buttons) {
+            TextButton.TextButtonStyle style = btn.getStyle();
+            style.font = font;
+            btn.setStyle(style);
+        }
+
+        TextField.TextFieldStyle fieldStyle = field.getStyle();
+        fieldStyle.font = font;
+        field.setStyle(fieldStyle);
+
         table.setFillParent(true);
         table.top().pad(15);
 
@@ -73,17 +96,17 @@ public class MainMenuView implements Screen {
         table.add(scoreLabel).padBottom(30).colspan(3).row();
         table.add(numberOfKilling).padBottom(20).colspan(3).row();
 
-        table.add(playButton).width(300).height( 120).pad(15);
-        table.add(settingsButton).width(300).height( 120).pad(15);
-        table.add(profileButton).width(300).height( 120).pad(15).row();
+        table.add(playButton).width(300).height(120).pad(15);
+        table.add(settingsButton).width(300).height(120).pad(15);
+        table.add(profileButton).width(300).height(120).pad(15).row();
 
-        table.add(scoreboardButton).width(300).height( 120).pad(15);
-        table.add(continueButton).width(300).height( 120).pad(15);
-        table.add(logoutButton).width(300).height( 120).pad(15).row();
+        table.add(scoreboardButton).width(300).height(120).pad(15);
+        table.add(continueButton).width(300).height(120).pad(15);
+        table.add(logoutButton).width(300).height(120).pad(15).row();
 
-        table.add(talentButton).width(300).height( 120).pad(15);
-        table.add(registerButton).width(300).height( 120).pad(15);
-        table.add(exitButton).width(300).height( 120).pad(15).row();
+        table.add(talentButton).width(300).height(120).pad(15);
+        table.add(registerButton).width(300).height(120).pad(15);
+        table.add(exitButton).width(300).height(120).pad(15).row();
 
         stage.addActor(table);
     }
