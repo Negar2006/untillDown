@@ -2,7 +2,9 @@ package com.tilldawn;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Json;
@@ -30,6 +32,7 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        setCustomCursor();
         main = this;
         settings = new SettingsController();
         batch = new SpriteBatch();
@@ -65,4 +68,12 @@ public class Main extends Game {
     public SettingsController getSettingsController() {
         return settings;
     }
+
+    private void setCustomCursor() {
+        Pixmap pixmap = new Pixmap(Gdx.files.internal("shooting.png"));
+        Cursor cursor = Gdx.graphics.newCursor(pixmap, 0, 0);
+        Gdx.graphics.setCursor(cursor);
+        pixmap.dispose();
+    }
+
 }
