@@ -12,9 +12,6 @@ import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
 
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameController {
@@ -121,7 +118,7 @@ public class GameController {
         Player player = playerController.getPlayer();
         float playerX = player.getPlayerSprite().getX();
         float playerY = player.getPlayerSprite().getY();
-        float radius = 50f;
+        float radius = 200f;
 
         for (Monster monster : monsterController.getTentacleMonsters()) {
             killingAllMonster(playerX, playerY, radius, monster);
@@ -310,5 +307,9 @@ public class GameController {
 
     public void setRemainingTimeMillis(long time) {
         this.remainingTimeMillis = time;
+    }
+
+    public WorldController getWorldController() {
+        return this.worldController;
     }
 }

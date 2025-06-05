@@ -1,21 +1,13 @@
 package com.tilldawn;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.tilldawn.Control.MainMenuController;
 import com.tilldawn.Control.RegisterMenuController;
 import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.User;
-import com.tilldawn.View.LoginMenuView;
-import com.tilldawn.View.MainMenuView;
 import com.tilldawn.View.RegisterMenuViews;
 
 import java.util.HashMap;

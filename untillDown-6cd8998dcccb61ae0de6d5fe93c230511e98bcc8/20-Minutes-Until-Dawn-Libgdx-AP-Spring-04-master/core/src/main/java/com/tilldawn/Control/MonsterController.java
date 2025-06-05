@@ -63,6 +63,7 @@ public class MonsterController {
         if (totalGameTime >= (totalGame / 2) && !isElder) {
             ElderMonster.add(new Monster(monsterTypes.Elder));
             isElder = true;
+            gameController.getWorldController().setShieldActive(true);
         }
 
         seeds.removeIf(seed -> {
@@ -92,6 +93,9 @@ public class MonsterController {
             Monster m = iter.next();
 
             if (m.isDead()) {
+                if(m.getType().equals(monsterTypes.Elder)){
+                    gameController.getWorldController().setShieldActive(false);
+                }
                 if (!m.isDeathAnimationFinished()) {
                     if (!m.isDying()) m.playDeathAnimation();
                     m.updateAndDraw(batch, player);
@@ -214,4 +218,3 @@ public class MonsterController {
         this.treesSpawned = treesSpawned;
     }
 }
-
