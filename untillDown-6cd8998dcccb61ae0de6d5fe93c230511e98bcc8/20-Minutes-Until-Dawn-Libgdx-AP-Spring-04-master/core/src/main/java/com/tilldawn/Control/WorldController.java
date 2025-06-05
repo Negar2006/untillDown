@@ -13,19 +13,16 @@ public class WorldController {
     private PlayerController playerController;
     private Texture backgroundTexture;
     private Texture radialGradientTexture;
-    private Texture circleTexture;
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
     private float shieldRadius;
-    private long lastShrinkTime;
     private float shrinkingRadius = -1f;
-    private float shrinkSpeed = 1000f;
+    private float shrinkSpeed = 100f;
     private boolean shieldActive = false;
 
     public WorldController(PlayerController playerController) {
         this.playerController = playerController;
         this.backgroundTexture = new Texture("background.png");
-        this.circleTexture = new Texture("circle_shield.png");
         this.radialGradientTexture = new Texture("radial_gradient11.png");
 
         this.camera = new OrthographicCamera();
@@ -33,25 +30,50 @@ public class WorldController {
 
         shapeRenderer = new ShapeRenderer();
         shieldRadius = Math.max(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()) * 1.2f;
-        lastShrinkTime = TimeUtils.millis();
     }
 
     public void update() {
-
         Player player = playerController.getPlayer();
 
         camera.position.set(player.getPosX(), player.getPosY(), 0);
         camera.update();
-        Main.getBatch().setProjectionMatrix(camera.combined);
-        drawBackground(player);
 
-        if (shieldActive) {
-            drawShieldCircleWithShape(player);
-        }
-        applyRadialGradient(player);
+        SpriteBatch batch = Main.getBatch();
+        batch.setProjectionMatrix(camera.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+
+        drawBackground(batch, player);
+        applyRadialGradient(batch, player);
+
     }
 
-    private void drawShieldCircleWithShape(Player player) {
+    private void drawBackground(SpriteBatch batch, Player player) {
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+
+        float backgroundWidth = Math.max(screenWidth, shieldRadius * 2);
+        float backgroundHeight = Math.max(screenHeight, shieldRadius * 2);
+
+        batch.draw(backgroundTexture,
+            player.getPosX() - backgroundWidth / 2,
+            player.getPosY() - backgroundHeight / 2,
+            backgroundWidth,
+            backgroundHeight);
+    }
+
+    private void applyRadialGradient(SpriteBatch batch, Player player) {
+        float playerX = player.getPosX();
+        float playerY = player.getPosY();
+        float size = shieldRadius * 2;
+
+        batch.draw(radialGradientTexture,
+            playerX - shieldRadius,
+            playerY - shieldRadius,
+            size,
+            size);
+    }
+
+    public void drawShieldCircleWithShape(Player player) {
         float deltaTime = Gdx.graphics.getDeltaTime();
 
         if (shrinkingRadius == -1f) {
@@ -64,41 +86,14 @@ public class WorldController {
         float playerX = player.getPosX();
         float playerY = player.getPosY();
 
-
-        shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0.4f, 0.8f, 1f, 1f);
         shapeRenderer.circle(playerX, playerY, shrinkingRadius);
         shapeRenderer.end();
     }
 
-    private void drawBackground(Player player) {
-        SpriteBatch batch = Main.getBatch();
-
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-
-        float backgroundWidth = Math.max(screenWidth, shieldRadius * 2);
-        float backgroundHeight = Math.max(screenHeight, shieldRadius * 2);
-
-        batch.setColor(1, 1, 1, 1);
-        batch.draw(backgroundTexture,
-            player.getPosX() - backgroundWidth / 2,
-            player.getPosY() - backgroundHeight / 2,
-            backgroundWidth,
-            backgroundHeight);
-    }
-
-    private void applyRadialGradient(Player player) {
-        SpriteBatch batch = Main.getBatch();
-
-        float playerX = player.getPosX();
-        float playerY = player.getPosY();
-
-        float size = shieldRadius * 2;
-
-        batch.setColor(1, 1, 1, 1);
-        batch.draw(radialGradientTexture, playerX - shieldRadius, playerY - shieldRadius, size, size);
+    public boolean isShieldActive() {
+        return shieldActive;
     }
 
     public void setShieldActive(boolean shieldActive) {
@@ -108,4 +103,12 @@ public class WorldController {
         }
     }
 
+    public void checkShieldCollision(Player player) {
+        if (!shieldActive) return;
+
+        if (shrinkingRadius <= 50 && shrinkingRadius > 0) {
+            player.takeDamage(5);
+            System.out.println("Shield hit! Player health decreased by 5.");
+        }
+    }
 }

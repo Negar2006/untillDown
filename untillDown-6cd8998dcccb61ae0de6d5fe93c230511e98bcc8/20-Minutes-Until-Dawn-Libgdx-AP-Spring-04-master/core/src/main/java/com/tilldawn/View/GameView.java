@@ -201,6 +201,11 @@ public class GameView extends InputAdapter implements Screen {
         stage.draw();
 
         Main.getBatch().end();
+
+        if (controller.getWorldController().isShieldActive()) {
+            controller.getWorldController().drawShieldCircleWithShape(controller.getPlayerController().getPlayer());
+            controller.getWorldController().checkShieldCollision(controller.getPlayerController().getPlayer());
+        }
     }
 
     @Override
