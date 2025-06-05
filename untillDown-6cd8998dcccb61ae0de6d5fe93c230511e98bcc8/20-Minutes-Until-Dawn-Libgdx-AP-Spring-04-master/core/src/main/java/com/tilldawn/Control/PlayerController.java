@@ -89,10 +89,6 @@ public class PlayerController {
     public GameController getGameController() {
         return gameController;
     }
-
-    public void setGameController(GameController gameController) {
-        this.gameController = gameController;
-    }
 }
 
 

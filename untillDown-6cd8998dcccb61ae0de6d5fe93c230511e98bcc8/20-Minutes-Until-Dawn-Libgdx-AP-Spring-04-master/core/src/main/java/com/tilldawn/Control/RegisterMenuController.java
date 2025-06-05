@@ -37,61 +37,90 @@ public class RegisterMenuController {
         view.getRegisterButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String username = view.getUsernameField().getText().trim();
-                String password = view.getPasswordField().getText().trim();
-                String securityAnswer = view.getSecurityQuestionField().getText().trim();
-                String character = view.getSelectedCharacterName();
-
-                if (username.isEmpty() || password.isEmpty() || securityAnswer.isEmpty()) {
-                    view.setFeedbackText("All fields must be filled.");
-                } else if (Gdx.files.local("users/" + username + ".json").exists()) {
-                    view.setFeedbackText("Username already taken.");
-                } else if (password.length() < 8) {
-                    view.setFeedbackText("Password must be at least 8 characters.");
-                } else if (!password.matches(".*\\d.*")) {
-                    view.setFeedbackText("Password must include a number.");
-                } else if (!password.matches(".*[A-Z].*")) {
-                    view.setFeedbackText("Password must include an uppercase letter.");
-                } else if (!password.matches(".*[()\\*$%@#].*")) {
-                    view.setFeedbackText("Password must include a special character: ()*$%@#");
-                } else {
-                    User newUser = new User(username, password, securityAnswer, character, 0, 0, 0);
-                    usersDB.put(username, newUser);
-                    saveUserToJson(newUser);
-                    saveUserToDatabase(newUser);
-                    Gdx.app.log("Register", "Registered: " + newUser);
-                    view.setFeedbackText("Registration successful!");
-                    registrationSuccess = true;
-                    isGuest = false;
-                    handleRegisterMenuButtons();
-                }
+                handleRegister();
             }
         });
 
         view.getGuestLoginButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("GuestLogin", "Guest user entered");
-                isGuest = true;
-                registrationSuccess = true;
-                handleGuestLogin();
+                handleGuestLoginClick();
             }
         });
 
         view.getLoginButton().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("LoginButton", "User pressed Login button from RegisterMenu");
-                Main.getMain().getScreen().dispose();
-                Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                handleLoginRedirect();
             }
         });
     }
 
+    private void handleRegister() {
+        String username = view.getUsernameField().getText().trim();
+        String password = view.getPasswordField().getText().trim();
+        String securityAnswer = view.getSecurityQuestionField().getText().trim();
+        String character = view.getSelectedCharacterName();
+
+        String validationMessage = validateRegistrationFields(username, password, securityAnswer);
+        if (validationMessage != null) {
+            view.setFeedbackText(validationMessage);
+            return;
+        }
+
+        User newUser = new User(username, password, securityAnswer, character, 0, 0, 0);
+        usersDB.put(username, newUser);
+        saveUserToJson(newUser);
+        saveUserToDatabase(newUser);
+
+        Gdx.app.log("Register", "Registered: " + newUser);
+        view.setFeedbackText("Registration successful!");
+        registrationSuccess = true;
+        isGuest = false;
+        handleRegisterMenuButtons();
+    }
+
+    private String validateRegistrationFields(String username, String password, String securityAnswer) {
+        if (username.isEmpty() || password.isEmpty() || securityAnswer.isEmpty()) {
+            return "All fields must be filled.";
+        }
+        if (Gdx.files.local("users/" + username + ".json").exists()) {
+            return "Username already taken.";
+        }
+        if (password.length() < 8) {
+            return "Password must be at least 8 characters.";
+        }
+        if (!password.matches(".*\\d.*")) {
+            return "Password must include a number.";
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            return "Password must include an uppercase letter.";
+        }
+        if (!password.matches(".*[()\\*$%@#].*")) {
+            return "Password must include a special character: ()*$%@#";
+        }
+        return null;
+    }
+
+    private void handleGuestLoginClick() {
+        Gdx.app.log("GuestLogin", "Guest user entered");
+        isGuest = true;
+        registrationSuccess = true;
+        handleGuestLogin();
+    }
+
+    private void handleLoginRedirect() {
+        Gdx.app.log("LoginButton", "User pressed Login button from RegisterMenu");
+        Main.getMain().getScreen().dispose();
+        Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+    }
+
+
     private void handleGuestLogin() {
         if (view != null && registrationSuccess) {
             Main.getMain().getScreen().dispose();
-            Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+            Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(),
+                GameAssetManager.getGameAssetManager().getSkin()));
             registrationSuccess = false;
         }
     }
@@ -100,9 +129,11 @@ public class RegisterMenuController {
         if (view != null && registrationSuccess) {
             Main.getMain().getScreen().dispose();
             if (isGuest)
-                Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                Main.getMain().setScreen(new PreGameMenuView(new PreGameMenuController(),
+                    GameAssetManager.getGameAssetManager().getSkin()));
             else
-                Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(), GameAssetManager.getGameAssetManager().getSkin()));
+                Main.getMain().setScreen(new LoginMenuView(new LoginMenuController(),
+                    GameAssetManager.getGameAssetManager().getSkin()));
             registrationSuccess = false;
         }
     }
@@ -155,5 +186,4 @@ public class RegisterMenuController {
             e.printStackTrace();
         }
     }
-
 }

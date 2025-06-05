@@ -1,11 +1,11 @@
 package com.tilldawn.Control;
 
 public class GameOverController {
-    private String username;
-    private int score;
-    private int kills;
-    private float health;
-    private String gameResult;  // new field for game result
+    private final String username;
+    private final int score;
+    private final int kills;
+    private final float health;
+    private final String gameResult;
     private long timeAliveMillis;
 
     public GameOverController(String username, int score, int kills, float health, long timeAliveMillis, String gameResult) {
@@ -31,10 +31,6 @@ public class GameOverController {
 
     public float getHealth() {
         return health;
-    }
-
-    public void calculateScore() {
-        this.score = (int) (timeAliveMillis / 1000 * kills);
     }
 
     public String getGameResult() {

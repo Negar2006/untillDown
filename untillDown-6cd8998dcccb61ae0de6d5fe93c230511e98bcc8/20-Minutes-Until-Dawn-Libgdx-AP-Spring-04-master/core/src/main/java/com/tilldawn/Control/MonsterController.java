@@ -32,7 +32,6 @@ public class MonsterController {
     }
 
     public void update(Player player, SpriteBatch batch, float totalGameTime, float totalGame) {
-
         if (!treesSpawned) {
             spawnInitialTrees();
             treesSpawned = true;
@@ -110,17 +109,6 @@ public class MonsterController {
                 seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
                 continue;
             }
-
-            if (m.isDead()) {
-                iter.remove();
-                overlapTimers.remove(m);  // clean up
-                int newKill = gameController.getKillCount() + 1;
-                gameController.setNumberOfKill(newKill);
-                player.addScore(m.getType().getScore());
-                seeds.add(new Seed(m.getType(), m.getX(), m.getY()));
-                continue;
-            }
-
             m.updateAndDraw(batch, player);
 
             if (player.getPlayerSprite().getBoundingRectangle().overlaps(m.getSprite().getBoundingRectangle())) {
@@ -131,12 +119,9 @@ public class MonsterController {
                     player.activateInvincibility();
                     time = 0f;
                 }
-
                 overlapTimers.put(m, time);
             }
-            else {
-                overlapTimers.put(m, 0f);
-            }
+            else overlapTimers.put(m, 0f);
         }
     }
 
@@ -161,31 +146,6 @@ public class MonsterController {
         }
     }
 
-    public void clearMonsters() {
-        tentacleMonsters.clear();
-        eyebatMonsters.clear();
-        treeMonsters.clear();
-        ElderMonster.clear();
-    }
-
-    public void addMonster(Monster monster) {
-        switch (monster.getType()) {
-            case TentacleMonster:
-                tentacleMonsters.add(monster);
-                break;
-            case Eyebat:
-                eyebatMonsters.add(monster);
-                break;
-            case TreeMonster:
-                treeMonsters.add(monster);
-                break;
-            case Elder:
-                ElderMonster.add(monster);
-                break;
-        }
-    }
-
-
     public ArrayList<Monster> getEyebatMonsters() {
         return eyebatMonsters;
     }
@@ -200,10 +160,6 @@ public class MonsterController {
 
     public ArrayList<Monster> getElderMonster() {
         return ElderMonster;
-    }
-
-    public ArrayList<Seed> getSeeds() {
-        return seeds;
     }
 
     public void setTreeMonsters(ArrayList<Monster> treeMonsters) {

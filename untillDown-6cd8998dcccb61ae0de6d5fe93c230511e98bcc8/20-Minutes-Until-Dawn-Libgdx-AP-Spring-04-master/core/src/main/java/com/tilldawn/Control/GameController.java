@@ -27,7 +27,6 @@ public class GameController {
     private int numberOfKill = 0;
     private weaponType weaponType;
     private boolean isPaused = false;
-    private long pausedTimeMillis = 0;
     private long pauseStartTime = 0;
     private String fileName;
     private String gameResult = "Game Over";
@@ -186,30 +185,24 @@ public class GameController {
 
     public void endGame() {
         String username;
-        if (Main.currentUser != null) {
-            username = Main.currentUser.getUsername();
-        } else {
-            username = "guest";
-        }
+        if (Main.currentUser != null) username = Main.currentUser.getUsername();
+        else username = "guest";
 
-        int score = (int) ((System.currentTimeMillis() - startTimeMillis) / 1000L * numberOfKill); // Time alive * kills
+        int score = (int) ((System.currentTimeMillis() - startTimeMillis) / 1000L * numberOfKill);
         int kills = numberOfKill;
         long time = System.currentTimeMillis() - startTimeMillis;
         float health = playerController.getPlayer().getPlayerHealth();
 
-        if (health <= 0) {
-            gameResult = "Game Over";
-        } else if (remainingTimeMillis <= 0) {
-            gameResult = "Time's Up you win";
-        } else {
-            gameResult = "Give UP";
-        }
+        if (health <= 0) gameResult = "Game Over";
+        else if (remainingTimeMillis <= 0) gameResult = "Time's Up you win";
+        else gameResult = "Give UP";
 
         GameOverController gameOverController = new GameOverController(username, score, kills, health, time, gameResult);
 
         if (Main.currentUser != null) {
             Main.currentUser.addNumberOfKilling(kills);
             Main.currentUser.addScore(score);
+            Main.currentUser.setTimeAliveMillis(time);
         }
 
         saveUserToJson(Main.currentUser);
@@ -221,10 +214,7 @@ public class GameController {
         Json json = new Json();
         FileHandle file = Gdx.files.local("users/" + user.getUsername() + ".json");
 
-        if (!file.parent().exists()) {
-            file.parent().mkdirs();
-        }
-
+        if (!file.parent().exists()) file.parent().mkdirs();
         file.writeString(json.prettyPrint(json.toJson(user)), false);
     }
 
@@ -254,7 +244,7 @@ public class GameController {
         data.playerHealth = player.getPlayerHealth();
         data.exp = player.getExp();
         data.level = player.getLevel();
-        for(Ability ability : player.getGainAbilities()){
+        for (Ability ability : player.getGainAbilities()) {
             data.abilities.add(ability.name());
         }
 
@@ -266,7 +256,6 @@ public class GameController {
         data.remainingTimeMillis = remainingTimeMillis;
         data.weapon = this.weaponType.name();
 
-        // Tree-monster positions
         data.treeMonsterPositionX = new ArrayList<>();
         data.treeMonsterPositionY = new ArrayList<>();
         for (Monster m : monsterController.getTreeMonsters()) {
