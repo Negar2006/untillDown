@@ -66,6 +66,7 @@ public class MainMenuController {
                     player.setPosX(data.playerX);
                     player.setPosY(data.playerY);
                     player.setPlayerHealth(data.playerHealth);
+                    player.setGainAbilities(data.abilities);
 
                     MonsterController monsterController = new MonsterController();
                     monsterController.setTreesSpawned(true);

@@ -16,6 +16,16 @@ public enum Ability {
         this.texture = texture;
         this.description = description;
     }
+
+    public static Ability getByName(String string) {
+        for(Ability ability : Ability.values()) {
+            if(ability.description.equals(string)) {
+                return ability;
+            }
+        }
+        return null;
+    }
+
     public Texture getTexture() {
         return texture;
     }

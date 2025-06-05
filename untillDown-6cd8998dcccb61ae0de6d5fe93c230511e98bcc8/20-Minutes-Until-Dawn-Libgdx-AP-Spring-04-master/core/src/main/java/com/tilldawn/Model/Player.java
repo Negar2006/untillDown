@@ -30,7 +30,7 @@ public class Player {
     private ArrayList<Ability> gainAbilities = new ArrayList<>();
     private boolean isInvincible = false;
     private long invincibleStartTime = 0;
-    private final long INVINCIBLE_DURATION = 4000;
+    private final long INVINCIBLE_DURATION = 10000;
     private boolean isDead = false;
     private Texture deadTexture;
     private Sprite deadSprite;
@@ -266,4 +266,12 @@ public class Player {
         return deadSprite;
     }
 
+    public void setGainAbilities(ArrayList<String> gainAbilities) {
+        ArrayList<Ability> abilityList = new ArrayList<>();
+        for(String string : gainAbilities) {
+            Ability newAbility = Ability.getByName(string);
+            abilityList.add(newAbility);
+        }
+        this.gainAbilities = abilityList;
+    }
 }

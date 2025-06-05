@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.tilldawn.Main;
 import com.tilldawn.Model.*;
+import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.enums.weaponType;
 import com.tilldawn.View.*;
 
@@ -96,7 +97,6 @@ public class GameController {
     public void toggleAutoAim() {
         autoAimEnabled = !autoAimEnabled;
     }
-
 
     public PlayerController getPlayerController() {
         return playerController;
@@ -248,6 +248,9 @@ public class GameController {
         data.playerX = player.getPosX();
         data.playerY = player.getPosY();
         data.playerHealth = player.getPlayerHealth();
+        for(Ability ability : player.getGainAbilities()){
+            data.abilities.add(ability.name());
+        }
 
         String nameOfFile = player.getPlayerTexture().toString().replaceAll(".png", "");
         data.NameOfFile = nameOfFile;
@@ -280,7 +283,6 @@ public class GameController {
         FileHandle file = Gdx.files.local(data.playerName + ".json");
         file.writeString(jsonOut, false);
     }
-
 
     public void setView(GameView view) {
         this.view = view;
