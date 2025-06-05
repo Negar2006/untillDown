@@ -18,7 +18,7 @@ public class Player {
     private String name;
     private float posX;
     private float posY;
-    private float playerHealth = 100;
+    private float playerHealth;
     private CollisionRect rect;
     private float time = 0;
     private float speed = 100f;
@@ -273,5 +273,81 @@ public class Player {
             abilityList.add(newAbility);
         }
         this.gainAbilities = abilityList;
+    }
+
+    public void setPlayerTexture(Texture playerTexture) {
+        this.playerTexture = playerTexture;
+    }
+
+    public void setPlayerSprite(Sprite playerSprite) {
+        this.playerSprite = playerSprite;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public CollisionRect getRect() {
+        return rect;
+    }
+
+    public void setRect(CollisionRect rect) {
+        this.rect = rect;
+    }
+
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
+    }
+
+    public boolean isPlayerIdle() {
+        return isPlayerIdle;
+    }
+
+    public void setPlayerIdle(boolean playerIdle) {
+        isPlayerIdle = playerIdle;
+    }
+
+    public void setLevel(int level) {
+        Level = level;
+    }
+
+    public void setInvincible(boolean invincible) {
+        isInvincible = invincible;
+    }
+
+    public long getInvincibleStartTime() {
+        return invincibleStartTime;
+    }
+
+    public void setInvincibleStartTime(long invincibleStartTime) {
+        this.invincibleStartTime = invincibleStartTime;
+    }
+
+    public long getINVINCIBLE_DURATION() {
+        return INVINCIBLE_DURATION;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
+
+    public Texture getDeadTexture() {
+        return deadTexture;
+    }
+
+    public void setDeadTexture(Texture deadTexture) {
+        this.deadTexture = deadTexture;
+    }
+
+    public void setDeadSprite(Sprite deadSprite) {
+        this.deadSprite = deadSprite;
     }
 }

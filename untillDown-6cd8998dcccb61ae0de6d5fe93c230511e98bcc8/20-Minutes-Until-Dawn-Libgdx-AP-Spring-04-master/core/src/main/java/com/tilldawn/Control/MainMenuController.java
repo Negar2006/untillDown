@@ -65,6 +65,8 @@ public class MainMenuController {
                     player.setCharacterName(data.playerName);
                     player.setPosX(data.playerX);
                     player.setPosY(data.playerY);
+                    player.setExp(data.exp);
+                    player.setLevel(data.level);
                     player.setPlayerHealth(data.playerHealth);
                     player.setGainAbilities(data.abilities);
 
@@ -101,7 +103,8 @@ public class MainMenuController {
                         gameController.getMonsterController().getElderMonster().add(elder);
                     }
 
-                    // Switch to GameView
+                    gameController.setRemainingTimeMillis(data.remainingTimeMillis);
+
                     Main.getMain().getScreen().dispose();
                     Main.getMain().setScreen(new GameView(gameController,
                         GameAssetManager.getGameAssetManager().getSkin(),

@@ -321,6 +321,8 @@ public class GameView extends InputAdapter implements Screen {
 
                 controller.getPlayerController().getPlayer().setPosX(monster.getX());
                 controller.getPlayerController().getPlayer().setPosY(monster.getY());
+            }else{
+                System.out.println("Monster is null");
             }
             return true;
         }

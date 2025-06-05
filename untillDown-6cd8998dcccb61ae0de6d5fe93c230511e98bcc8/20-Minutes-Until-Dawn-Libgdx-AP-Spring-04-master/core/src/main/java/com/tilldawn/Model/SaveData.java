@@ -7,9 +7,12 @@ public class SaveData {
     public float playerX;
     public float playerY;
     public float playerHealth;
+    public int exp;
+    public int level;
     public ArrayList<String> abilities;
 
     public long currentTimeMillis;
+    public long remainingTimeMillis;
     public int duration;
     public String weapon;
 

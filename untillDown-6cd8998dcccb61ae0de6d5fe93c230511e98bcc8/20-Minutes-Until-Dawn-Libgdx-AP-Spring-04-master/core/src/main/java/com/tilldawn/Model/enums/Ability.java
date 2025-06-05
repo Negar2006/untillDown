@@ -19,7 +19,7 @@ public enum Ability {
 
     public static Ability getByName(String string) {
         for(Ability ability : Ability.values()) {
-            if(ability.description.equals(string)) {
+            if(ability.description.equalsIgnoreCase(string)) {
                 return ability;
             }
         }

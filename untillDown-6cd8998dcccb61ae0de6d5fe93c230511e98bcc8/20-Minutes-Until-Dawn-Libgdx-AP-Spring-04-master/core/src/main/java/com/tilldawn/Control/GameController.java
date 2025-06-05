@@ -41,18 +41,25 @@ public class GameController {
         this.startTimeMillis = System.currentTimeMillis();
         this.monsterController = new MonsterController();
         switch (weapon) {
+            case "SMG_DUAL":
             case "SMGs Dual":
                 this.weaponType = com.tilldawn.Model.enums.weaponType.SMG_DUAL;
                 break;
+            case "SHOTGUN":
             case "shotgun":
                 this.weaponType = com.tilldawn.Model.enums.weaponType.SHOTGUN;
                 break;
+            case "REVOLVER":
             case "Revolver":
                 this.weaponType = com.tilldawn.Model.enums.weaponType.REVOLVER;
                 break;
             default:
                 break;
         }
+    }
+
+    public void setGAME_DURATION_MILLIS(long GAME_DURATION_MILLIS) {
+        this.GAME_DURATION_MILLIS = GAME_DURATION_MILLIS;
     }
 
     public void setView(GameView view, Texture playerTexture, String characterName) {
@@ -248,6 +255,8 @@ public class GameController {
         data.playerX = player.getPosX();
         data.playerY = player.getPosY();
         data.playerHealth = player.getPlayerHealth();
+        data.exp = player.getExp();
+        data.level = player.getLevel();
         for(Ability ability : player.getGainAbilities()){
             data.abilities.add(ability.name());
         }
@@ -257,8 +266,7 @@ public class GameController {
 
         System.out.println(data.NameOfFile);
 
-        data.currentTimeMillis = System.currentTimeMillis();
-        data.duration = (int) (remainingTimeMillis / 60_000L);
+        data.remainingTimeMillis = remainingTimeMillis;
         data.weapon = this.weaponType.name();
 
         // Tree-monster positions
@@ -298,5 +306,9 @@ public class GameController {
 
     public boolean isReloadAutoEnabled() {
         return autoAimEnabled;
+    }
+
+    public void setRemainingTimeMillis(long time) {
+        this.remainingTimeMillis = time;
     }
 }
