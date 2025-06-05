@@ -193,13 +193,12 @@ public class GameController {
         long time = System.currentTimeMillis() - startTimeMillis;
         float health = playerController.getPlayer().getPlayerHealth();
 
-        // Determine game result (win/loss/quit)
         if (health <= 0) {
-            gameResult = "Game Over";  // Player lost
+            gameResult = "Game Over";
         } else if (remainingTimeMillis <= 0) {
-            gameResult = "Time's Up";
+            gameResult = "Time's Up you win";
         } else {
-            gameResult = "You Win";
+            gameResult = "Give UP";
         }
 
         GameOverController gameOverController = new GameOverController(username, score, kills, health, time, gameResult);

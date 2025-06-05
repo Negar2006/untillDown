@@ -179,7 +179,7 @@ public class WeaponController {
             int windowY = gd.getDefaultConfiguration().getBounds().y;
 
             int screenX = windowX + (int) targetX;
-            int screenY = windowY + Gdx.graphics.getHeight() - (int) targetY;
+            int screenY = windowY + (int) targetY;
 
             robot.mouseMove(screenX, screenY);
         } catch (AWTException e) {

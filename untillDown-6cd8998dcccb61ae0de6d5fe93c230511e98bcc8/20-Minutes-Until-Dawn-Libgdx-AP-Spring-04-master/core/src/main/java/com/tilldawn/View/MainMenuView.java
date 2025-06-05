@@ -9,7 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.tilldawn.Control.MainMenuController;
+import com.tilldawn.Control.SettingsController;
 import com.tilldawn.Main;
+import com.tilldawn.Model.enums.Language;
 
 public class MainMenuView implements Screen {
     private Stage stage;
@@ -34,22 +36,22 @@ public class MainMenuView implements Screen {
 
     public MainMenuView(MainMenuController controller, Skin skin) {
         this.controller = controller;
-        this.playButton = new TextButton("Play", skin);
-        this.gameTitle = new Label("Game Title", skin);
-        this.field = new TextField("Player Name", skin);
+        this.playButton = new TextButton("", skin);
+        this.gameTitle = new Label("", skin);
+        this.field = new TextField("", skin);
         this.table = new Table();
-        this.settingsButton = new TextButton("Settings", skin);
-        this.profileButton = new TextButton("Profile", skin);
-        this.scoreboardButton = new TextButton("Scoreboard", skin);
-        this.continueButton = new TextButton("Continue", skin);
-        this.logoutButton = new TextButton("Logout", skin);
-        this.registerButton = new TextButton("Register", skin);
-        this.exitButton = new TextButton("Exit", skin);
-        this.talentButton = new TextButton("Talent", skin);
+        this.settingsButton = new TextButton("", skin);
+        this.profileButton = new TextButton("", skin);
+        this.scoreboardButton = new TextButton("", skin);
+        this.continueButton = new TextButton("", skin);
+        this.logoutButton = new TextButton("", skin);
+        this.registerButton = new TextButton("", skin);
+        this.exitButton = new TextButton("", skin);
+        this.talentButton = new TextButton("", skin);
         setAvatar(Main.currentUser.getSelectedCharacter());
-        this.usernameLabel = new Label("Username: " + Main.currentUser.getUsername(), skin);
-        this.scoreLabel = new Label("Score: " + Main.currentUser.getScore(), skin);
-        this.numberOfKilling = new Label("Kills: " + Main.currentUser.getNumberOfKillingMonster(), skin);
+        this.usernameLabel = new Label("", skin);
+        this.scoreLabel = new Label("", skin);
+        this.numberOfKilling = new Label("", skin);
 
         controller.setView(this);
     }
@@ -84,13 +86,16 @@ public class MainMenuView implements Screen {
         table.setFillParent(true);
         table.top().pad(15);
 
+        updateLanguageTexts(); // اینجا متن‌ها رو بر اساس زبان فعلی تنظیم می‌کنیم
+        updateUserInfo();
+
+        table.clear(); // جدول رو پاک می‌کنیم که از رندر قبلی چیزی نمونده باشه
+
         table.add(gameTitle).colspan(3).padBottom(30).row();
 
         if (avatarImage != null) {
             table.add(avatarImage).size(150).padBottom(20).colspan(3).row();
         }
-
-        updateUserInfo();
 
         table.add(usernameLabel).colspan(3).padBottom(20).row();
         table.add(scoreLabel).padBottom(30).colspan(3).row();
@@ -111,7 +116,6 @@ public class MainMenuView implements Screen {
         stage.addActor(table);
     }
 
-
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
@@ -123,24 +127,16 @@ public class MainMenuView implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) { }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() { }
 
     @Override
     public void dispose() {
@@ -243,9 +239,50 @@ public class MainMenuView implements Screen {
     }
 
     public void updateUserInfo() {
-        usernameLabel.setText("Username: " + Main.currentUser.getUsername());
-        scoreLabel.setText("Score: " + Main.currentUser.getScore());
-        numberOfKilling.setText("Kills: " + Main.currentUser.getNumberOfKillingMonster());
+        usernameLabel.setText(
+            "username : " + Main.currentUser.getUsername()
+        );
+        scoreLabel.setText(
+            "score : " + Main.currentUser.getScore()
+        );
+        numberOfKilling.setText(
+            "kills : " + Main.currentUser.getNumberOfKillingMonster()
+        );
     }
 
+    public void updateLanguageTexts() {
+        Language lang =Main.getMain().getSettingsController().getCurrentLanguage();
+
+        if (lang == Language.FRENCH) {
+            gameTitle.setText("Titre du Jeu");
+            playButton.setText("Jouer");
+            settingsButton.setText("Paramètres");
+            profileButton.setText("Profil");
+            scoreboardButton.setText("Classement");
+            continueButton.setText("Continuer");
+            logoutButton.setText("Déconnexion");
+            talentButton.setText("Talent");
+            registerButton.setText("S'inscrire");
+            exitButton.setText("Quitter");
+
+            updateUserInfo();
+        } else {
+            gameTitle.setText("Game Title");
+            playButton.setText("Play");
+            settingsButton.setText("Settings");
+            profileButton.setText("Profile");
+            scoreboardButton.setText("Scoreboard");
+            continueButton.setText("Continue");
+            logoutButton.setText("Logout");
+            talentButton.setText("Talent");
+            registerButton.setText("Register");
+            exitButton.setText("Exit");
+
+            updateUserInfo();
+        }
+    }
+    public void refreshView() {
+        updateLanguageTexts();
+        updateUserInfo();
+    }
 }
