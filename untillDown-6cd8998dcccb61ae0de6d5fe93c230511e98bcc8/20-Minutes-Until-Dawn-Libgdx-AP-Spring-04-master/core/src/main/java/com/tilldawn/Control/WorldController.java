@@ -64,6 +64,7 @@ public class WorldController {
         float playerX = player.getPosX();
         float playerY = player.getPosY();
 
+
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0.4f, 0.8f, 1f, 1f);
