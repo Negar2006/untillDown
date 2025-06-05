@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.tilldawn.Main;
 import com.tilldawn.Model.User;
 import com.tilldawn.Control.ScoreboardController;
-import com.tilldawn.View.ScoreboardView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,22 +38,18 @@ public class RankingView implements Screen {
 
     @Override
     public void show() {
-        // Prepare stage and table
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
         table.clear();
         table.setFillParent(true);
         table.top().pad(50);
-
-        // Header row
         table.add(new Label("Username", skin)).pad(10);
         table.add(new Label("Score", skin)).pad(10);
         table.add(new Label("Kills", skin)).pad(10);
         table.add(new Label("Time Alive", skin)).pad(10);
         table.add(new Label("Avatar", skin)).pad(10).row();
 
-        // Populate rows
         int rankIndex = 0;
         for (User user : users) {
             Label nameLabel = new Label(user.getUsername(), skin);
@@ -72,15 +67,10 @@ public class RankingView implements Screen {
             table.add(timeLabel).pad(10);
             table.add(avatar).size(50, 50).pad(10).row();
 
-            // Highlight top 3
-            if (rankIndex == 0) {
-                nameLabel.setColor(Color.MAGENTA);
-            } else if (rankIndex == 1) {
-                nameLabel.setColor(Color.PINK);
-            } else if (rankIndex == 2) {
-                nameLabel.setColor(Color.PURPLE);
-            }
-            // Highlight current user
+            if (rankIndex == 0) nameLabel.setColor(Color.MAGENTA);
+            else if (rankIndex == 1) nameLabel.setColor(Color.PINK);
+            else if (rankIndex == 2) nameLabel.setColor(Color.PURPLE);
+
             if (user.getUsername().equalsIgnoreCase(Main.currentUser.getUsername())) {
                 nameLabel.setColor(Color.GREEN);
                 scoreLabel.setColor(Color.GREEN);
@@ -90,7 +80,6 @@ public class RankingView implements Screen {
             rankIndex++;
         }
 
-        // Back button
         TextButton backButton = new TextButton("Back to Scoreboard", skin);
         backButton.addListener(new ChangeListener() {
             @Override
@@ -124,13 +113,20 @@ public class RankingView implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {}
+    public void resize(int width, int height) {
+    }
+
     @Override
-    public void pause() {}
+    public void pause() {
+    }
+
     @Override
-    public void resume() {}
+    public void resume() {
+    }
+
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

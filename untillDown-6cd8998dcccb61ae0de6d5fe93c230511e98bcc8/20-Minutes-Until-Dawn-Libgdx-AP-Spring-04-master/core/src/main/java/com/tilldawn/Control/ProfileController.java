@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.utils.Json;
 import com.tilldawn.Main;
 import com.tilldawn.Model.User;
+
 import java.util.HashSet;
 import java.util.Set;
 

@@ -92,7 +92,6 @@ public class RegisterMenuViews implements Screen {
         table.add(new Label("Answer:", skin));
         table.add(securityQuestionField).width(200);
 
-        // Random character selection
         Random random = new Random();
         int index = random.nextInt(characterImagePaths.length);
         selectedCharacterName = characterImagePaths[index];
@@ -131,10 +130,21 @@ public class RegisterMenuViews implements Screen {
         controller.handleRegisterMenuButtons();
     }
 
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

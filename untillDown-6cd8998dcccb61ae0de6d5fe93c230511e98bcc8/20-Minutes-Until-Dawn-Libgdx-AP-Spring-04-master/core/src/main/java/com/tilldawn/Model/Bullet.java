@@ -17,7 +17,6 @@ public class Bullet {
         sprite.setX(playerX);
         sprite.setY(playerY);
 
-        // direction from player to target, normalized
         direction = new Vector2(targetX - playerX, targetY - playerY).nor();
         this.damage = damage;
     }

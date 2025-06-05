@@ -47,7 +47,6 @@ public class SettingsView implements Screen {
         musicSelectBox.setItems("Montero", "rise_up", "walk_thru_fire");
         musicSelectBox.setSelected(ctrl.getCurrentMusic());
 
-        // چک‌باکس‌ها
         sfxToggle = new CheckBox("Enable Sound Effects", skin);
         sfxToggle.setChecked(ctrl.isSfxEnabled());
 
@@ -181,7 +180,8 @@ public class SettingsView implements Screen {
             : (lang == Language.FRENCH ? "Reprendre la musique" : "Resume Music"));
     }
 
-    @Override public void render(float delta) {
+    @Override
+    public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         SpriteBatch batch = (SpriteBatch) stage.getBatch();
 
@@ -196,9 +196,27 @@ public class SettingsView implements Screen {
         batch.setShader(null);
     }
 
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() { ctrl.pauseMusic(); }
-    @Override public void resume() { ctrl.resumeMusic(); }
-    @Override public void hide() { dispose(); }
-    @Override public void dispose() { stage.dispose(); }
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+        ctrl.pauseMusic();
+    }
+
+    @Override
+    public void resume() {
+        ctrl.resumeMusic();
+    }
+
+    @Override
+    public void hide() {
+        dispose();
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
 }

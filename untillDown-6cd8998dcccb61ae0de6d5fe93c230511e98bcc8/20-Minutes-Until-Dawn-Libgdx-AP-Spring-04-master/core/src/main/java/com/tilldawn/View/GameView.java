@@ -28,6 +28,7 @@ import com.tilldawn.Model.enums.Ability;
 import com.tilldawn.Model.DamagePopup;
 import com.tilldawn.Model.GameAssetManager;
 import com.tilldawn.Model.Player;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,7 +87,6 @@ public class GameView extends InputAdapter implements Screen {
             Gdx.app.error("Shader", "Shader compile error: " + grayscaleShader.getLog());
         }
 
-
         timerLabel = new Label("Time Left: 10:00", skin);
         timerLabel.setPosition(10, Gdx.graphics.getHeight() - 30);
         stage.addActor(timerLabel);
@@ -99,7 +99,7 @@ public class GameView extends InputAdapter implements Screen {
         killsLabel.setPosition(10, Gdx.graphics.getHeight() - 90);
         stage.addActor(killsLabel);
 
-        ammoLabel = new Label("Ammo: " + controller.getWeaponController().getWeapon().getAmmo(), skin);  // Assuming getAmmo() exists
+        ammoLabel = new Label("Ammo: " + controller.getWeaponController().getWeapon().getAmmo(), skin);
         ammoLabel.setPosition(10, Gdx.graphics.getHeight() - 120);
         stage.addActor(ammoLabel);
 
@@ -107,7 +107,6 @@ public class GameView extends InputAdapter implements Screen {
         speedLable.setPosition(Gdx.graphics.getWidth() - 400, Gdx.graphics.getHeight() - 40);
         stage.addActor(speedLable);
 
-        // Create Level label
         levelLabel = new Label("Level: " + controller.getPlayerController().getPlayer().getLevel(), skin);
         levelLabel.setPosition(Gdx.graphics.getWidth() - 250, Gdx.graphics.getHeight() - 40);
         stage.addActor(levelLabel);
@@ -116,13 +115,13 @@ public class GameView extends InputAdapter implements Screen {
         expLable.setPosition(Gdx.graphics.getWidth() - 100, Gdx.graphics.getHeight() - 40);
         stage.addActor(expLable);
 
-        expProgressBar = new ProgressBar(0, 100, 1, false, skin.get("default-horizontal", ProgressBar.ProgressBarStyle.class));
+        expProgressBar = new ProgressBar(0, 100, 1, false, skin.get("default-horizontal",
+            ProgressBar.ProgressBarStyle.class));
         expProgressBar.setValue(0);
         expProgressBar.setAnimateDuration(0.25f);
         expProgressBar.setSize(300, 10);
         expProgressBar.setPosition(stage.getWidth() - 320, stage.getHeight() - 80);
 
-        // Change the color of the progress bar when full
         expProgressBar.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -134,8 +133,9 @@ public class GameView extends InputAdapter implements Screen {
 
         stage.addActor(expProgressBar);
 
-        pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture(Gdx.files.internal("pause_icon.png")))));
-        pauseButton.setPosition(Gdx.graphics.getWidth() - 60, 10);  // Positioned at bottom-right
+        pauseButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(new com.badlogic.gdx.graphics.Texture
+            (Gdx.files.internal("pause_icon.png")))));
+        pauseButton.setPosition(Gdx.graphics.getWidth() - 60, 10);
         pauseButton.setSize(50, 50);
         pauseButton.addListener(new ClickListener() {
             @Override
@@ -153,7 +153,6 @@ public class GameView extends InputAdapter implements Screen {
         playerAnimation = new Animation<>(rawPlayerAnim.getFrameDuration(), playerFrames, Animation.PlayMode.LOOP);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
-
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(this);
         Gdx.input.setInputProcessor(multiplexer);
@@ -256,7 +255,8 @@ public class GameView extends InputAdapter implements Screen {
             return true;
         }
         if (keycode == settings.getCheatKey("RELOAD") && settings.isAutoReloadEnabled()) {
-            controller.getWeaponController().getWeapon().setAmmo(controller.getWeaponController().getWeapon().getType().maxAmmo);
+            controller.getWeaponController().getWeapon().setAmmo(controller.getWeaponController().getWeapon().
+                getType().maxAmmo);
             return true;
         }
 
@@ -266,83 +266,103 @@ public class GameView extends InputAdapter implements Screen {
         }
 
         if (keycode == Input.Keys.V) {
-            if (controller.getPlayerController().getPlayer().hasAbility(Ability.VITALITY)) {
-                float newHealth = controller.getPlayerController().getPlayer().getPlayerHealth() + 20;
-                controller.getPlayerController().getPlayer().setPlayerHealth(newHealth);
-                controller.getPlayerController().getPlayer().removeAbility(Ability.VITALITY);
-            }
+            addHealth();
             return true;
         }
 
         if (keycode == Input.Keys.S) {
-            Player player = controller.getPlayerController().getPlayer();
-            if (player.hasAbility(Ability.SPEEDY)) {
-                player.setSpeed(player.getSpeed() * 2);
-
-                float speedDuration = 10f;
-                new Thread(() -> {
-                    try {
-                        Thread.sleep((long) (speedDuration * 1000));
-                        player.setSpeed(player.getSpeed() / 2);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-                player.removeAbility(Ability.SPEEDY);
-            }
+            SpeedIncrease();
             return true;
         }
 
 
         if (keycode == Input.Keys.A) {
-            Player player = controller.getPlayerController().getPlayer();
-            if (player.hasAbility(Ability.AMOCREASE)) {
-                controller.getWeaponController().getWeapon().addAmmo(5);
-                player.removeAbility(Ability.AMOCREASE);
-            }
+            ammoAdd();
             return true;
         }
 
         if (keycode == Input.Keys.P) {
-            Player player = controller.getPlayerController().getPlayer();
-
-            if (player.hasAbility(Ability.PROCREASE)) {
-                controller.getWeaponController().addProjectile(1);
-                System.out.println("Procrease used! Projectiles increased.");
-                player.removeAbility(Ability.PROCREASE);
-            }
+            addProjacle();
             return true;
         }
 
-        if(keycode == Input.Keys.H){
-            if(controller.getPlayerController().getPlayer().getPlayerHealth() <= 5) {
+        if (keycode == Input.Keys.H) {
+            if (controller.getPlayerController().getPlayer().getPlayerHealth() <= 5) {
                 controller.getPlayerController().getPlayer().setHealth(100);
             }
             return true;
         }
-        if(keycode == Input.Keys.F){
-            if(controller.getMonsterController().getElderMonster() != null){
-                Monster monster = controller.getMonsterController().getElderMonster().get(0);
-
-                controller.getPlayerController().getPlayer().setPosX(monster.getX());
-                controller.getPlayerController().getPlayer().setPosY(monster.getY());
-            }else{
-                System.out.println("Monster is null");
-            }
+        if (keycode == Input.Keys.F) {
+            eldesChaeatCode();
             return true;
         }
 
         if (keycode == Input.Keys.D) {
-            Player player = controller.getPlayerController().getPlayer();
-            if (player.hasAbility(Ability.DAMAGER)) {
-                controller.getWeaponController().getWeapon().addDamage(1.25f);
-                System.out.println("Damager used! Weapon damage is now 125%.");
-                player.removeAbility(Ability.DAMAGER);
-            }
+            IncreaseDamager();
             return true;
         }
 
         return false;
+    }
+
+    private void IncreaseDamager() {
+        Player player = controller.getPlayerController().getPlayer();
+        if (player.hasAbility(Ability.DAMAGER)) {
+            controller.getWeaponController().getWeapon().addDamage(1.25f);
+            player.removeAbility(Ability.DAMAGER);
+        }
+    }
+
+    private void eldesChaeatCode() {
+        if (controller.getMonsterController().getElderMonster() != null) {
+            Monster monster = controller.getMonsterController().getElderMonster().get(0);
+
+            controller.getPlayerController().getPlayer().setPosX(monster.getX());
+            controller.getPlayerController().getPlayer().setPosY(monster.getY());
+        }
+    }
+
+    private void addProjacle() {
+        Player player = controller.getPlayerController().getPlayer();
+
+        if (player.hasAbility(Ability.PROCREASE)) {
+            controller.getWeaponController().addProjectile(1);
+            player.removeAbility(Ability.PROCREASE);
+        }
+    }
+
+    private void ammoAdd() {
+        Player player = controller.getPlayerController().getPlayer();
+        if (player.hasAbility(Ability.AMOCREASE)) {
+            controller.getWeaponController().getWeapon().addAmmo(5);
+            player.removeAbility(Ability.AMOCREASE);
+        }
+    }
+
+    private void SpeedIncrease() {
+        Player player = controller.getPlayerController().getPlayer();
+        if (player.hasAbility(Ability.SPEEDY)) {
+            player.setSpeed(player.getSpeed() * 2);
+
+            float speedDuration = 10f;
+            new Thread(() -> {
+                try {
+                    Thread.sleep((long) (speedDuration * 1000));
+                    player.setSpeed(player.getSpeed() / 2);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            player.removeAbility(Ability.SPEEDY);
+        }
+    }
+
+    private void addHealth() {
+        if (controller.getPlayerController().getPlayer().hasAbility(Ability.VITALITY)) {
+            float newHealth = controller.getPlayerController().getPlayer().getPlayerHealth() + 20;
+            controller.getPlayerController().getPlayer().setPlayerHealth(newHealth);
+            controller.getPlayerController().getPlayer().removeAbility(Ability.VITALITY);
+        }
     }
 
     @Override
@@ -385,10 +405,6 @@ public class GameView extends InputAdapter implements Screen {
         this.controller = controller;
     }
 
-    public Array<DamagePopup> getDamagePopups() {
-        return damagePopups;
-    }
-
     private void updateHearts() {
         int playerHealth = (int) controller.getPlayerHealth();
         int numberOfFullHearts = playerHealth / 20;
@@ -397,9 +413,7 @@ public class GameView extends InputAdapter implements Screen {
         float heartX = healthLabel.getX() + healthLabel.getWidth() + 10;
 
         for (Actor actor : stage.getActors()) {
-            if (actor instanceof Image) {
-                actor.remove();
-            }
+            if (actor instanceof Image) actor.remove();
         }
 
         for (int i = 0; i < numberOfFullHearts; i++) {
@@ -497,8 +511,8 @@ public class GameView extends InputAdapter implements Screen {
             }
         }
     }
+
     public void setGrayscale(boolean enable) {
         grayscaleEnabled = enable;
     }
-
 }

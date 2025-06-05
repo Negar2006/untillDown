@@ -57,7 +57,6 @@ public class PauseMenuView implements Screen {
         final float centerX = stage.getWidth() / 2 - buttonWidth / 2;
         float startY = stage.getHeight() - 100;
 
-        // Resume Button
         resumeButton = new TextButton("Resume", skin);
         resumeButton.setSize(buttonWidth, buttonHeight);
         resumeButton.setPosition(centerX, startY);
@@ -69,7 +68,6 @@ public class PauseMenuView implements Screen {
         });
         stage.addActor(resumeButton);
 
-        // Cheat Codes Button
         cheatCodesButton = new TextButton("Cheat Codes", skin);
         cheatCodesButton.setSize(buttonWidth, buttonHeight);
         cheatCodesButton.setPosition(centerX, startY - (buttonHeight + 10));
@@ -99,7 +97,6 @@ public class PauseMenuView implements Screen {
 
         stage.addActor(cheatCodesButton);
 
-        // Abilities Button
         abilitiesButton = new TextButton("Abilities", skin);
         abilitiesButton.setSize(buttonWidth, buttonHeight);
         abilitiesButton.setPosition(centerX, startY - 2 * (buttonHeight + 10));
@@ -185,10 +182,12 @@ public class PauseMenuView implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
     public void dispose() {

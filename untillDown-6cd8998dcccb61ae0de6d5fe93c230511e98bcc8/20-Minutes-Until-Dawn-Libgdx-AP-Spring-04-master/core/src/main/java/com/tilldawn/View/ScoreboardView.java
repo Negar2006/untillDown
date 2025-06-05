@@ -33,7 +33,6 @@ public class ScoreboardView implements Screen {
     public void show() {
         final Array<User> users = loadUsersFromJson("users/");
 
-        // دکمه‌ها
         TextButton sortByScoreButton = new TextButton("Sort by Score", skin);
         TextButton sortByKillsButton = new TextButton("Sort by Kills", skin);
         TextButton sortByTimeAliveButton = new TextButton("Sort by Time Alive", skin);
@@ -117,9 +116,24 @@ public class ScoreboardView implements Screen {
         stage.draw();
     }
 
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void dispose() { stage.dispose(); }
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
 }

@@ -12,14 +12,15 @@ public enum Ability {
 
     private final Texture texture;
     private String description;
+
     Ability(Texture texture, String description) {
         this.texture = texture;
         this.description = description;
     }
 
     public static Ability getByName(String string) {
-        for(Ability ability : Ability.values()) {
-            if(ability.description.equalsIgnoreCase(string)) {
+        for (Ability ability : Ability.values()) {
+            if (ability.description.equalsIgnoreCase(string)) {
                 return ability;
             }
         }
@@ -29,6 +30,7 @@ public enum Ability {
     public Texture getTexture() {
         return texture;
     }
+
     public String getDescription() {
         return description;
     }

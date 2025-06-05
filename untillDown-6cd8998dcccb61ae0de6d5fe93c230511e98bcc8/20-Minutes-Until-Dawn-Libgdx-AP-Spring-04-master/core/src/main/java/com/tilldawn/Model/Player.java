@@ -20,7 +20,6 @@ public class Player {
     private float posY;
     private float playerHealth;
     private CollisionRect rect;
-    private float time = 0;
     private float speed = 100f;
     private int score = 0;
     private boolean isPlayerIdle = true;
@@ -36,7 +35,7 @@ public class Player {
     private Sprite deadSprite;
 
     public Player(Texture playerTexture) {
-        if(Main.currentUser!= null) name = Main.currentUser.getUsername();
+        if (Main.currentUser != null) name = Main.currentUser.getUsername();
         else name = "guest";
         this.playerTexture = playerTexture;
         this.playerSprite = new Sprite(playerTexture);
@@ -119,20 +118,12 @@ public class Player {
         return playerHealth;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
     public Texture getPlayerTexture() {
         return playerTexture;
     }
 
     public void setPlayerHealth(float playerHealth) {
         this.playerHealth = playerHealth;
-    }
-
-    public int getScore() {
-        return score;
     }
 
     public float getSpeed() {
@@ -154,7 +145,6 @@ public class Player {
 
             view.addDamagePopup(popupX, popupY, "-" + damage);
         }
-
         if (playerHealth <= 0) {
             playerHealth = 0;
             isDead = true;
@@ -185,8 +175,6 @@ public class Player {
         }
     }
 
-
-
     public String getCharacterName() {
         return name;
     }
@@ -205,7 +193,7 @@ public class Player {
 
     public void addEXP(int exp) {
         this.exp += exp;
-        if(this.exp >= 20 * Level){
+        if (this.exp >= 20 * Level) {
             Level += 1;
             this.exp = 0;
 
@@ -222,6 +210,7 @@ public class Player {
     public int getLevel() {
         return this.Level;
     }
+
     public ArrayList<Ability> getGainAbilities() {
         return gainAbilities;
     }
@@ -235,8 +224,8 @@ public class Player {
     }
 
     public void removeAbility(Ability ability) {
-        for(Ability ability1 : gainAbilities) {
-            if(ability.equals(ability1)) {
+        for (Ability ability1 : gainAbilities) {
+            if (ability.equals(ability1)) {
                 gainAbilities.remove(ability);
                 break;
             }
@@ -268,86 +257,14 @@ public class Player {
 
     public void setGainAbilities(ArrayList<String> gainAbilities) {
         ArrayList<Ability> abilityList = new ArrayList<>();
-        for(String string : gainAbilities) {
+        for (String string : gainAbilities) {
             Ability newAbility = Ability.getByName(string);
             abilityList.add(newAbility);
         }
         this.gainAbilities = abilityList;
     }
 
-    public void setPlayerTexture(Texture playerTexture) {
-        this.playerTexture = playerTexture;
-    }
-
-    public void setPlayerSprite(Sprite playerSprite) {
-        this.playerSprite = playerSprite;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public CollisionRect getRect() {
-        return rect;
-    }
-
-    public void setRect(CollisionRect rect) {
-        this.rect = rect;
-    }
-
-    public float getTime() {
-        return time;
-    }
-
-    public void setTime(float time) {
-        this.time = time;
-    }
-
-    public boolean isPlayerIdle() {
-        return isPlayerIdle;
-    }
-
-    public void setPlayerIdle(boolean playerIdle) {
-        isPlayerIdle = playerIdle;
-    }
-
     public void setLevel(int level) {
         Level = level;
-    }
-
-    public void setInvincible(boolean invincible) {
-        isInvincible = invincible;
-    }
-
-    public long getInvincibleStartTime() {
-        return invincibleStartTime;
-    }
-
-    public void setInvincibleStartTime(long invincibleStartTime) {
-        this.invincibleStartTime = invincibleStartTime;
-    }
-
-    public long getINVINCIBLE_DURATION() {
-        return INVINCIBLE_DURATION;
-    }
-
-    public void setDead(boolean dead) {
-        isDead = dead;
-    }
-
-    public Texture getDeadTexture() {
-        return deadTexture;
-    }
-
-    public void setDeadTexture(Texture deadTexture) {
-        this.deadTexture = deadTexture;
-    }
-
-    public void setDeadSprite(Sprite deadSprite) {
-        this.deadSprite = deadSprite;
     }
 }

@@ -86,10 +86,10 @@ public class MainMenuView implements Screen {
         table.setFillParent(true);
         table.top().pad(15);
 
-        updateLanguageTexts(); // اینجا متن‌ها رو بر اساس زبان فعلی تنظیم می‌کنیم
+        updateLanguageTexts();
         updateUserInfo();
 
-        table.clear(); // جدول رو پاک می‌کنیم که از رندر قبلی چیزی نمونده باشه
+        table.clear();
 
         table.add(gameTitle).colspan(3).padBottom(30).row();
 
@@ -127,16 +127,20 @@ public class MainMenuView implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) { }
+    public void resize(int width, int height) {
+    }
 
     @Override
-    public void pause() { }
+    public void pause() {
+    }
 
     @Override
-    public void resume() { }
+    public void resume() {
+    }
 
     @Override
-    public void hide() { }
+    public void hide() {
+    }
 
     @Override
     public void dispose() {
@@ -145,10 +149,6 @@ public class MainMenuView implements Screen {
 
     public TextButton getPlayButton() {
         return playButton;
-    }
-
-    public TextField getField() {
-        return field;
     }
 
     public MainMenuController getController() {
@@ -187,10 +187,6 @@ public class MainMenuView implements Screen {
         this.stage = stage;
     }
 
-    public Label getGameTitle() {
-        return gameTitle;
-    }
-
     public Table getTable() {
         return table;
     }
@@ -205,30 +201,6 @@ public class MainMenuView implements Screen {
 
     public TextButton getExitButton() {
         return exitButton;
-    }
-
-    public Image getAvatarImage() {
-        return avatarImage;
-    }
-
-    public void setAvatarImage(Image avatarImage) {
-        this.avatarImage = avatarImage;
-    }
-
-    public String getAvatarPath() {
-        return avatarPath;
-    }
-
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
-    }
-
-    public Label getUsernameLabel() {
-        return usernameLabel;
-    }
-
-    public Label getScoreLabel() {
-        return scoreLabel;
     }
 
     public void setAvatar(String path) {
@@ -251,7 +223,7 @@ public class MainMenuView implements Screen {
     }
 
     public void updateLanguageTexts() {
-        Language lang =Main.getMain().getSettingsController().getCurrentLanguage();
+        Language lang = Main.getMain().getSettingsController().getCurrentLanguage();
 
         if (lang == Language.FRENCH) {
             gameTitle.setText("Titre du Jeu");
@@ -280,9 +252,5 @@ public class MainMenuView implements Screen {
 
             updateUserInfo();
         }
-    }
-    public void refreshView() {
-        updateLanguageTexts();
-        updateUserInfo();
     }
 }

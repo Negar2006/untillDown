@@ -9,7 +9,8 @@ public class User {
     private long timeAliveMillis;
     private int numberOfKillingMonster;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String username, String password, String securityAnswer, String selectedCharacter, int Score, int numberOfKillingMonster, long timeAliveMillis) {
         this.username = username;
@@ -49,24 +50,12 @@ public class User {
         return Score;
     }
 
-    public void setScore(int score) {
-        this.Score = score;
-    }
-
     public void setUsername(String username) {
         this.username = username;
     }
 
     public void addNumberOfKilling(int numberOfKillingMonster) {
         this.numberOfKillingMonster += numberOfKillingMonster;
-    }
-
-    public void setSecurityAnswer(String securityAnswer) {
-        this.securityAnswer = securityAnswer;
-    }
-
-    public void setNumberOfKillingMonster(int numberOfKillingMonster) {
-        this.numberOfKillingMonster = numberOfKillingMonster;
     }
 
     public void addScore(int score) {
@@ -79,10 +68,6 @@ public class User {
 
     public long getTimeAliveMillis() {
         return timeAliveMillis;
-    }
-
-    public String getAvatar() {
-        return securityAnswer;
     }
 
     public void setTimeAliveMillis(long timeAliveMillis) {

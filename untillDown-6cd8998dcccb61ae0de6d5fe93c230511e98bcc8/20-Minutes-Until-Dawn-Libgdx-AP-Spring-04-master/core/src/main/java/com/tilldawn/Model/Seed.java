@@ -13,16 +13,16 @@ public class Seed {
     public Seed(monsterTypes type, float x, float y) {
         this.type = type;
         switch (type) {
-            case TreeMonster :
+            case TreeMonster:
                 texture = new Texture("Tree_EM.png");
                 break;
-            case TentacleMonster :
+            case TentacleMonster:
                 texture = new Texture("Tentacle_EM.png");
                 break;
-            case Eyebat :
+            case Eyebat:
                 texture = new Texture("EyeBat_EM.png");
                 break;
-            case Elder :
+            case Elder:
                 texture = new Texture("Elder_EM.png");
                 break;
         }
@@ -35,10 +35,6 @@ public class Seed {
 
     public Rectangle getBounds() {
         return bounds;
-    }
-
-    public monsterTypes getType() {
-        return type;
     }
 
     public void dispose() {

@@ -170,10 +170,6 @@ public class GameController {
         return startTimeMillis;
     }
 
-    public void setStartTimeMillis(long startTimeMillis) {
-        this.startTimeMillis = startTimeMillis;
-    }
-
     public void addTime(long millis) {
         startTimeMillis -= millis;
     }

@@ -32,16 +32,8 @@ public class GameOverView implements Screen {
     public GameOverView(GameOverController gameOverController, Skin skin) {
         this.gameOverController = gameOverController;
         this.skin = skin;
-        this.largeFont = new BitmapFont(); // default font
+        this.largeFont = new BitmapFont();
         this.largeFont.getData().setScale(3);
-    }
-
-    public GameController getGameController() {
-        return gameController;
-    }
-
-    public void setGameController(GameController gameController) {
-        this.gameController = gameController;
     }
 
     @Override
@@ -49,15 +41,13 @@ public class GameOverView implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // Initialize background and fonts
         backgroundTexture = new Texture(Gdx.files.internal("game_over_background.png"));
         batch = new SpriteBatch();
 
         BitmapFont smallFont = new BitmapFont();
-        smallFont.getData().setScale(1.5f); // smaller than title
+        smallFont.getData().setScale(1.5f);
         Label.LabelStyle smallLabelStyle = new Label.LabelStyle(smallFont, null);
 
-        // Game Over title
         Label gameOverLabel = new Label("GAME OVER!", skin.get("title", Label.LabelStyle.class));
         gameOverLabel.setPosition(
             Gdx.graphics.getWidth() / 2f - gameOverLabel.getWidth() / 2f,
@@ -65,32 +55,26 @@ public class GameOverView implements Screen {
         );
         stage.addActor(gameOverLabel);
 
-        // Username
         Label usernameLabel = new Label("Username: " + gameOverController.getUsername(), smallLabelStyle);
         usernameLabel.setPosition(Gdx.graphics.getWidth() / 2f - usernameLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 320);
         stage.addActor(usernameLabel);
 
-        // Score
         Label scoreLabel = new Label("Score: " + gameOverController.getScore(), smallLabelStyle);
         scoreLabel.setPosition(Gdx.graphics.getWidth() / 2f - scoreLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 400);
         stage.addActor(scoreLabel);
 
-        // Kills
         Label killsLabel = new Label("Kills: " + gameOverController.getKills(), smallLabelStyle);
         killsLabel.setPosition(Gdx.graphics.getWidth() / 2f - killsLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 480);
         stage.addActor(killsLabel);
 
-        // Health
         Label healthLabel = new Label("Health: " + gameOverController.getHealth(), smallLabelStyle);
         healthLabel.setPosition(Gdx.graphics.getWidth() / 2f - healthLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 560);
         stage.addActor(healthLabel);
 
-        // Game Result (Win/Loss/Draw)
         Label gameResultLabel = new Label("Game Result: " + gameOverController.getGameResult(), smallLabelStyle);
         gameResultLabel.setPosition(Gdx.graphics.getWidth() / 2f - gameResultLabel.getWidth() / 2f, Gdx.graphics.getHeight() - 640);
         stage.addActor(gameResultLabel);
 
-        // Button to go back to the main menu
         TextButton mainMenuButton = new TextButton("Go Back to Main Menu", skin);
         mainMenuButton.getLabel().getStyle().fontColor = Color.RED;
         mainMenuButton.getLabel().setFontScale(0.6f);
@@ -116,6 +100,7 @@ public class GameOverView implements Screen {
         });
         stage.addActor(mainMenuButton);
     }
+
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -135,13 +120,16 @@ public class GameOverView implements Screen {
     }
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
-    public void hide() {}
+    public void hide() {
+    }
 
     @Override
     public void dispose() {

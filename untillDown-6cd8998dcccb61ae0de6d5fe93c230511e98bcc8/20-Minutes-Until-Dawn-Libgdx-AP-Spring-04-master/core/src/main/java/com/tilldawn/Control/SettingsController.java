@@ -63,37 +63,34 @@ public class SettingsController {
         currentPlayingMusic.play();
     }
 
-    public void setSfxEnabled(boolean enabled) { sfxEnabled = enabled; }
-
-    public void setAutoReloadEnabled(boolean enabled) { autoReloadEnabled = enabled; }
-
-    public void setGrayscaleEnabled(boolean enabled) {
-        grayscaleEnabled = enabled;
+    public float getMusicVolume() {
+        return musicVolume;
     }
 
-    /** Called by the view before drawing the stage. */
-    public void applyGrayscale() {
-        if (grayscaleEnabled && grayscaleShader.isCompiled()) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            Gdx.gl.glUseProgram(grayscaleShader.getHandle());
-        } else {
-            Gdx.gl.glUseProgram(0);
-        }
+    public String getCurrentMusic() {
+        return currentMusic;
     }
 
-    public float getMusicVolume() { return musicVolume; }
+    public boolean isSfxEnabled() {
+        return sfxEnabled;
+    }
 
-    public String getCurrentMusic() { return currentMusic; }
-    public boolean isSfxEnabled() { return sfxEnabled; }
-    public boolean isAutoReloadEnabled() { return autoReloadEnabled; }
-    public boolean isGrayscaleEnabled() { return grayscaleEnabled; }
+    public boolean isAutoReloadEnabled() {
+        return autoReloadEnabled;
+    }
+
+    public boolean isGrayscaleEnabled() {
+        return grayscaleEnabled;
+    }
+
     public boolean isMusicPlaying() {
         return currentPlayingMusic != null && currentPlayingMusic.isPlaying();
     }
+
     public void pauseMusic() {
         if (isMusicPlaying()) currentPlayingMusic.pause();
     }
+
     public void resumeMusic() {
         if (currentPlayingMusic != null && !currentPlayingMusic.isPlaying()) {
             currentPlayingMusic.play();

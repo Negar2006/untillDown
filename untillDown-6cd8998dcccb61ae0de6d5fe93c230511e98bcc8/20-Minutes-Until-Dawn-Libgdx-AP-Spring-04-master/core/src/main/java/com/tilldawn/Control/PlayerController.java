@@ -14,7 +14,7 @@ public class PlayerController {
     private Player player;
     private Animation<TextureRegion> playerAnimation;
     private float stateTime = 0f;
-    private Animation<Texture> rawAnim ;
+    private Animation<Texture> rawAnim;
     private GameController gameController;
 
     public PlayerController(Player player, String characterName, GameController gameController) {

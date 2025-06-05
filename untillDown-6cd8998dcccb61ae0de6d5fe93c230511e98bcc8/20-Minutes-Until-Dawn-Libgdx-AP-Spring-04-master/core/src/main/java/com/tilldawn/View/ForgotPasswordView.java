@@ -32,22 +32,18 @@ public class ForgotPasswordView extends ScreenAdapter {
         table.setFillParent(true);
         table.defaults().pad(10);
 
-        // Username input
         usernameField = new TextField("", skin);
         table.add(new Label("Username:", skin));
         table.add(usernameField).row();
 
-        // Security question
         securityQuestionLabel = new Label("What is your favorite character?", skin);
         table.add(new Label("Question:", skin));
         table.add(securityQuestionLabel).row();
 
-        // Answer input
         answerField = new TextField("", skin);
         table.add(new Label("Answer:", skin));
         table.add(answerField).row();
 
-        // New password input
         newPasswordField = new TextField("", skin);
         newPasswordField.setPasswordCharacter('*');
         newPasswordField.setPasswordMode(true);
@@ -57,18 +53,16 @@ public class ForgotPasswordView extends ScreenAdapter {
         backToLoginButton = new TextButton("Back to Login", skin);
         backToLoginButton.setVisible(false);
 
-        // Submit button
         submitButton = new TextButton("Submit", skin);
         table.add(submitButton).colspan(2).center().row();
 
-        // Feedback label
         feedbackLabel = new Label("", skin);
         table.add(feedbackLabel).colspan(2).center();
 
         table.add(backToLoginButton).colspan(2).center().row();
 
         stage.addActor(table);
-        controller.setView(this); // Let controller hook up
+        controller.setView(this);
     }
 
     @Override
@@ -91,10 +85,6 @@ public class ForgotPasswordView extends ScreenAdapter {
         return usernameField;
     }
 
-    public Label getSecurityQuestionLabel() {
-        return securityQuestionLabel;
-    }
-
     public TextField getAnswerField() {
         return answerField;
     }
@@ -109,10 +99,6 @@ public class ForgotPasswordView extends ScreenAdapter {
 
     public void setFeedbackText(String text) {
         feedbackLabel.setText(text);
-    }
-
-    public void setSecurityQuestion(String question) {
-        securityQuestionLabel.setText(question);
     }
 
     public TextButton getBackToLoginButton() {

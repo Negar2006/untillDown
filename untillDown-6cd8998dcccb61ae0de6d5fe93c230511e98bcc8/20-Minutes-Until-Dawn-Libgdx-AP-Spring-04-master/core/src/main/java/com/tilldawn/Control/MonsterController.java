@@ -92,7 +92,7 @@ public class MonsterController {
             Monster m = iter.next();
 
             if (m.isDead()) {
-                if(m.getType().equals(monsterTypes.Elder)){
+                if (m.getType().equals(monsterTypes.Elder)) {
                     gameController.getWorldController().setShieldActive(false);
                 }
                 if (!m.isDeathAnimationFinished()) {
@@ -120,8 +120,7 @@ public class MonsterController {
                     time = 0f;
                 }
                 overlapTimers.put(m, time);
-            }
-            else overlapTimers.put(m, 0f);
+            } else overlapTimers.put(m, 0f);
         }
     }
 

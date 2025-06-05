@@ -7,8 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.tilldawn.Main;
 import com.tilldawn.Model.*;
 import com.tilldawn.View.GameView;
-import java.awt.MouseInfo;
-import java.awt.Point;
+
 import java.awt.Robot;
 import java.awt.AWTException;
 import java.awt.GraphicsDevice;
@@ -40,7 +39,6 @@ public class WeaponController {
     }
 
     public void update() {
-
         ArrayList<Monster> allMonsters = new ArrayList<>();
         allMonsters.addAll(controller.getMonsterController().getTentacleMonsters());
         allMonsters.addAll(controller.getMonsterController().getTreeMonsters());
@@ -49,16 +47,7 @@ public class WeaponController {
 
         if (controller != null && controller.isAutoAimEnabled()) {
             Monster closest = findClosestMonster(allMonsters);
-            if (closest != null) {
-                autoAimAt(closest);
-            }
-        }
-
-        if (controller != null && controller.isAutoAimEnabled()) {
-            Monster closest = findClosestMonster(allMonsters);
-            if (closest != null) {
-                autoAimAt(closest);
-            }
+            if (closest != null) autoAimAt(closest);
         }
 
         Player player = controller.getPlayerController().getPlayer();
@@ -103,7 +92,7 @@ public class WeaponController {
         float fixedAngle = angleDeg + 360;
 
         for (int i = 0; i < weapon.getProjectileCount(); i++) {
-            float spread = MathUtils.random(-5f, 5f); // randomize for shotgun
+            float spread = MathUtils.random(-5f, 5f);
             float finalAngle = fixedAngle + spread;
             float targetX = playerX + MathUtils.cosDeg(finalAngle) * 1000;
             float targetY = playerY + MathUtils.sinDeg(finalAngle) * 1000;
@@ -121,7 +110,6 @@ public class WeaponController {
             Bullet b = bulletIterator.next();
             b.getSprite().draw(Main.getBatch());
 
-            // move in stored direction
             Vector2 dir = b.getDirection();
             b.getSprite().translate(dir.x * 5, dir.y * 5);
 
@@ -188,5 +176,6 @@ public class WeaponController {
     }
 
     public void addProjectile(int i) {
+        weapon.addProjectile(i);
     }
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.tilldawn.Model.enums.monsterTypes;
 
 import java.util.ArrayList;
@@ -37,7 +36,6 @@ public class Monster {
 
     public Monster(monsterTypes type) {
         this.deathAnimation = GameAssetManager.getGameAssetManager().getDeathAnimation();
-
         this.type = type;
         switch (type) {
             case TreeMonster:
@@ -61,7 +59,6 @@ public class Monster {
                 this.animation = GameAssetManager.getGameAssetManager().getMonsterIdleAnimation();
                 break;
         }
-
         Texture firstFrame = animation.getKeyFrame(0);
         sprite = new Sprite(firstFrame);
         if (type == monsterTypes.TentacleMonster || type == monsterTypes.TreeMonster)
@@ -74,38 +71,34 @@ public class Monster {
 
     private void setRandomStartPosition() {
         Random rand = new Random();
-
-        // Define your big world size here
-        float worldWidth = 3500f;  // set your actual world width
-        float worldHeight = 2500f; // set your actual world height
+        float worldWidth = 3500f;
+        float worldHeight = 2500f;
 
         if (type == monsterTypes.TreeMonster) {
-            // Spawn TreeMonster anywhere inside the big world bounds
             float x = rand.nextFloat() * worldWidth;
             float y = rand.nextFloat() * worldHeight;
             sprite.setPosition(x, y);
 
         } else {
-            // For other monsters, spawn outside the visible screen edges
             float screenWidth = Gdx.graphics.getWidth();
             float screenHeight = Gdx.graphics.getHeight();
             int edge = rand.nextInt(4);
             float x = 0, y = 0;
 
             switch (edge) {
-                case 0: // top
+                case 0:
                     x = rand.nextFloat() * screenWidth;
                     y = screenHeight + 50;
                     break;
-                case 1: // right
+                case 1:
                     x = screenWidth + 50;
                     y = rand.nextFloat() * screenHeight;
                     break;
-                case 2: // bottom
+                case 2:
                     x = rand.nextFloat() * screenWidth;
                     y = -50;
                     break;
-                case 3: // left
+                case 3:
                     x = -50;
                     y = rand.nextFloat() * screenHeight;
                     break;
@@ -129,14 +122,6 @@ public class Monster {
         sprite.setPosition(sprite.getX() + dx * speed, sprite.getY() + dy * speed);
     }
 
-    public void setType(monsterTypes type) {
-        this.type = type;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
     public monsterTypes getType() {
         return type;
     }
@@ -150,10 +135,7 @@ public class Monster {
             sprite.setRegion(currentFrame);
             sprite.draw(batch);
 
-            // Mark as finished after 1 second
-            if (deathStateTime >= 1f) {
-                deathAnimFinished = true;
-            }
+            if (deathStateTime >= 1f) deathAnimFinished = true;
             return;
         }
 
@@ -218,10 +200,6 @@ public class Monster {
         return sprite;
     }
 
-    public float getHealth() {
-        return health;
-    }
-
     public ArrayList<Bullet> getBullets() {
         return bullets;
     }
@@ -281,6 +259,5 @@ public class Monster {
         knockbackX = dx * strength;
         knockbackY = dy * strength;
     }
-
 }
 

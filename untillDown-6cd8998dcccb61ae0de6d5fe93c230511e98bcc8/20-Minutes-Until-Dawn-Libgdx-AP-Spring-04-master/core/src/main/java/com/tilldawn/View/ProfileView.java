@@ -184,21 +184,25 @@ public class ProfileView implements Screen {
             protected void result(Object obj) {
                 if ((boolean) obj) {
                     String newPassword = passwordField.getText().trim();
-                    if (newPassword.isEmpty()) {
-                        controller.showError("Password cannot be empty.", stage, skin);
-                    }else if (newPassword.length() < 8) {
-                        controller.showError("Password must be at least 8 characters.", stage, skin);
-                    } else if (!newPassword.matches(".*\\d.*")) {
-                        controller.showError("Password must include a number.", stage, skin);
-                    } else if (!newPassword.matches(".*[A-Z].*")) {
-                        controller.showError("Password must include an uppercase letter.", stage, skin);
-                    } else if (!newPassword.matches(".*[()\\*$%@#].*")) {
-                        controller.showError("Password must include a special character: ()*$%@#", stage, skin);
-                    }else {
-                        controller.changePassword(newPassword);
-                        controller.showInfo("Password changed successfully.", stage, skin);
-                        this.hide();
-                    }
+                    changePassword(newPassword);
+                }
+            }
+
+            private void changePassword(String newPassword) {
+                if (newPassword.isEmpty()) {
+                    controller.showError("Password cannot be empty.", stage, skin);
+                } else if (newPassword.length() < 8) {
+                    controller.showError("Password must be at least 8 characters.", stage, skin);
+                } else if (!newPassword.matches(".*\\d.*")) {
+                    controller.showError("Password must include a number.", stage, skin);
+                } else if (!newPassword.matches(".*[A-Z].*")) {
+                    controller.showError("Password must include an uppercase letter.", stage, skin);
+                } else if (!newPassword.matches(".*[()\\*$%@#].*")) {
+                    controller.showError("Password must include a special character: ()*$%@#", stage, skin);
+                } else {
+                    controller.changePassword(newPassword);
+                    controller.showInfo("Password changed successfully.", stage, skin);
+                    this.hide();
                 }
             }
         };
@@ -270,11 +274,24 @@ public class ProfileView implements Screen {
         stage.draw();
     }
 
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void dispose() {
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
+    public void hide() {
+    }
+
+    @Override
+    public void dispose() {
         stage.dispose();
     }
 }

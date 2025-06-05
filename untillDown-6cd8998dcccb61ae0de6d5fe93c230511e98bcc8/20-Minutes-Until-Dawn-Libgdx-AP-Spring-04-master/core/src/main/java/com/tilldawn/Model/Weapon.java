@@ -11,6 +11,7 @@ public class Weapon {
 
     private weaponType type;
     private int ammo;
+    private int projectile;
     private int damage;
     private boolean isReloading = false;
     private float reloadTimer = 0f;
@@ -19,6 +20,7 @@ public class Weapon {
         this.damage = type.damage;
         this.type = type;
         this.ammo = type.maxAmmo;
+        this.projectile = type.projectileCount;
         smgSprite.setSize(50, 50);
         smgSprite.setPosition((float) Gdx.graphics.getWidth() / 2, (float) Gdx.graphics.getHeight() / 2);
     }
@@ -39,16 +41,16 @@ public class Weapon {
         return ammo;
     }
 
-    public void setAmmo(int ammo){
+    public void setAmmo(int ammo) {
         this.ammo = ammo;
     }
 
     public int getProjectileCount() {
-        return type.projectileCount;
+        return this.projectile;
     }
 
-    public int getMaxAmmo() {
-        return type.maxAmmo;
+    public void addProjectile(int i) {
+        projectile += i;
     }
 
     public boolean isReloading() {
