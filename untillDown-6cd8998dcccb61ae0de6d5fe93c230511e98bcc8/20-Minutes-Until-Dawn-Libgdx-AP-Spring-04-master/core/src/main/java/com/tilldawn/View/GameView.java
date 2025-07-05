@@ -198,6 +198,7 @@ public class GameView extends InputAdapter implements Screen {
         displayGainedAbilities();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        controller.getWorldController().drawCircleAroundPlayer(controller.getPlayerController().getPlayer(), 200);
 
         Main.getBatch().end();
 

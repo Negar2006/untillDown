@@ -78,5 +78,4 @@ public class Main extends Game {
         original.dispose();
         scaled.dispose();
     }
-
 }

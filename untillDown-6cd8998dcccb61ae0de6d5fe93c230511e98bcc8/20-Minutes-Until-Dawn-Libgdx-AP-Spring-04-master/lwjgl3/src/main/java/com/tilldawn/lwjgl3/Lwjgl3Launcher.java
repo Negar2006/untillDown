@@ -1,8 +1,11 @@
 package com.tilldawn.lwjgl3;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3WindowAdapter;
 import com.tilldawn.Main;
+import com.tilldawn.View.ProfileView;
 
 /** Launches the desktop (LWJGL3) application. */
 public class Lwjgl3Launcher {
@@ -27,6 +30,18 @@ public class Lwjgl3Launcher {
         //// If you remove the above line and set Vsync to false, you can get unlimited FPS, which can be
         //// useful for testing performance, but can also be very stressful to some hardware.
         //// You may also need to configure GPU drivers to fully disable Vsync; this can cause screen tearing.
+        configuration.setWindowListener(new Lwjgl3WindowAdapter(){
+            @Override
+            public void filesDropped(String[] files) {
+                for (String file : files) {
+                    System.out.println(file);
+                    if(Main.getMain().getScreen() instanceof ProfileView){
+                        ProfileView profileView = (ProfileView) Main.getMain().getScreen();
+                        Gdx.app.postRunnable(() -> profileView.processDraggedImage(file));
+                    }
+                }
+            }
+        });
         configuration.setWindowedMode(1920, 1080);
         //// You can change these files; they are in lwjgl3/src/main/resources/ .
         //// They can also be loaded from the root of assets/ .

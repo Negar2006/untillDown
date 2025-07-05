@@ -43,7 +43,6 @@ public class WorldController {
 
         drawBackground(batch, player);
         applyRadialGradient(batch, player);
-
     }
 
     private void drawBackground(SpriteBatch batch, Player player) {
@@ -110,4 +109,16 @@ public class WorldController {
             System.out.println("Shield hit! Player health decreased by 5.");
         }
     }
+
+    // Draws a constant circle around the player
+    public void drawCircleAroundPlayer(Player player, float radius) {
+        float playerX = player.getPosX();
+        float playerY = player.getPosY();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0.4f, 0.8f, 1f, 1f);
+        shapeRenderer.circle(playerX, playerY, radius);
+        shapeRenderer.end();
+    }
+
 }

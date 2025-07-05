@@ -118,7 +118,12 @@ public class MainMenuController {
                 gameController.getMonsterController().getElderMonster().add(elder);
             }
 
-            gameController.setRemainingTimeMillis(data.remainingTimeMillis);
+            long time = data.remainingTimeMillis;
+            if (time <= 1000) {
+                System.out.println("Saved game has no remaining time. Resetting to minimum value.");
+                time = 12_000;
+            }
+            gameController.setRemainingTimeMillis(time);
             Main.getMain().getScreen().dispose();
             Main.getMain().setScreen(new GameView(gameController,
                 GameAssetManager.getGameAssetManager().getSkin(), playerTexture, newFileName));

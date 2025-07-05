@@ -158,8 +158,7 @@ public class ProfileView implements Screen {
                     } else if (controller.isUsernameDuplicate(newUsername)) {
                         controller.showError("Username already exists.", stage, skin);
                     } else {
-                        controller.changeUsername(newUsername);
-                        controller.showInfo("Username changed to " + newUsername, stage, skin);
+                        controller.changeUsername(newUsername, stage, skin);
                         this.hide();
                     }
                 }
@@ -293,5 +292,31 @@ public class ProfileView implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public void processDraggedImage(String file) {
+        if (file == null || file.isEmpty()) {
+            controller.showError("Invalid file.", stage, skin);
+            return;
+        }
+
+        String lower = file.toLowerCase();
+        if (!lower.endsWith(".png") && !lower.endsWith(".jpg") && !lower.endsWith(".jpeg")) {
+            controller.showError("Only PNG, JPG, or JPEG files are supported.", stage, skin);
+            return;
+        }
+
+        java.io.File imageFile = new java.io.File(file);
+        if (!imageFile.exists() || !imageFile.isFile()) {
+            controller.showError("File does not exist or is not a valid file.", stage, skin);
+            return;
+        }
+
+        try {
+            controller.changeAvatar(file);
+            controller.showInfo("Avatar changed from dragged image:\n" + file, stage, skin);
+        } catch (Exception e) {
+            controller.showError("Failed to set avatar from dragged image.", stage, skin);
+        }
     }
 }

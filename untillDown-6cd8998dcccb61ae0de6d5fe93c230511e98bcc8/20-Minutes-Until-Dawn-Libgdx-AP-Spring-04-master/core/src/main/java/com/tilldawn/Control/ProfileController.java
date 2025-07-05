@@ -26,18 +26,29 @@ public class ProfileController {
         return existingUsernames.contains(username);
     }
 
-    public void changeUsername(String newUsername) {
+    public void changeUsername(String newUsername, Stage stage, Skin skin) {
         if (Main.currentUser == null) return;
 
-        existingUsernames.remove(Main.currentUser.getUsername());
+        if (Gdx.files.local("users/" + newUsername + ".json").exists()) {
+            showError("Username already exists. Please choose another one.", stage, skin);
+            return;
+        }
+        String oldUsername = Main.currentUser.getUsername();
 
+        User user = loadUserFromJson(oldUsername);
+        if (user == null) return;
+
+        existingUsernames.remove(oldUsername);
+
+        user.setUsername(newUsername);
         Main.currentUser.setUsername(newUsername);
         existingUsernames.add(newUsername);
 
-        User user = loadUserFromJson(Main.currentUser.getUsername());
+        FileHandle oldFile = Gdx.files.local("users/" + oldUsername + ".json");
+        if (oldFile.exists()) oldFile.delete();
 
-        user.setUsername(newUsername);
         updateUserFile(user);
+        showInfo("Username changed to "+ newUsername+" successfully!", stage, skin);
     }
 
     public void showError(String message, Stage stage, Skin skin) {
