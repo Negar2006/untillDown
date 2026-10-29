@@ -64,7 +64,3 @@ Before running the project, make sure you have:
 5. Run the appropriate desktop launcher or main application entry point.
 
 > **Note:** The exact build and execution steps depend on the project's configuration and available launcher files.
-
-## 📄 License
-
-Please refer to the repository's license file, if available, for information about usage and redistribution.
